@@ -1,22 +1,22 @@
 # Scripts
 
 ## Python library modules: lib 
-abc2plot.py         - JAMS module: adding a), b), c) to plots
-autostring.py       - JAMS module: convert numbers to string
-brewer.py           - JAMS module: provides Brewer colors
-date2dec.py         - JAMS module: converts date into decimal (julian)
-fread.py            - JAMS module: reads ASCII file into floats
-fsread.py           - JAMS module: reads ASCII file into floats and strings
-position.py         - JAMS module: positions subplots in figures
-signature2plot.py   - JAMS module: adds signature to plots
-str2tex.py          - JAMS module: converts string to tex-string
+- abc2plot.py         <br> JAMS module: adding a), b), c) to plots <br>
+- autostring.py       <br> JAMS module: convert numbers to string  <br>
+- brewer.py           <br> JAMS module: provides Brewer colors <br>
+- date2dec.py         <br> JAMS module: converts date into decimal (julian)  <br>
+- fread.py            <br> JAMS module: reads ASCII file into floats <br>
+- fsread.py           <br> JAMS module: reads ASCII file into floats and strings <br>
+- position.py         <br> JAMS module: positions subplots in figures  <br>
+- signature2plot.py   <br> JAMS module: adds signature to plots  <br>
+- str2tex.py          <br> JAMS module: converts string to tex-string  <br>
 
-color/              - JAMS module: providing colors
-const/              - JAMS module: defining constants
-netcdf/             - JAMS module: fancy netcdf routines by David Schaefer
+- color/              <br> JAMS module: providing colors 
+- const/              <br> JAMS module: defining constants
+- netcdf/             <br> JAMS module: fancy netcdf routines by David Schaefer
 
 ## Converter Raster to NetCDF: convert_raster2netcdf
-raster2netcdf          - converts ArcGIS raster format into NetCDF
-test-arcgis-raster.dat - example ArcGIS ratser file
-addinfo.csv            - excample CSV containing additional data for NetCDF
+- raster2netcdf          <br> converts ArcGIS raster format into NetCDF <br>
+- test-arcgis-raster.dat <br> example ArcGIS ratser file <br>
+- addinfo.csv            <br> excample CSV containing additional data for NetCDF <br>
 
