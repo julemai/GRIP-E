@@ -1,14 +1,15 @@
---------------------------------------------------------------------------------------------------------
-data 
+## Regional Deterministic Reforecast System (RDRS) data
+
+1.a Data 
 
     RDRS data for Lake Erie watershed            --> file: RDRS_CaPA24hr_forcings_final.nc
 
-downloaded from
+1.b Downloaded from
 
     contact Julie (juliane.mai@uwaterloo.ca)
 	file size: 1.1GB is too big for GitHub
 
-prepared by
+1.c Prepared by
 
     Juliane Mai PhD
     Department Civil & Environmental Engineering
