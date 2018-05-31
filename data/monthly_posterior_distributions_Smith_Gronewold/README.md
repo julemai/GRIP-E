@@ -36,6 +36,6 @@ These are CSV files, with the columns from left to right being:
 -  2.5 percentile
 - 97.5 percentile
 
-### 1.c Data cover period:
+### 1.c Period of data
 - Jan 1950 to Dec 2015
 - monthly data
