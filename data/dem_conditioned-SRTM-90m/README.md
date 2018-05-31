@@ -1,15 +1,16 @@
---------------------------------------------------------------------------------------------------------
-data (ASCII raster format)
+## Conditioned SRTM DEM from HydroSHEDS
+
+1.a Data (ASCII raster format)
 
     Conditioned SRTM DEM from HydroSHEDS, 3 second (90 m)    -->  file: rect_dem_Erie.txt
     Dervided flow accumulation from DEM using ArcGIS         -->  file: rect_flow_accumulation_Erie.txt
     Dervided flow direction    from DEM using ArcGIS         -->  file: rect_flow_direction_Erie.txt
 
-downloaded from
+1.b Downloaded from
 
     https://hydrosheds.cr.usgs.gov/index.php
 
-prepared by
+1.c Prepared by
 
     Hongren Shen 
     Ph.D. Student
@@ -21,14 +22,13 @@ prepared by
     Phone: +1 (226)-899-3796 
     Email: hongren.shen@uwaterloo.ca, shrhongren@gmail.com
 
---------------------------------------------------------------------------------------------------------
-converted data (NetCDF format)
+2.a Converted data (NetCDF format)
 
     Conditioned SRTM DEM from HydroSHEDS, 3 second (90 m)    -->  file: rect_dem_Erie.nc
     Dervided flow accumulation from DEM using ArcGIS         -->  file: rect_flow_accumulation_Erie.nc
     Dervided flow direction    from DEM using ArcGIS         -->  file: rect_flow_direction_Erie.nc
 
-converted by
+2.b Converted by
 
     Juliane Mai PhD
     Department Civil & Environmental Engineering
@@ -40,7 +40,7 @@ converted by
     http://www.civil.uwaterloo.ca/jmai/
     https://www.researchgate.net/profile/Juliane_Mai
 
-data conversion
+2.c Data conversion
 
     -----------------
     DEM
@@ -51,8 +51,8 @@ data conversion
     description="digital elevation model from HydroSheds (USGS) based on conditioned, global SRTM DEM at 3 sec (90m) resolution"
 
     python raster2netcdf.py -i ${datapath}dem_conditioned-SRTM-90m/rect_dem_Erie.txt \
-                            -o ${datapath}dem_conditioned-SRTM-90m/rect_dem_Erie.nc \
-			    -v "${varname},${vartype},${unit},${description}"
+		     	        -o ${datapath}dem_conditioned-SRTM-90m/rect_dem_Erie.nc \
+		     	        -v "${varname},${vartype},${unit},${description}"
 
     -----------------
     Flow accumulation
@@ -65,8 +65,8 @@ data conversion
                  conditioned, global SRTM DEM at 3 sec (90m) resolution"
 
     python raster2netcdf.py -i ${datapath}dem_conditioned-SRTM-90m/rect_flow_accumulation_Erie.txt
-                            -o ${datapath}dem_conditioned-SRTM-90m/rect_flow_accumulation_Erie.nc
-			    -v "${varname},${vartype},${unit},${description}"
+		     	        -o ${datapath}dem_conditioned-SRTM-90m/rect_flow_accumulation_Erie.nc
+		     	        -v "${varname},${vartype},${unit},${description}"
 
     -----------------
     Flow direction
@@ -80,5 +80,5 @@ data conversion
                  conditioned, global SRTM DEM at 3 sec (90m) resolution"
 
     python raster2netcdf.py -i ${datapath}dem_conditioned-SRTM-90m/rect_flow_direction_Erie.txt
-                            -o ${datapath}dem_conditioned-SRTM-90m/rect_flow_direction_Erie.nc
-			    -v "${varname},${vartype},${unit},${description}"
+		     	        -o ${datapath}dem_conditioned-SRTM-90m/rect_flow_direction_Erie.nc
+		     	        -v "${varname},${vartype},${unit},${description}"
