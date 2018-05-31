@@ -1,16 +1,17 @@
---------------------------------------------------------------------------------------------------------
-data 
+## Shapefiles
+
+1.a Data 
 
     Shapefile of Lake Erie watershed                                  --> file: glahf_erie_altered_mainland.zip
     Shapefile of Lake Erie sub-watersheds                             --> file: Erie_subwatershed_GLAHF.zip
 
-downloaded from
+1.b Downloaded from
 
     https://www.glahf.org/data/
     --> Hydrology
     --> Watersheds & tributaries
 
-prepared by
+1.c Prepared by
 
     Hongren Shen 
     Ph.D. Student
