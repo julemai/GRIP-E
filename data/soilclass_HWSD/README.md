@@ -1,14 +1,15 @@
---------------------------------------------------------------------------------------------------------
-data (ASCII raster format; classification information given in separate file)
+## Harmonized World soil data (FAO), 30 second (1 km) 
+
+### 1.a Data (ASCII raster format; classification information given in separate file)
 
     Harmonized World soil data (FAO), 30 second (1 km)                --> file: rect_landcover_UMD_scheme_MODIS_Erie.txt
     Classification information (formatting adjusted)                  --> file: USDA_soil_class_legends.csv
 
-downloaded from
+### 1.b Downloaded from
 
     http://www.fao.org/soils-portal/soil-survey/soil-maps-and-databases/harmonized-world-soil-database-v12/en/
 
-prepared by
+### 1.c Prepared by
 
     Hongren Shen 
     Ph.D. Student
@@ -20,12 +21,11 @@ prepared by
     Phone: +1 (226)-899-3796 
     Email: hongren.shen@uwaterloo.ca, shrhongren@gmail.com
 
---------------------------------------------------------------------------------------------------------
-converted data (NetCDF format including classification information)
+### 2.a Converted data (NetCDF format including classification information)
 
     Harmonized World soil data (FAO), 30 second (1 km)                --> file: rect_landcover_UMD_scheme_MODIS_Erie.nc
 
-converted by
+### 2.b Converted by
 
     Juliane Mai PhD
     Department Civil & Environmental Engineering
@@ -37,7 +37,7 @@ converted by
     http://www.civil.uwaterloo.ca/jmai/
     https://www.researchgate.net/profile/Juliane_Mai
 
-data conversion
+### 2.c Data conversion
 
     -----------------
     Soil class
@@ -48,6 +48,6 @@ data conversion
     description="soil classes taken from FAO Harmonized World Soil Database (HWSD) v1.2 at 30 sec (1km) resolution"
 
     python raster2netcdf.py -i ${datapath}soilclass_HWSD/rect_HWSD_soil_class.txt
-                            -o ${datapath}soilclass_HWSD/rect_HWSD_soil_class.nc
+			    -o ${datapath}soilclass_HWSD/rect_HWSD_soil_class.nc
 			    -v "${varname},${vartype},${unit},${description}"
 			    -a ${datapath}soilclass_HWSD/USDA_soil_class_legends.csv
