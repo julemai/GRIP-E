@@ -1,4 +1,12 @@
 -----------------------
+Meteorological forcings
+-----------------------
+1. Regional Deterministic Reforecast System (RDRS)
+   download:      contact Julie (juliane.mai@uwaterloo.ca)
+   folder:        meteo_forcing_RDRS
+   used to setup: all models
+
+-----------------------
 DEM
 -----------------------
 1. Conditioned SRTM DEM from HydroSHEDS, 3 second (90 m)
