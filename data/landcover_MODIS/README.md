@@ -1,14 +1,15 @@
---------------------------------------------------------------------------------------------------------
-data (ASCII raster format; classification information given in separate file)
+## MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500m SIN Grid V006 (MCD12Q1_006), 500 m
+
+1.a Data (ASCII raster format; classification information given in separate file)
 
     MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500m SIN Grid V006 (MCD12Q1_006), 500 m   --> file: rect_landcover_UMD_scheme_MODIS_Erie.txt
     Classification information (formatting adjusted)                                            --> file: UMD_scheme_MODIS_legends.csv
 
-downloaded from
+1.b Downloaded from
 
     https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mcd12q1_v006
 
-prepared by
+1.c Prepared by
 
     Hongren Shen 
     Ph.D. Student
@@ -20,12 +21,11 @@ prepared by
     Phone: +1 (226)-899-3796 
     Email: hongren.shen@uwaterloo.ca, shrhongren@gmail.com
 
---------------------------------------------------------------------------------------------------------
-converted data (NetCDF format including classification information)
+2.a Converted data (NetCDF format including classification information)
 
     MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500m SIN Grid V006 (MCD12Q1_006), 500 m   --> file: rect_landcover_UMD_scheme_MODIS_Erie.nc
 
-converted by
+2.b Converted by
 
     Juliane Mai PhD
     Department Civil & Environmental Engineering
@@ -37,7 +37,7 @@ converted by
     http://www.civil.uwaterloo.ca/jmai/
     https://www.researchgate.net/profile/Juliane_Mai
 
-data conversion
+2.c ata conversion
 
     -----------------
     Land cover
@@ -49,6 +49,6 @@ data conversion
                  product (NASA) using classification scheme 2 (UMD)"
 
     python raster2netcdf.py -i ${datapath}landcover_MODIS/rect_landcover_UMD_scheme_MODIS_Erie.txt
-                            -o ${datapath}landcover_MODIS/rect_landcover_UMD_scheme_MODIS_Erie.nc
-			    -v "${varname},${vartype},${unit},${description}"
-			    -a ${datapath}landcover_MODIS/UMD_scheme_MODIS_legends.csv
+			        -o ${datapath}landcover_MODIS/rect_landcover_UMD_scheme_MODIS_Erie.nc
+			        -v "${varname},${vartype},${unit},${description}"
+			        -a ${datapath}landcover_MODIS/UMD_scheme_MODIS_legends.csv
