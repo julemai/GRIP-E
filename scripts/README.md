@@ -16,7 +16,10 @@
 - netcdf/             <br> JAMS module: fancy netcdf routines by David Schaefer
 
 ## Converter Raster to NetCDF: convert_raster2netcdf
-- raster2netcdf          <br> converts ArcGIS raster format into NetCDF <br>
+- raster2netcdf.py       <br> converts ArcGIS raster format into NetCDF <br>
 - test-arcgis-raster.dat <br> example ArcGIS ratser file <br>
 - addinfo.csv            <br> excample CSV containing additional data for NetCDF <br>
 
+## Process Forcing NetCDFs: process_netcdf
+- netcdf_per_calendar_year.py <br> splits multi-year NetCDF into
+  single NetCDF files containing one calendar year each
