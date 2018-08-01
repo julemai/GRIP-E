@@ -1,5 +1,7 @@
 ## Shapefiles
 
+see also Wiki: Data section
+
 ### 1.a Data 
 
     Shapefile of whole modeling domain (1 shape: land and lake together)             --> file: 1_LEB_boundary_mainland+lake.zip
