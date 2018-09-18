@@ -307,6 +307,11 @@ for ii,ifile in enumerate(inputfile):
 
     fig.suptitle(datatype.replace('-',' ').title(), fontsize=textsize+3, x=0.5, y=0.93)
 
+    if variable == 'nbs':
+        variable = 'NBS'
+    else:
+        variable = variable.title()
+
     if usetex:
         xlab   = r'$\mathrm{Date time}'
         ylab   = r'$\mathrm{'+variable+'} \; [\mathrm{m}^{3} \mathrm{s}^{-1}]$'
@@ -378,6 +383,8 @@ for ii,efile in enumerate(inputensemblefile):
 
     if variable == 'nbs':
         variable = 'NBS'
+    else:
+        variable = variable.title()
         
     if usetex:
         xlab   = r'$\mathrm{Date time}'
@@ -396,7 +403,7 @@ for ii,efile in enumerate(inputensemblefile):
     idx = np.where(times>datetime.date(*[2010,1,1]))[0]
 
     # only to get the label
-    sub.plot(         times[idx], np.transpose(data_ens[ii][0,idx]), linewidth=0.75, color='gray', alpha=0.5, label='Ensembles')
+    sub.plot(         times[idx], np.transpose(data_ens[ii][0,idx]), linewidth=0.75, color='gray', alpha=0.5, label='Samples')
     sub.plot(         times[idx], np.transpose(data_ens[ii][:,idx]), linewidth=0.75, color='gray', alpha=0.5)
     #sub.fill_between( times[idx], data_ens[ii][idx,1],data_ens[ii][idx,2], linewidth=0.75, color='gray', alpha=0.5, label='Percentiles [$p_{5}$,$p_{95}$]')
 
