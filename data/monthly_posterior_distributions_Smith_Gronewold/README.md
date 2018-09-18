@@ -48,7 +48,7 @@ is one ensemble member, each column is one month starting at Jan 1950.
 
 ### 1.d Notes
 
-The net basin supply was initially provided in [mm] instead of
+The net basin supply for Lake Erie was initially provided in [mm] instead of
 [m^3/s]. The conversion was performed by Juliane Mai in collaboration
 with Joeseph Smith.
 
@@ -62,3 +62,5 @@ with the lake area (lake_area_m2) was set to be 27314*1000^2
 [m^2]. The seconds per month (seconds_this_month) was determined for
 every month considering leap years and different lengths of
 months. The multiplier for a 30-day month (e.g. April) would be around 10.5378.
+
+The original files are named "nbs_lake_erie_summary-stats_mm.csv" and "nbs_lake_erie_samples_mm.csv". The conversion was done using this script [here](https://github.com/julemai/GRIP-E/blob/master/scripts/monthly_nbs_inflows/convert_nbs_lake_erie_to_m3s.py). 
