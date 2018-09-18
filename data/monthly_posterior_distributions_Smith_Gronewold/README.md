@@ -30,7 +30,7 @@ These are CSV files, with the columns from left to right being:
 -  2.5 percentile
 - 97.5 percentile
 
-#### All ensemble members of monthly posterior distributions
+#### 3000 samples of monthly posterior distributions
 
 In units of cubic meters per second [m<sup>3</sup>/s]
 - Lake St. Clair inflow (= miHuronOutflow)         <br> --> file: inflow_lake_st-clair_samples.csv
@@ -39,7 +39,7 @@ In units of cubic meters per second [m<sup>3</sup>/s]
 - Lake Erie net basin supply                       <br> --> file: nbs_lake_erie_samples.csv
 
 These are CSV files with the T=792 columns and N=3000 rows. Each row
-is one ensemble member, each column is one month starting at Jan 1950.
+is one sample, each column is one month starting at Jan 1950.
 
 ### 1.c Period of data
 - Jan 1950 to Dec 2015
