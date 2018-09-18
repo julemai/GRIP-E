@@ -1,0 +1,32 @@
+NO,ID,Name,Lat,Lon,Country,Drainage_area,Regulation,Regulated/Natural_Period,Reference,Q_period,Q_length,Lake ,Frank  ,Tim,Flow info,Upstream info
+1,02GB001,GRAND RIVER AT BRANTFORD,43.13272095,-80.2673111,CA,5200,Regulated,1942-End,,1913-2016,81,,,,,
+2,02GB007,FAIRCHILD CREEK NEAR BRANTFORD,43.14738846,-80.15460968,CA,389,Natural,All,,1964-2015,52,,,,,
+3,02GC002,KETTLE CREEK AT ST. THOMAS,42.77769089,-81.21399689,CA,331,Natural,All,,1945-2017,65,,,,,
+4,02GC007,BIG CREEK NEAR WALSINGHAM,42.68561172,-80.53846741,CA,567,Regulated,1900-End,,1955-2016,62,,,,,
+5,02GC018,CATFISH CREEK NEAR SPARTA,42.74607849,-81.05693817,CA,295,Natural,All,,1964-2017,54,,,,,
+6,02GC026,BIG OTTER CREEK NEAR CALTON,42.71067047,-80.84081268,CA,665,Regulated,1900-End,,1975-2017,43,,,,,
+7,02GE007,MCGREGOR CREEK NEAR CHATHAM,42.38349915,-82.09506226,CA,204,Natural,All,,1977-2017,34,,,,,
+8,02GG003,SYDENHAM RIVER AT FLORENCE,42.65061188,-82.00839233,CA,1150,Natural,All,,1984-2017,34,,,,,
+9,02GG009,BEAR CREEK BELOW BRIGDEN,42.81203079,-82.29842377,CA,536,Natural,All,,1981-2017,37,,,,,
+10,02GG013,BLACK CREEK NEAR BRADSHAW,42.76243973,-82.25921631,CA,213,Natural,1900-End,,2006-2017,12,,,,,
+11,4159900,"MILL CREEK NEAR AVOCA, MI",43.054471,-82.734649,US,438.7401,Natural,,Non-ref,1963-2018,56, STCLAIR,FALSE,TRUE,,"upstrm town, intensive ag & channelization in hw"
+12,4160600,"BELLE RIVER AT MEMPHIS, MI",42.900862,-82.769091,US,390.8754,Natural,,Non-ref,1962-2018,57, STCLAIR,FALSE,TRUE,,upstrm channelizatoin & ag drains
+13,4165500,"CLINTON RIVER AT MORAVIAN DRIVE AT MT. CLEMENS, MI",42.595867,-82.90881,US,1892.565,Natural,,Non-ref,1934-2018,85, STCLAIR,FALSE,TRUE,,urban basin
+14,4166500,"RIVER ROUGE AT DETROIT, MI",42.372259,-83.255485,US,475.9533,Regulated,,Non-ref,1930-2018,89,ERIE,FALSE,TRUE,Regulation by water retention structure upstream from station and some diversion by pumping for sprinkler irrigation,urban basin
+15,4174500,"HURON RIVER AT ANN ARBOR, MI",42.286149,-83.733274,US,1928.162,Regulated,,Non-ref,1914-2018,105,ERIE,FALSE,TRUE,From 1962 to 1975 occasional regulation for lake level control operations upstream. Since 1975 extensive regulation of flow exists,"prox urban, upstrm regulating dams"
+16,4176500,"RIVER RAISIN NEAR MONROE, MI",41.960601,-83.531046,US,2685.966,Regulated,,Non-ref,1937-2018,82,ERIE,FALSE,TRUE,"Diurnal fluctuation caused by powerplants upstream from station prior to June 27, 1968. At times, flow is affected by irrigation pumpage",upstrm cities
+17,4177000,Ottawa River at University of Toledo Toledo OH,41.659681,-83.612547,US,343.7883,Natural,,Non-ref,1945-2018,74,ERIE,FALSE,TRUE,,urban
+18,4193500,Maumee River at Waterville OH,41.500053,-83.712714,US,16409.35,Regulated,,Non-ref,1898-2018,121,ERIE,FALSE,TRUE,,many upstrm cities
+19,4195820,Portage River near Elmore OH,41.491162,-83.224645,US,1266.16,Regulated,,Non-ref,1998-2018,20,,FALSE,FALSE,"Flow supplemented by water imported from Maumee River Basin for municipal supply for the city of Bowling Green 30 mi upstream. The importation of this water began Sept. 1, 1951.",hvy ag
+20,4198000,Sandusky River near Fremont OH,41.307831,-83.158809,US,3243.828,Regulated,,Non-ref,1923-2018,96,ERIE,FALSE,TRUE,,several upstrm cities
+21,4199000,Huron River at Milan OH,41.301719,-82.606844,US,947.3742,Regulated,,Non-ref,1950-2018,69,ERIE,FALSE,TRUE,,upstrm cities & reservoir
+22,4199500,VERMILION R NR VERMILION OH,41.38199,-82.316827,US,672.3603,Regulated,,Non-ref,1950-2018,69,ERIE,FALSE,TRUE,,"prox suburban, hvy ag, channelized hw"
+23,4200500,Black River at Elyria OH,41.380324,-82.104593,US,1026.93,Regulated,,Non-ref,1944-2018,75,ERIE,FALSE,TRUE,Some regulation at low flow for industrial use.,prox urban
+24,4208504,Cuyahoga River near Newburgh Heights OH,41.46255,-81.68096,US,2043.611,Natural,,Non-ref,1991-2018,27,,FALSE,FALSE,,urban
+25,4209000,Chagrin River at Willoughby OH,41.630881,-81.403445,US,637.3935,Regulated,,Non-ref,1925-2018,94,ERIE,FALSE,TRUE,Water diverted 200 ft upstream from station for municipal supply of City of Willoughby until 1988.,urban & suburban basin
+26,4212100,Grand River near Painesville OH,41.718934,-81.227879,US,1784.892,Regulated,,Non-ref,1974-2018,45,ERIE,FALSE,TRUE,,"reservoirs on 2 tribs, prox suburban"
+27,4213000,Conneaut Creek at Conneaut OH,41.926999,-80.603966,US,455.2974,Natural,,Ref,1922-2018,97,ERIE,FALSE,TRUE,,"small towns on main trib, NEoA"
+28,4213500,CATTARAUGUS CR AT GOWANDA NY,42.46395,-78.935035,US,1128.811,Regulated,,Non-ref,1939-2018,80,ERIE,FALSE,TRUE,Diurnal fluctuation at low and medium flow caused by powerplant 20 mi upstream from station.,"prox urban, upstrm urban & mod-hvy ag"
+29,4214500,BUFFALO CREEK AT GARDENVILLE NY,42.854781,-78.755031,US,368.3547,Regulated,,Non-ref,1938-2018,80, ERIE ,FALSE,TRUE,,"mod. Ag, prox. Urban"
+30,4215000,CAYUGA CREEK NR LANCASTER NY,42.890059,-78.645028,US,248.0184,Regulated,,Non-ref,1938-2018,80, ERIE ,FALSE,TRUE,"Since August 1962, undetermined amount of flow diverted by Lancaster Country Club for irrigation upstream from station.  Concrete dam configuration modified in September 1974 resulting in a lower point of zero flow.","upstrm ag, small towns, small ponds, NEoA"
+31,4215500,CAZENOVIA CREEK AT EBENEZER NY,42.829781,-78.775031,US,350.7246,Regulated,,Non-ref,1940-2018,78, ERIE ,FALSE,TRUE,All is good,"mod. Ag, prox. Urban"
