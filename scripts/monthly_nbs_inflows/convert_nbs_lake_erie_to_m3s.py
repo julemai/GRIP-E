@@ -20,13 +20,16 @@ from __future__ import print_function
 # along with Juliane Mai's personal code library.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+# run:
+#     run convert_nbs_lake_erie_to_m3s.py
+
 # -----------------------
 # add subolder scripts/lib to search path
 # -----------------------
 import sys
 import os 
 dir_path = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(dir_path+'/lib')
+sys.path.append(dir_path+'/../lib')
 
 import numpy as np
 import datetime
@@ -71,7 +74,7 @@ times = np.array([ datetime.date(*[int(ttt[ii,0]),int(ttt[ii,1]),1]) for ii in r
 # data in [mm]
 #   ncols = number of months    (=792)
 #   nrows = number of ensembles (=3000)
-data_mm = fread("../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_samples_mm.csv")
+data_mm = fread("../../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_samples_mm.csv")
 
 # convert into [m^3/s]
 data_m3s = copy.deepcopy(data_mm)
@@ -84,7 +87,7 @@ for ii in range(3):
     print('    [median,p2.5,p97.5] '+str(ii+1)+'/1950: [',np.median(data_m3s[:,ii]),',',np.percentile(data_m3s[:,ii],2.5),',',np.percentile(data_m3s[:,ii],97.5),']')
 
 # write to file with converted units
-f = open('../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_samples_m3s.csv', 'w')
+f = open('../../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_samples_m3s.csv', 'w')
 for ii in range(np.shape(data_m3s)[0]):
     f.write( ','.join(astr(data_m3s[ii,:],prec=8))+'\n')
 f.close()
@@ -96,7 +99,7 @@ f.close()
 # data in [mm]
 #   nrows = number of months    (=792)
 #   ncols = 3                   (median, 2.5 percentile, 97.5 percentile)
-data_mm = fread("../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_summary-stats_mm.csv",skip=1,separator=',')[:,2:]  # only Median,2.5 Percentile,97.5 Percentile
+data_mm = fread("../../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_summary-stats_mm.csv",skip=1,separator=',')[:,2:]  # only Median,2.5 Percentile,97.5 Percentile
 
 # convert into [m^3/s]
 data_m3s = copy.deepcopy(data_mm)
@@ -109,7 +112,7 @@ for ii in range(3):
     print('    [median,p2.5,p97.5] '+str(ii+1)+'/1950: [',data_m3s[ii,0],',',data_m3s[ii,1],',',data_m3s[ii,2],']')
 
 # write to file with converted units
-f = open('../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_summary-stats_m3s.csv', 'w')
+f = open('../../data/monthly_posterior_distributions_Smith_Gronewold/nbs_lake_erie_summary-stats_m3s.csv', 'w')
 f.write('Year,Month,Median,2.5 Percentile,97.5 Percentile\n')
 for ii in range(np.shape(data_m3s)[0]):
     f.write(    astr(times[ii].year*1.0, prec=4)+','+
