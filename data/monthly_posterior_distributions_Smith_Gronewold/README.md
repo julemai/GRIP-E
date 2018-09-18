@@ -64,3 +64,5 @@ every month considering leap years and different lengths of
 months. The ``multiplier`` for a 30-day month (e.g. April) would be around 10.5378.
 
 The original files are named "nbs_lake_erie_summary-stats_mm.csv" and "nbs_lake_erie_samples_mm.csv". The conversion was done using this script [here](https://github.com/julemai/GRIP-E/blob/master/scripts/monthly_nbs_inflows/convert_nbs_lake_erie_to_m3s.py). 
+
+A script to plot the data (all in [m^3/s]) can be found [here](https://github.com/julemai/GRIP-E/blob/master/scripts/monthly_nbs_inflows/plot_nbs_inflows.py). Plots of the data can be found [here](https://github.com/julemai/GRIP-E/wiki/Datasets#monthly-inflows-and-net-basin-supplies-to-lake-erie-and-lake-st-clair).
