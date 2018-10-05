@@ -355,7 +355,7 @@ if (not(gaugeinfo_file is None)):
     # ------------------
     # latitudes
     # ------------------
-    varName    = 'latitude'
+    varName    = 'lat'
     attributes = {"long_name":     "latitude",
                   "standard_name": "latitude",
                   "units":         "degrees_north"}
@@ -377,7 +377,7 @@ if (not(gaugeinfo_file is None)):
     # ------------------
     # longitudes
     # ------------------
-    varName    = "longitude"
+    varName    = "lon"
     attributes = {"long_name":     "longitude",
                   "standard_name": "longitude",
                   "units":         "degrees_east"}

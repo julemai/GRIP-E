@@ -32,6 +32,11 @@ dprog=$(dirname ${prog})
 isdir=${PWD}
 pid=$$
 
+# tell me what to do
+convert_to_single_nc=0       # converts every csv/txt into an individual NetCDF --> "<station-id>.nc"
+convert_to_merged_nc=1       # converts all   csv/txt's into one single NetCDF  --> "all_gauges.nc"
+plot_merged_nc=1             # plots all stations of a NetCDF into pdf          --> "all_gauges.pdf"
+
 objectives="1 2"
 
 for objective in ${objectives} ; do
@@ -55,7 +60,9 @@ for objective in ${objectives} ; do
 	    tmp1=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 3- | rev )
 	    ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
 	    
-	    # python convert_gauge_csv_2_netcdf.py --filetype USGS --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
+	    if [ ${convert_to_single_nc} == 1 ] ; then
+		python convert_gauge_csv_2_netcdf.py --filetype USGS --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
+	    fi
 	fi
 
 	ifile="../../data/objective_${objective}/csv/${ii}.csv"   # this is the WSC data
@@ -71,12 +78,22 @@ for objective in ${objectives} ; do
 	    tmp1=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 3- | rev )
 	    ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
 	    
-	    # python convert_gauge_csv_2_netcdf.py --filetype WSC --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
+	    if [ ${convert_to_single_nc} == 1 ] ; then
+		python convert_gauge_csv_2_netcdf.py --filetype WSC --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
+	    fi
 	fi
     done
 
-    ofile=$( echo "${tmp1}/netcdf/all_gauges.nc")
-    python convert_gauge_csv_2_netcdf.py --filetype "$(echo ${filetype})" --input_files "$(echo ${input_files})" --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
+    if [ ${convert_to_merged_nc} == 1 ] ; then
+	ofile=$( echo "${tmp1}/netcdf/all_gauges.nc")
+	python convert_gauge_csv_2_netcdf.py --filetype "$(echo ${filetype})" --input_files "$(echo ${input_files})" --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
+    fi
+
+    if [ ${plot_merged_nc} == 1 ] ; then
+	python plot_gauge_data.py -i ../../data/objective_${objective}/netcdf/all_gauges.nc -p ../../data/objective_${objective}/all_gauges.pdf
+	pdfcrop ../../data/objective_${objective}/all_gauges.pdf
+	mv      ../../data/objective_${objective}/all_gauges-crop.pdf ../../data/objective_${objective}/all_gauges.pdf
+    fi
 
 done
 
