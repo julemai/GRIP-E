@@ -22,7 +22,15 @@ from __future__ import print_function
 
 # run:
 #
-#    python convert_raw_to_netcdf.py -i lbrm_phase_0_objective_1.csv -o lbrm_phase_0_objective_1.nc -a ../../gauge_info.csv
+#    ------------
+#    LBRM
+#    ------------
+#    python convert_raw_to_netcdf.py -m LBRM -i ../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.csv -o ../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+#
+#    ------------
+#    VIC-GRU
+#    ------------
+#    python convert_raw_to_netcdf.py -m VIC-GRU -i ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.csv -o ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/VIC-GRU/subid2gauge.csv
 
 # -----------------------
 # add subolder scripts/lib to search path
@@ -45,9 +53,11 @@ from fread         import fread        # in lib/
 from fsread        import fsread       # in lib/
 from writenetcdf   import writenetcdf  # in lib/
 
-input_file  = 'LBRM_output_interpolated_to_gages_obj1.csv'
-output_file = 'lbrm_phase_0_objective_1.nc'
-gaugeinfo_file   = 'gauge_info.csv'
+model                      = ['LBRM']
+input_file                 = ['lbrm_phase_0_objective_1.csv']
+output_file                = ['lbrm_phase_0_objective_1.nc']
+gaugeinfo_file             = ['gauge_info.csv']
+mapping_subbasinID_gaugeID = ['']
 parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
 parser.add_argument('-i', '--input_file', action='store',
@@ -56,24 +66,68 @@ parser.add_argument('-i', '--input_file', action='store',
 parser.add_argument('-o', '--output_file', action='store',
                     default=output_file, dest='output_file', metavar='output_file', nargs=1,
                     help='Name of output file (NetCDF file).')
+parser.add_argument('-m', '--model', action='store',
+                    default=model, dest='model', metavar='model', nargs=1,
+                    help='Model (e.g., LBRM, VIC, VIC-GRU).')
 parser.add_argument('-a', '--gaugeinfo_file', action='store',
                     default=gaugeinfo_file, dest='gaugeinfo_file', metavar='gaugeinfo_file', nargs=1,
-                    help='File containing additional information.')
+                    help='File containing additional information about gauges (e.g., darinage area, lat/lon).')
+parser.add_argument('-b', '--mapping_subbasinID_gaugeID', action='store',
+                    default=mapping_subbasinID_gaugeID, dest='mapping_subbasinID_gaugeID', metavar='mapping_subbasinID_gaugeID',nargs=1,
+                    help='File containing mapping of subbasin ID (col 1) to gauge ID (col 2). All other columns are ignored. One header line. Only required for VIC and VIC-GRU.')
 
-
-args          = parser.parse_args()
-input_file    = args.input_file[0]
-output_file   = args.output_file[0]
-gaugeinfo_file     = args.gaugeinfo_file[0]
+args                       = parser.parse_args()
+model                      = args.model[0]
+input_file                 = args.input_file[0]
+output_file                = args.output_file[0]
+gaugeinfo_file             = args.gaugeinfo_file[0]
+mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
 
 del parser, args
 
+if (model != 'LBRM') and (model != 'VIC-GRU'):
+    raise ValueError('This model is not supported yet!')
+
+if (model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == ''):
+    raise ValueError('For VIC model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.')
+
 # read model output file
-model_stations = fread(input_file,skip=1,cskip=1,header=True)
-model_data     = fread(input_file,skip=1,cskip=1,header=False)
-model_data     = np.array(model_data,dtype=np.float32)
-model_dates    = fsread(input_file,skip=1,snc=1)
-model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),0,0 ) for ii in model_dates ]
+if (model == 'LBRM'):
+    # ---------------
+    # read model outputs
+    # ---------------
+    model_stations = fread(input_file,skip=1,cskip=1,header=True)
+    model_data     = fread(input_file,skip=1,cskip=1,header=False)
+    model_data     = np.array(model_data,dtype=np.float32)
+    model_dates    = fsread(input_file,skip=1,snc=1)
+    model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),0,0 ) for ii in model_dates ]
+
+if (model == 'VIC-GRU'):
+    # ---------------
+    # read model outputs
+    # ---------------
+    model_stations = fread(input_file,skip=1,cskip=4,header=True)   # this is subbasin IDs    
+    model_data     = fread(input_file,skip=1,cskip=4,header=False)
+    model_data     = np.array(model_data,dtype=np.float32)
+    model_dates    = fsread(input_file,skip=1,cskip=1,snc=2)
+    model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),int(str(ii[1])[0:2]),int(str(ii[1])[3:5]) ) for ii in model_dates ]
+
+    # ---------------
+    # read mapping info subbasin ID --> gauge station ID
+    # ---------------
+    mapping = fsread(mapping_subbasinID_gaugeID,skip=0,snc=2)
+    mapping = np.array(mapping)
+    
+    # ---------------
+    # map subbasin ID's to gauging stations IDs
+    # ---------------
+    for ii,isubbasin in enumerate(model_stations):  # they look like "sub676 [m3/s]" --> "676"
+
+        subbasin_ID = isubbasin.split(' ')[0].split('sub')[1]
+        idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
+        gauge_id = mapping[idx,1]
+
+        model_stations[ii] = gauge_id
 
 # get gauge station file
 gaugeinfo_header = fsread(gaugeinfo_file,comment='#',separator=',',skip=1,header=True)
@@ -100,9 +154,25 @@ for cc in content[1:]:
 
 # slim down gauge information to only gauges present (in right order)
 station_id_all = [ ii[0] for ii in gaugeinfo_all ]
+
+# check if data read from model are only stations required (see "station_id_all"); if not, delete data from:
+#      model_stations
+#      model_data
+nn = len(model_stations)
+ii = 0
+while ii < nn:
+    if not(model_stations[ii] in station_id_all):
+        # print('not in: ',model_stations[ii])
+        model_stations.pop(ii)
+        model_data = np.delete(model_data,ii,axis=1)
+        nn -= 1
+    else:
+        # print('in:     ',model_stations[ii])
+        ii += 1        
+
 idx_stations   = [ station_id_all.index(ss) for ss in station_id ]
-gaugeinfo = [ gaugeinfo_all[idx] for idx in idx_stations ]   # gauge information of only the requested gauges: [ID,Name,Lat,Lon,Country,Drainage_area]
-station_info = [[] for istation in range(len(gaugeinfo))]
+gaugeinfo      = [ gaugeinfo_all[idx] for idx in idx_stations ]   # gauge information of only the requested gauges: [ID,Name,Lat,Lon,Country,Drainage_area]
+station_info   = [[] for istation in range(len(gaugeinfo))]
 for istation in range(len(gaugeinfo)):
     station_info[istation] = gaugeinfo[istation][0]+' : '+gaugeinfo[istation][1]+' ('+gaugeinfo[istation][4]+')'
 

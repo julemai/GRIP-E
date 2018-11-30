@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='LBRM'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
+convert_models='LBRM VIC-GRU'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
 convert_obj='1 2'      # can be 1, 2, and/or 3
 convert_phase='0'      # phase 0: uncalibrated, different phys. setups,
 #                      # phase 1: calibrated,   different phys. setups,
@@ -43,13 +43,19 @@ for imodel in ${convert_models} ; do
     imodel_lower=$( echo "$imodel" | tr '[:upper:]' '[:lower:]' )
     echo ${imodel_lower}
 
+    if [ ${imodel} == 'VIC-GRU' ] ; then
+	add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.csv"
+    else
+	add_inputs=''
+    fi
+
     for iobj in ${convert_obj} ; do
 
 	for iphase in ${convert_phase} ; do
 
 	    echo ''
 	    echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
-	    python convert_raw_to_netcdf.py -i ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv -o ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ../../data/objective_${iobj}/gauge_info.csv
+	    python convert_raw_to_netcdf.py -m ${imodel} -i ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv -o ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ../../data/objective_${iobj}/gauge_info.csv ${add_inputs}
 
 	done
 
