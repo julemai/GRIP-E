@@ -32,6 +32,11 @@ from __future__ import print_function
 #    ------------
 #    python convert_raw_to_netcdf.py -m VIC-GRU -i ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.csv -o ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/VIC-GRU/subid2gauge.csv
 
+#    ------------
+#    GEM-Hydro
+#    ------------
+#    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+
 # -----------------------
 # add subolder scripts/lib to search path
 # -----------------------
@@ -85,7 +90,7 @@ mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
 
 del parser, args
 
-if (model != 'LBRM') and (model != 'VIC-GRU'):
+if (model != 'LBRM') and (model != 'VIC-GRU') and (model != 'GEM-Hydro'):
     raise ValueError('This model is not supported yet!')
 
 if (model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == ''):
@@ -101,6 +106,16 @@ if (model == 'LBRM'):
     model_data     = np.array(model_data,dtype=np.float32)
     model_dates    = fsread(input_file,skip=1,snc=1)
     model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),0,0 ) for ii in model_dates ]
+
+if (model == 'GEM-Hydro'):
+    # ---------------
+    # read model outputs :: this is already model outputs after running "strf_graphs_scores.py"
+    # ---------------
+    model_stations = fread(input_file,skip=1,cskip=2,header=True)
+    model_data     = fread(input_file,skip=1,cskip=2,header=False)
+    model_data     = np.array(model_data,dtype=np.float32)
+    model_dates    = fsread(input_file,skip=1,snc=2)
+    model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),int(str(ii[1])[0:2]),int(str(ii[1])[3:5]) ) for ii in model_dates ]
 
 if (model == 'VIC-GRU'):
     # ---------------
@@ -155,6 +170,9 @@ for cc in content[1:]:
 # slim down gauge information to only gauges present (in right order)
 station_id_all = [ ii[0] for ii in gaugeinfo_all ]
 
+# ------------------------
+# only dump stations to NetCDF that are in gauge_info.csv
+# ------------------------
 # check if data read from model are only stations required (see "station_id_all"); if not, delete data from:
 #      model_stations
 #      model_data
@@ -168,7 +186,21 @@ while ii < nn:
         nn -= 1
     else:
         # print('in:     ',model_stations[ii])
-        ii += 1        
+        ii += 1
+
+# ------------------------
+# do not dump stations multiple times
+# ------------------------
+unique_stations = list(np.unique(model_stations))
+for uu in unique_stations:
+
+    idx = np.sort(np.where(np.array(model_stations) == uu)[0])
+    for ii in idx[:0:-1]:
+        # delete that column from
+        #      model_stations
+        #      model_data
+        model_stations.pop(ii)
+        model_data = np.delete(model_data,ii,axis=1)
 
 idx_stations   = [ station_id_all.index(ss) for ss in station_id ]
 gaugeinfo      = [ gaugeinfo_all[idx] for idx in idx_stations ]   # gauge information of only the requested gauges: [ID,Name,Lat,Lon,Country,Drainage_area]
