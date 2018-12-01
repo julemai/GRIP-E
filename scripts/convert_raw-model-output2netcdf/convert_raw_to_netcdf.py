@@ -224,7 +224,7 @@ nodata = -9999.0
 print("Write '"+output_file+"' ...")
 fh = nc.Dataset( output_file, 'w', 'NETCDF4' )
 # File attributes
-FiAtt   = ([['description', 'Gauging station file created from '+', '.join(input_file)],
+FiAtt   = ([['description', 'Gauging station file created from '+input_file],
             ['history'    , 'Created by Juliane Mai'],
             ['Conventions', 'CF-1.6'],
             ['featureType', 'timeSeries']])
@@ -377,6 +377,7 @@ attributes = {'long_name': "discharge",
               '_FillValue': np.float32(nodata)}
 
 model_data = np.array(model_data,np.float32)
+model_data = np.transpose(model_data) # to match order of dimensions of observations
 
 arr_shape = np.shape(model_data)
 idx = [ np.where(dims==arr_shape[ddd])[0][0] for ddd in np.arange(len(arr_shape)) ]
@@ -392,7 +393,7 @@ writenetcdf( fh, vh, var = model_data)
 fh.setncattr('product', 'raster')
 fh.setncattr('Conventions', 'CF-1.6')
 fh.setncattr('License', 'These data are provided by the GWF funded IMPC project A5 - Hydrologic model inter-comparison and multi-model analysis for improved prediction. The data are under a GWF licence.')
-fh.setncattr('Remarks', "This data were converted from '"+input_file+"' using 'convert_raw_to_netcdf.py'")
+fh.setncattr('Remarks', "This data were converted from "+input_file+" using convert_raw_to_netcdf.py")
 
 # close netcdf
 fh.close() 
