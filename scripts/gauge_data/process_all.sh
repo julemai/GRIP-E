@@ -44,7 +44,8 @@ for objective in ${objectives} ; do
     input_files=""
     filetype=""
 
-    ids=$( grep -v ID ../../data/objective_${objective}/gauge_info.csv | awk -F, '{ print $2 }' )
+    ids=$( grep -v 'NO,ID,Name,Lat,Lon,Country' ../../data/objective_${objective}/gauge_info.csv | awk -F, '{ print $2 }' )
+    echo ${ids}
     for ii in ${ids} ; do
 	
 	ifile="../../data/objective_${objective}/csv/${ii}.txt"   # this is the USGS data
