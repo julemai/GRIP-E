@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='LBRM VIC-GRU GEM-Hydro'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
+convert_models='LBRM VIC VIC-GRU GEM-Hydro'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
 convert_obj='1 2'      # can be 1, 2, and/or 3
 convert_phase='0'      # phase 0: uncalibrated, different phys. setups,
 #                      # phase 1: calibrated,   different phys. setups,
@@ -43,7 +43,7 @@ for imodel in ${convert_models} ; do
     imodel_lower=$( echo "$imodel" | tr '[:upper:]' '[:lower:]' )
     echo ${imodel_lower}
 
-    if [ ${imodel} == 'VIC-GRU' ] ; then
+    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) ]] ; then
 	add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.csv"
     else
 	add_inputs=''

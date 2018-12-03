@@ -28,6 +28,11 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m LBRM -i ../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.csv -o ../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 #
 #    ------------
+#    VIC
+#    ------------
+#    python convert_raw_to_netcdf.py -m VIC -i ../../data/objective_1/model/VIC/vic_phase_0_objective_1.csv -o ../../data/objective_1/model/VIC/vic_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/VIC/subid2gauge.csv
+
+#    ------------
 #    VIC-GRU
 #    ------------
 #    python convert_raw_to_netcdf.py -m VIC-GRU -i ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.csv -o ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/VIC-GRU/subid2gauge.csv
@@ -90,7 +95,7 @@ mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
 
 del parser, args
 
-if (model != 'LBRM') and (model != 'VIC-GRU') and (model != 'GEM-Hydro'):
+if (model != 'LBRM') and (model != 'VIC') and (model != 'VIC-GRU') and (model != 'GEM-Hydro'):
     raise ValueError('This model is not supported yet!')
 
 if (model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == ''):
@@ -117,7 +122,7 @@ if (model == 'GEM-Hydro'):
     model_dates    = fsread(input_file,skip=1,snc=2)
     model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),int(str(ii[1])[0:2]),int(str(ii[1])[3:5]) ) for ii in model_dates ]
 
-if (model == 'VIC-GRU'):
+if (model == 'VIC-GRU' or model == 'VIC'):
     # ---------------
     # read model outputs
     # ---------------
