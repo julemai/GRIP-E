@@ -22,10 +22,9 @@ from __future__ import print_function
 
 # run:
 #
-#    ------------
-#    GEM-Hydro
-#    ------------
 #    python plot_nc_model_output.py -i '../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc' -p test.pdf
+#
+#    python plot_nc_model_output.py -i '../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc' -a '2011-01-01:2014-12-31' -p test.pdf
 
 # -----------------------
 # add subolder scripts/lib to search path
@@ -57,12 +56,16 @@ input_files = ['vic-gru_phase_0_objective_1.nc', 'gem-hydro_phase_0_objective_1.
 pngbase     = ''
 pdffile     = 'test.pdf'
 usetex      = False
+time_period = ''
 
 parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
 parser.add_argument('-i', '--input_files', action='store',
                     default=input_files, dest='input_files', metavar='input_files', nargs=1,
                     help='Name of NetCDF file containing standard model outputs.')
+parser.add_argument('-a', '--time_period', action='store',
+                    default=time_period, dest='time_period', metavar='time_period', nargs=1,
+                    help='Time period to plot and calculate performance of (format: YYYY-MM-DD:YYYY-MM-DD; default: all time points).')
 parser.add_argument('-g', '--pngbase', action='store',
                     default=pngbase, dest='pngbase', metavar='pngbase',
                     help='Name basis for png output files (default: open screen window).')
@@ -77,6 +80,7 @@ input_files = (args.input_files[0]).split(' ')
 pngbase     = args.pngbase
 pdffile     = args.pdffile
 usetex      = args.usetex
+time_period = args.time_period[0]
 
 del parser, args
 
@@ -101,6 +105,12 @@ for iinput_file,input_file in enumerate(input_files):
     idx_station = [ list(data_sim.station_id).index(ii) for ii in data_obs.station_id ]
     idx_time    = [ np.where(data_obs.time==sim_tt)[0][0] for sim_tt in data_sim.time ]
 
+    # cut out time period requested
+    if time_period != '':
+        start = time_period.split(':')[0]
+        end   = time_period.split(':')[1]
+        idx_period = np.where((data_sim.time>=np.datetime64(start)).data & (data_sim.time<=np.datetime64(end)).data)[0]
+
     # some stuff for labels in plots
     var_longname = data_obs['Q'].long_name
     var_unit     = data_obs['Q'].units
@@ -118,7 +128,13 @@ for iinput_file,input_file in enumerate(input_files):
     for istation in range(nstations):
         stat_id = str(data_obs.station_id[istation].data)
         Qobs    = data_obs.Q[istation,idx_time]
-        Qsim    = data_sim.Q[idx_station[istation],:]     
+        Qsim    = data_sim.Q[idx_station[istation],:]
+        dates   = data_sim.time.data
+        
+        if time_period != '':
+            Qobs  = Qobs[idx_period]
+            Qsim  = Qsim[idx_period]
+            dates = dates[idx_period]
         nse     = float(errormeasures.nse(Qobs,Qsim).data)
         pbias   = float(errormeasures.pbias(Qobs,Qsim).data)
         ttidx = np.where((Qsim > 0.0) & (Qobs > 0.0))[0]
@@ -132,7 +148,7 @@ for iinput_file,input_file in enumerate(input_files):
         dict_qobs[stat_id]    = Qobs.data
         dict_qsim[stat_id]    = Qsim.data
         # convert from numpy.datetime64 to datetime.datetime
-        dict_dates[stat_id]   = np.array([ pd.Timestamp(itime).to_pydatetime() for itime in data_sim.time.data ])
+        dict_dates[stat_id]   = np.array([ pd.Timestamp(itime).to_pydatetime() for itime in dates ])
         # station long name
         dict_info[stat_id]    = data_obs['station_info'][istation]
 
@@ -431,7 +447,7 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
                         marker='o', markeredgecolor=lcols[0], markerfacecolor='None')
     sub.tick_params(axis='x',labelbottom='off')
     plt.setp(sub, ylabel='NSE(Q)')
-    plt.setp(sub,ylim=[dmin,dmax*1.02])
+    plt.setp(sub,ylim=[dmin,max(dmax,1.0)])
 
     # title
     sub.text(0.5, 1.02, imodel, transform=sub.transAxes,
@@ -453,7 +469,7 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
                              horizontalalignment='left', verticalalignment='center')
     sub.tick_params(axis='x',labelbottom='off')
     sub.tick_params(axis='y',labelleft='off')
-    plt.setp(sub,ylim=[dmin,dmax*1.02])
+    plt.setp(sub,ylim=[dmin,max(dmax,1.0)])
 
     # -------------
     # LOG NSE
@@ -470,7 +486,7 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
                         marker='o', markeredgecolor=lcols[0], markerfacecolor='None')
     sub.tick_params(axis='x',labelbottom='off')
     plt.setp(sub, ylabel='NSE(log[Q])')
-    plt.setp(sub,ylim=[dmin,dmax*1.02])
+    plt.setp(sub,ylim=[dmin,max(dmax,1.0)])
 
     iplot += 1
     pos    = position(nrow,nncol,iplot,hspace=hspace,vspace=vvspace)
@@ -487,7 +503,7 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
                              horizontalalignment='left', verticalalignment='center')
     sub.tick_params(axis='x',labelbottom='off')
     sub.tick_params(axis='y',labelleft='off')
-    plt.setp(sub,ylim=[dmin,dmax*1.02])
+    plt.setp(sub,ylim=[dmin,max(dmax,1.0)])
 
     # -------------
     # SQRT NSE
@@ -504,7 +520,7 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
                         marker='o', markeredgecolor=lcols[0], markerfacecolor='None')
     sub.tick_params(axis='x',labelbottom='off')
     plt.setp(sub, ylabel='NSE(sqrt[Q])')
-    plt.setp(sub,ylim=[dmin,dmax*1.02])
+    plt.setp(sub,ylim=[dmin,max(dmax,1.0)])
 
     iplot += 1
     # [left, bottom, width, height)
@@ -522,7 +538,7 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
                              horizontalalignment='left', verticalalignment='center')
     sub.tick_params(axis='x',labelbottom='off')
     sub.tick_params(axis='y',labelleft='off')
-    plt.setp(sub,ylim=[dmin,dmax*1.02])
+    plt.setp(sub,ylim=[dmin,max(dmax,1.0)])
 
     # -------------
     # PBIAS
