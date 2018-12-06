@@ -42,6 +42,11 @@ from __future__ import print_function
 #    ------------
 #    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
+#    ------------
+#    HYPE
+#    ------------
+#    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+
 # -----------------------
 # add subolder scripts/lib to search path
 # -----------------------
@@ -56,7 +61,8 @@ import numpy as np             # to perform numerics
 import shutil                  # file operations
 import copy                    # deep copy objects, arrays etc
 import datetime                # converting dates
-import netCDF4 as nc
+import netCDF4 as nc           # NetCDF writing
+import glob                    # for file listing
 
 #import netcdf4     as     nc4         # in lib/
 from fread         import fread        # in lib/
@@ -72,13 +78,13 @@ parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormat
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
 parser.add_argument('-i', '--input_file', action='store',
                     default=input_file, dest='input_file', metavar='input_file', nargs=1,
-                    help='Name of input file (raw model output file).')
+                    help='Name of input file (raw model output file; for HYPE basename (filename to be expected to be basename<gaugeId>.txt).')
 parser.add_argument('-o', '--output_file', action='store',
                     default=output_file, dest='output_file', metavar='output_file', nargs=1,
                     help='Name of output file (NetCDF file).')
 parser.add_argument('-m', '--model', action='store',
                     default=model, dest='model', metavar='model', nargs=1,
-                    help='Model (e.g., LBRM, VIC, VIC-GRU).')
+                    help='Model (e.g., LBRM, VIC, VIC-GRU, HYPE, GEM-Hydro).')
 parser.add_argument('-a', '--gaugeinfo_file', action='store',
                     default=gaugeinfo_file, dest='gaugeinfo_file', metavar='gaugeinfo_file', nargs=1,
                     help='File containing additional information about gauges (e.g., darinage area, lat/lon).')
@@ -95,13 +101,50 @@ mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
 
 del parser, args
 
-if (model != 'LBRM') and (model != 'VIC') and (model != 'VIC-GRU') and (model != 'GEM-Hydro'):
+if (model != 'LBRM') and (model != 'VIC') and (model != 'VIC-GRU') and (model != 'GEM-Hydro') and (model != 'HYPE'):
     raise ValueError('This model is not supported yet!')
 
-if (model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == ''):
+if ((model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == '')) or ((model == 'VIC') and (mapping_subbasinID_gaugeID == '')):
     raise ValueError('For VIC model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.')
 
 # read model output file
+if (model == 'HYPE'):
+    # ---------------
+    # read model outputs
+    # - every gauge is in a separate file
+    # ---------------
+    input_files    = glob.glob(input_file+"*")
+    model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
+    model_data     = [ [] for ii in input_files ]
+    model_dates    = None
+    for ii,iinput_file in enumerate(input_files):
+        
+        # find column containing discharge "cout"
+        head = fread(iinput_file,skip=2,cskip=1,header=True)
+        idx = head[0].index('cout')
+        
+        model_data[ii]  = fread(iinput_file,skip=2,cskip=1,header=False)[:,idx]
+
+        # make sure all model dates are same in all files
+        if model_dates is None:
+            # save first file's dates
+            model_dates = fsread(iinput_file,skip=2,snc=1)
+            model_dates = [ datetime.datetime( int(str(iii[0])[0:4]),int(str(iii[0])[5:7]),int(str(iii[0])[8:10]),0,0 ) for iii in model_dates ]
+        else:
+            # check if dates are same as already saved
+            tmp_dates = fsread(iinput_file,skip=2,snc=1)
+            tmp_dates = [ datetime.datetime( int(str(iii[0])[0:4]),int(str(iii[0])[5:7]),int(str(iii[0])[8:10]),0,0 ) for iii in tmp_dates ]
+            if not np.all(tmp_dates == model_dates):
+                print('Time steps first file: ',input_files[0])
+                print('     ',model_dates)
+                print('Time steps current file: ',input_files[ii])
+                print('     ',tmp_dates)
+                raise ValueError('Time step in files must be all the same!')
+            
+
+    model_data  = np.transpose(np.array(model_data))
+    model_dates = np.transpose(np.array(model_dates))
+    
 if (model == 'LBRM'):
     # ---------------
     # read model outputs
@@ -114,7 +157,8 @@ if (model == 'LBRM'):
 
 if (model == 'GEM-Hydro'):
     # ---------------
-    # read model outputs :: this is already model outputs after running "strf_graphs_scores.py"
+    # read model outputs
+    # - model outputs already pre-processes using "strf_graphs_scores.py"
     # ---------------
     model_stations = fread(input_file,skip=1,cskip=2,header=True)
     model_data     = fread(input_file,skip=1,cskip=2,header=False)
@@ -125,6 +169,7 @@ if (model == 'GEM-Hydro'):
 if (model == 'VIC-GRU' or model == 'VIC'):
     # ---------------
     # read model outputs
+    # - model outputs contain subbasin ID and not gauge ID --> need to be remapped
     # ---------------
     model_stations = fread(input_file,skip=1,cskip=4,header=True)   # this is subbasin IDs    
     model_data     = fread(input_file,skip=1,cskip=4,header=False)
