@@ -22,7 +22,7 @@ from __future__ import print_function
 
 # run:
 #
-#    python plot_nc_model_output.py -i '../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc' -p test.pdf
+#    python plot_nc_model_output.py -i '../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc ../../data/objective_1/model/VIC/vic_phase_0_objective_1.nc' -a '2011-01-01:2014-12-31' -p test.pdf
 #
 #    python plot_nc_model_output.py -i '../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc' -a '2011-01-01:2014-12-31' -p test.pdf
 
@@ -85,6 +85,7 @@ time_period = args.time_period[0]
 del parser, args
 
 dicts_nse     = {}
+dicts_rmse    = {}
 dicts_pbias   = {}
 dicts_lognse  = {}
 dicts_sqrtnse = {}
@@ -117,6 +118,7 @@ for iinput_file,input_file in enumerate(input_files):
 
     # calculate objectives
     dict_nse     = {}
+    dict_rmse    = {}
     dict_pbias   = {}
     dict_lognse  = {}
     dict_sqrtnse = {}
@@ -136,12 +138,14 @@ for iinput_file,input_file in enumerate(input_files):
             Qsim  = Qsim[idx_period]
             dates = dates[idx_period]
         nse     = float(errormeasures.nse(Qobs,Qsim).data)
+        rmse    = float(errormeasures.rmse(Qobs,Qsim).data)
         pbias   = float(errormeasures.pbias(Qobs,Qsim).data)
         ttidx = np.where((Qsim > 0.0) & (Qobs > 0.0))[0]
         lognse  = float(errormeasures.nse(np.log(Qobs[ttidx]),np.log(Qsim[ttidx])).data)
         sqrtnse = float(errormeasures.nse(np.sqrt(Qobs),np.sqrt(Qsim)).data)
         
         dict_nse[stat_id]     = nse
+        dict_rmse[stat_id]    = rmse
         dict_pbias[stat_id]   = pbias
         dict_lognse[stat_id]  = lognse
         dict_sqrtnse[stat_id] = sqrtnse
@@ -154,6 +158,7 @@ for iinput_file,input_file in enumerate(input_files):
 
     # save everything in dictionaries
     dicts_nse[input_file.split('/')[-1].split('_')[0]]     = dict_nse
+    dicts_rmse[input_file.split('/')[-1].split('_')[0]]    = dict_rmse
     dicts_pbias[input_file.split('/')[-1].split('_')[0]]   = dict_pbias
     dicts_lognse[input_file.split('/')[-1].split('_')[0]]  = dict_lognse
     dicts_sqrtnse[input_file.split('/')[-1].split('_')[0]] = dict_sqrtnse
@@ -176,11 +181,11 @@ else:
 
 # Main plot
 ncol        = 1           # # of columns of subplots per figure
-nrow        = 8           # # of rows of subplots per figure
+nrow        = 6           # # of rows of subplots per figure
 hspace      = 0.05        # x-space between subplots
 vspace      = 0.04        # y-space between subplots
 right       = 0.9         # right space on page
-textsize    = 10           # standard text size
+textsize    = 14           # standard text size
 textsize_clock = 0.6*textsize        # standard text size
 dxabc       = 0.95        # % of (max-min) shift to the right from left y-axis for a,b,c,... labels
 dyabc       = 0.9         # % of (max-min) shift up from lower x-axis for a,b,c,... labels
@@ -311,6 +316,10 @@ else:
 
 ifig = 0
 
+sel_stations = ['02GG006','04207200','04208504'] #['02GG002','02GG003','04196800']
+# max of simulation across per basin all models
+max_sim_basins = np.array([ np.nanmax( [ dicts_qobs[imodel_lc.lower()][key] for imodel_lc in [ ii.split('/')[-2] for ii in input_files ] ]) for key in sel_stations ])
+
 for imodel in [ ii.split('/')[-2] for ii in input_files ]:
     
     # -------------------------------------------------------------------------
@@ -323,7 +332,6 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
 
     imodel_lc = imodel.lower()
 
-    sel_stations = ['02GG002','02GG003','04196800']
     max_obs = np.max(np.array([ np.nanmax(dicts_qobs[imodel_lc][key]) for key in sel_stations ]))
     max_sim = np.max(np.array([ np.nanmax(dicts_qsim[imodel_lc][key]) for key in sel_stations ]))
 
@@ -365,28 +373,29 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
 
         # legend
         if (iplot > 0):
-            illxbbox     =  1.0        # x-anchor legend bounding box
+            illxbbox     =  0.0        # x-anchor legend bounding box
             illybbox     =  1.0        # y-anchor legend bounding box
-            locat       = 'upper right' #'upper left'   
+            locat       = 'upper left' #'upper left'   
             sub.legend(frameon=frameon,
                            labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
                            loc=locat, bbox_to_anchor=(illxbbox,illybbox), scatterpoints=1, numpoints=1,fontsize=textsize)
 
         # text for performance metrics
         textbox_x = 0.5
-        textbox_y = 1.00
+        textbox_y = 1.02
         nse     = "NSE(Q) = {0:6.3f}".format(dicts_nse[imodel_lc][istation]).strip()
+        rmse    = "RMSE(Q) = {0:6.3f}".format(dicts_rmse[imodel_lc][istation]).strip()
         pbias   = "PBIAS(Q) = {0:6.3f}".format(dicts_pbias[imodel_lc][istation]).strip()
         lognse  = "NSE(logQ) = {0:6.3f}".format(dicts_lognse[imodel_lc][istation]).strip()
         sqrtnse = "NSE(sqrtQ) = {0:6.3f}".format(dicts_sqrtnse[imodel_lc][istation]).strip()
         performance = nse+'  '+lognse+'  '+sqrtnse+'  '+pbias
         
         sub.text(textbox_x, textbox_y, performance, transform=sub.transAxes,
-                             rotation=0, fontsize=textsize,
+                             rotation=0, fontsize=textsize-2,
                              horizontalalignment='center', verticalalignment='bottom')
 
         textbox_x = 0.5
-        textbox_y = 1.18
+        textbox_y = 1.15 # 1.18
         # text for gauge name
         # insert line break if station_info (without spaces) is longer than ~100 charachters
         tmp = str(dicts_info[imodel_lc][istation].data).strip().replace('"','').split(' ')
@@ -405,7 +414,8 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
 
         # limits
         plt.setp(sub,xlim=[mdates.date2num(datetime.datetime(2010,1,1,0,0)),mdates.date2num(datetime.datetime(2015,1,1,0,0))])
-        plt.setp(sub,ylim=[0.1,max(max_obs,max_sim)*1.05])
+        #plt.setp(sub,ylim=[0.0,max(max_obs,max_sim)*1.05])
+        plt.setp(sub,ylim=[0.0,max_sim_basins[iistation]])
 
         # rotate x-ticks
         plt.xticks(rotation=0)
@@ -420,7 +430,7 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
 
 
     # -------------------------------------------------------------------------
-    # Fig 2 :: statistics as boxplot
+    # Fig 2 :: statistics over basins and as boxplot
     # -------------------------------------------------------------------------
     ifig += 1
     iplot = 0
