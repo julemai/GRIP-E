@@ -47,6 +47,11 @@ from __future__ import print_function
 #    ------------
 #    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
+#    ------------
+#    SWAT
+#    ------------
+#    python convert_raw_to_netcdf.py -m SWAT -i ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT/subid2gauge.csv
+
 # -----------------------
 # add subolder scripts/lib to search path
 # -----------------------
@@ -68,6 +73,8 @@ import glob                    # for file listing
 from fread         import fread        # in lib/
 from fsread        import fsread       # in lib/
 from writenetcdf   import writenetcdf  # in lib/
+from dec2date      import dec2date     # in lib/
+from date2dec      import date2dec     # in lib/
 
 model                      = ['LBRM']
 input_file                 = ['lbrm_phase_0_objective_1.csv']
@@ -101,11 +108,15 @@ mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
 
 del parser, args
 
-if (model != 'LBRM') and (model != 'VIC') and (model != 'VIC-GRU') and (model != 'GEM-Hydro') and (model != 'HYPE'):
+if (model != 'LBRM') and (model != 'VIC') and (model != 'VIC-GRU') and (model != 'GEM-Hydro') and (model != 'HYPE') and (model != 'SWAT') and (model != 'WATFLOOD'):
     raise ValueError('This model is not supported yet!')
 
-if ((model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == '')) or ((model == 'VIC') and (mapping_subbasinID_gaugeID == '')):
-    raise ValueError('For VIC model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.')
+if ( ((model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'VIC') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'SWAT') and (mapping_subbasinID_gaugeID == '')) ):
+    raise ValueError('For VIC and SWAT model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.')
+if ((model == 'WATFLOOD') and (csvheader == '')):
+    raise ValueError('For WATFLOOD model TXT file containing the header (column names) of model output needs to be provided.')
 
 # read model output file
 if (model == 'HYPE'):
@@ -155,6 +166,16 @@ if (model == 'LBRM'):
     model_dates    = fsread(input_file,skip=1,snc=1)
     model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),0,0 ) for ii in model_dates ]
 
+if (model == 'WATFLOOD'):
+    # ---------------
+    # read model outputs
+    # ---------------
+    model_stations = fread(csvheader,skip=0,cskip=0,header=True)
+    model_data     = fread(input_file,skip=0,cskip=1,header=False)
+    model_data     = np.array(model_data,dtype=np.float32)
+    model_dates    = fsread(input_file,skip=1,snc=1)
+    model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),0,0 ) for ii in model_dates ]
+
 if (model == 'GEM-Hydro'):
     # ---------------
     # read model outputs
@@ -189,6 +210,62 @@ if (model == 'VIC-GRU' or model == 'VIC'):
     for ii,isubbasin in enumerate(model_stations):  # they look like "sub676 [m3/s]" --> "676"
 
         subbasin_ID = isubbasin.split(' ')[0].split('sub')[1]
+        idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
+        gauge_id = mapping[idx,1]
+
+        model_stations[ii] = gauge_id
+
+if (model == 'SWAT'):
+
+    # ---------------
+    # read mapping info subbasin ID --> gauge station ID
+    # ---------------
+    mapping = fsread(mapping_subbasinID_gaugeID,skip=1,snc=2)
+    mapping = np.array(mapping)
+    mapping[:,0] = np.array( [ii.strip() for ii in mapping[:,0]] )   # remove trailing blanks
+    mapping[:,1] = np.array( [ii.strip() for ii in mapping[:,1]] )   # remove trailing blanks
+    nstations = np.shape(mapping)[0]
+    
+    # ---------------
+    # read model outputs
+    # - model outputs contain subbasin ID and not gauge ID --> need to be remapped
+    # ---------------
+    #
+    # col 1 :: tmp[idx,0] :: subbasin ID: 1-199 (basins that are important are in mapping)
+    # col 2 :: tmp[idx,1] :: Year
+    # col 3 :: tmp[idx,2] :: day of the year (1-366)
+    # col 6 :: tmp[idx,3] :: FLOW_OUTcms = Q[m^3/s]
+    tmp = fread(input_file,nc=[0,1,2,5], skip=1,cskip=0,header=False)
+
+    model_stations_all = np.array(np.array(tmp[:,0],np.int),dtype=str)   # this is subbasin IDs
+    ntime = np.shape(np.where(model_stations_all==model_stations_all[0])[0])[0]
+
+    model_data = np.ones([nstations,ntime],dtype=np.float32) * -9999.9
+    model_stations = list(np.array(['None']*nstations,dtype=str))
+    for istation,station in enumerate([ str(int(ii)) for ii in mapping[:,0] ]):
+
+        idx = np.where(model_stations_all==station)[0]   # lines containing data for current station
+        imodel_data = tmp[idx,3]               # FLOW_OUTcms for current station
+        ndat = np.shape(imodel_data)[0]        # number of data points
+        if ndat != ntime:
+            print('ERROR :: station: ',station, '   # of time steps = ',ndat, '         expected # of time steps = ',ntime)
+            stop
+        
+        model_data[istation,:] = imodel_data
+        model_stations[istation] = station   # this is subbasin IDs    
+
+        year = tmp[idx,1]  # YEAR
+        doy  = tmp[idx,2]  # MON = day of the year (1...366)
+
+    model_dates = [ dec2date(date2dec(yr=year[ii],mo=1,dy=1)-1.0 + doy[ii]) for ii in range(len(year)) ]
+    model_dates = [ datetime.datetime( ii[0],ii[1],ii[2],0,0 ) for ii in model_dates ]
+    
+    # ---------------
+    # map subbasin ID's to gauging stations IDs
+    # ---------------
+    for ii,isubbasin in enumerate(model_stations):  # they look like "sub676 [m3/s]" --> "676"
+
+        subbasin_ID = str(isubbasin) # isubbasin.split(' ')[0].split('sub')[1]
         idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
         gauge_id = mapping[idx,1]
 
