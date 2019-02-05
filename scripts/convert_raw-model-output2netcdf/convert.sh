@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='LBRM VIC VIC-GRU GEM-Hydro SWAT'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
+convert_models='LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
 convert_obj='1'      # can be 1, 2, and/or 3
 convert_phase='0'      # phase 0: uncalibrated, different phys. setups,
 #                      # phase 1: calibrated,   different phys. setups,

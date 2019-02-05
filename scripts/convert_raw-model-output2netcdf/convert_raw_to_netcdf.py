@@ -52,6 +52,11 @@ from __future__ import print_function
 #    ------------
 #    python convert_raw_to_netcdf.py -m SWAT -i ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT/subid2gauge.csv
 
+#    ------------
+#    WATFLOOD
+#    ------------
+#    python convert_raw_to_netcdf.py -m WATFLOOD -i ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.csv -o ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+
 # -----------------------
 # add subolder scripts/lib to search path
 # -----------------------
@@ -115,8 +120,6 @@ if ( ((model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'VIC') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'SWAT') and (mapping_subbasinID_gaugeID == '')) ):
     raise ValueError('For VIC and SWAT model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.')
-if ((model == 'WATFLOOD') and (csvheader == '')):
-    raise ValueError('For WATFLOOD model TXT file containing the header (column names) of model output needs to be provided.')
 
 # read model output file
 if (model == 'HYPE'):
@@ -170,11 +173,60 @@ if (model == 'WATFLOOD'):
     # ---------------
     # read model outputs
     # ---------------
-    model_stations = fread(csvheader,skip=0,cskip=0,header=True)
-    model_data     = fread(input_file,skip=0,cskip=1,header=False)
-    model_data     = np.array(model_data,dtype=np.float32)
-    model_dates    = fsread(input_file,skip=1,snc=1)
-    model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),0,0 ) for ii in model_dates ]
+
+    input_f = open(input_file, "r")
+    dump = input_f.readlines()
+    input_f.close()
+    
+    dump = [ dd.strip() for dd in dump ]    # remove leading and trailing blanks and '\n'
+
+    # indexes of lines that start with "location"
+    idx_location_line = np.where( [ line.startswith('location') for line in dump ] )[0]
+
+    # col_1 = # of gauges in following block
+    # col_2 = max hour
+    # col_3 = max hour
+    # col_4 = delta hour
+    # next block will have <col_1> lines and some columns; first column contains gauge ID
+    # block after has <col_1*2 + 1> columns; first is time step in hours; then obs_1, mod_1, obs_2, mod_2, ..., obs_ngauge, mod_ngauge
+    #                 <col_3> / <col_4> rows
+    ref_dates  = [ ' '.join(dump[ii-2].split()).split('\\')[-1].split('_')[0] for ii in idx_location_line ]
+    ref_dates  = [ datetime.datetime( int(str(ii)[0:4]),int(str(ii)[4:6]),int(str(ii)[6:8]),0,0 ) for ii in ref_dates ]
+    block_info = np.array( [ ' '.join(dump[ii-1].split()).split(' ') for ii in idx_location_line],dtype=np.int )
+
+    # stations per block
+    model_stations_block = [ [ ' '.join(dump[jj].split()).split(' ')[0] for jj in range(ii+1, ii+block_info[iii,0]+1)] for iii,ii in enumerate(idx_location_line) ]
+
+    # unique list of stations (first flatten list of lists)
+    model_stations_uniq = [item for sublist in model_stations_block for item in sublist]
+    model_stations_uniq  = np.unique( model_stations_uniq )
+
+    # model dates are ref_dates plus hours (first column in second block)
+    hours_block = [ [ int(' '.join(dump[jj].split()).split(' ')[0]) for jj in range(ii+block_info[iii,0]+2,
+                                                                      ii+block_info[iii,0]+2+block_info[iii,2]/block_info[iii,3])]
+                                                      for iii,ii in enumerate(idx_location_line) ]
+    # ASK FRANK IF FIRST DAY IS JAN 2 (-0) OR JAN 1 (-24) 
+    model_dates_block = [ [ iref + datetime.timedelta(hours=jj-24) for jj in hours_block[ii] ] for ii,iref in enumerate(ref_dates) ]
+
+    # unique list of dates (first flatten list of lists)
+    model_dates_uniq = [item for sublist in model_dates_block for item in sublist]
+    model_dates_uniq  = np.unique( model_dates_uniq )
+
+    # data of each block; not sorted yet following model_stations_uniq
+    model_data_block = [ [ list(np.array(' '.join(dump[jj].split()).split(' ')[2::2],dtype=np.float32)) for jj in range(ii+block_info[iii,0]+2,
+                                                                      ii+block_info[iii,0]+2+block_info[iii,2]/block_info[iii,3])] for iii,ii in enumerate(idx_location_line) ]
+
+    # finally put data
+    model_data = np.ones([np.shape(model_dates_uniq)[0], np.shape(model_stations_uniq)[0]]) * -9999.9
+
+    for iblock in range(len(model_data_block)):
+        row_idx = np.array([ list(model_dates_uniq).index(ii) for ii in model_dates_block[iblock] ])
+        col_idx = np.array([ list(model_stations_uniq).index(ii) for ii in model_stations_block[iblock] ])
+
+        model_data[row_idx[:, np.newaxis],col_idx] = np.array(model_data_block[iblock])
+
+    model_stations = list(model_stations_uniq)
+    model_dates    = list(model_dates_uniq)
 
 if (model == 'GEM-Hydro'):
     # ---------------
