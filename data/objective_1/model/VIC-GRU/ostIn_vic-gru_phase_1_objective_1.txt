@@ -1,0 +1,82 @@
+#ProgramType ParaPADDS
+#ProgramType  GeneticAlgorithm
+ProgramType  ModelEvaluation
+ObjectiveFunction  GCOP
+ModelExecutable  ./OST_VIC.sh
+#PreserveBestModel ./save_best.sh
+PreserveModelOutput no
+ModelSubdir run_folders_
+
+BeginFilePairs
+Soil.tpl ; Soil.tpl
+Veg.tpl; Veg.tpl
+Parameters.tpl ; Parameters.tpl;
+Kslow.tpl; Kslow.txt
+Split.tpl; Split.txt;
+EndFilePairs
+
+BeginParams
+#name   init.	 lower  	upper	 transformations		format
+b_inf_1 random	 0.01		5        none  none  none
+#b_inf_2	random	 0.01		5        none  none  none
+exp_1_1 random	 4		4.1        none  none  none
+#exp_1_2 random	 3		12        none  none  none
+K_sat_1_1 random	 300		301        none  none  none
+#K_sat_1_2 random	 100		600        none  none  none
+depth_1_1 random	 0.1		0.11        none  none  none
+#depth_1_2 random	 0.1		0.31        none  none  none
+depth_2_1 random	 0.11		1        none  none  none
+#depth_2_2 random	 0.11		1        none  none  none
+root_1_1 random	 0.6		0.61        none  none  none
+#root_1_2 random	 0.6		0.8        none  none  none
+root_2_1 random	 0.4		0.41        none  none  none
+#root_2_2 random	 0.2		0.4        none  none  none
+K_slow  random	 0.01		0.5        none  none  none
+splitter random	 0.01		0.99        none  none  none
+#FC      random	 0.2		0.71        none  none  none  # field capacity
+#WP      random	 0.02		0.021        none  none  none  # wilting point
+#RSM     random	 0.01		0.012        none  none  none  # residual mositure
+EndParams
+
+BeginTiedParams
+b_inf_2 1 b_inf_1 linear 1 0
+exp_1_2 1 exp_1_1 linear 1 0
+K_sat_1_2 1 K_sat_1_1 linear 1 0
+depth_1_2 1 depth_1_1 linear 1 0
+depth_2_2 1 depth_2_1 linear 1 0
+root_1_2 1 root_1_1 linear 1 0
+root_2_2 1 root_2_1 linear 1 0
+EndTiedParams
+
+BeginInitParams
+# the most balance solution on the Pareto front, the closes to origin
+1.39702	4.078163	300.6945	0.11	0.26604	0.605614	0.4053202	0.1079371	0.6748041 # the closest solution to origin
+0.10000	4        	300     	0.11	0.5	0.60    	0.40    	0.05    	0.5 # baseline run
+EndInitParams
+
+
+BeginResponseVars
+#name	filename	keyword		line	col	token	augment?
+NSE1    NS_text.txt;	OST_NULL	0	38	' '  yes   # 4193500	Maumee River at Waterville OH
+NSE2    NS_text.txt;	OST_NULL	0	48	' '  yes   # 4197100	Honey Creek at Melmore OH
+NSE3    NS_text.txt;	OST_NULL	0	49	' '  yes   # 4196800	Tymochtee Creek at Crawford OH
+NSE4    NS_text.txt;	OST_NULL	0	11	' '  yes   # 02GB007	FAIRCHILD CREEK NEAR BRANTFORD
+NSE5    NS_text.txt;	OST_NULL	0	8	' '  yes   # 02GD004	MIDDLE THAMES RIVER AT THAMESFORD
+EndResponseVars 
+
+BeginTiedRespVars
+Obj1 3 NSE1 NSE2 NSE3  wsum  0.33  0.33  0.33    # I know the percentages are not correct, they do now affect the Pareto memeber by the closest solution to origin
+Obj2 2 NSE4 NSE5  wsum  0.5  0.5
+EndTiedRespVars
+
+BeginGCOP
+CostFunction Obj1
+CostFunction Obj2 
+PenaltyFunction APM
+EndGCOP
+
+BeginParaPADDS
+PerturbationValue 0.2
+MaxIterations 20000
+SelectionMetric ExactHyperVolumeContribution
+EndParaPADDS
