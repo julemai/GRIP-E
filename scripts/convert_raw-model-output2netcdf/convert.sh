@@ -50,14 +50,10 @@ for imodel in ${convert_models} ; do
 	    echo ''
 	    echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
 
-	    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) ]] ; then
+	    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) ]] ; then
 		add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.csv"
 	    else
-		if [[ ( ${imodel} == 'SWAT' ) ]] ; then
-		    add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge_phase_${convert_phase}.csv"
-		else
-		    add_inputs=''
-		fi
+		add_inputs=''
 	    fi
 
 	    if [[ ( ${imodel} == 'HYPE' ) ]] ; then
