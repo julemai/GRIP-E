@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='LBRM VIC VIC-GRU GEM-Hydro' # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
+plot_models='LBRM VIC VIC-GRU GEM-Hydro SWAT' # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
 plot_obj='1'                             # can be 1, 2, and/or 3
 plot_phase='0'                           # phase 0: uncalibrated, different phys. setups,
 #                                        # phase 1: calibrated,   different phys. setups,

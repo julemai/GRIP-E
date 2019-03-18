@@ -113,6 +113,9 @@ mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
 
 del parser, args
 
+# nodata
+nodata = -9999.0
+
 if (model != 'LBRM') and (model != 'VIC') and (model != 'VIC-GRU') and (model != 'GEM-Hydro') and (model != 'HYPE') and (model != 'SWAT') and (model != 'WATFLOOD'):
     raise ValueError('This model is not supported yet!')
 
@@ -245,7 +248,7 @@ if (model == 'VIC-GRU' or model == 'VIC'):
     # - model outputs contain subbasin ID and not gauge ID --> need to be remapped
     # ---------------
     model_stations = fread(input_file,skip=1,cskip=4,header=True)   # this is subbasin IDs    
-    model_data     = fread(input_file,skip=1,cskip=4,header=False)
+    model_data     = fread(input_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)
     model_data     = np.array(model_data,dtype=np.float32)
     model_dates    = fsread(input_file,skip=1,cskip=1,snc=2)
     model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),int(str(ii[1])[0:2]),int(str(ii[1])[3:5]) ) for ii in model_dates ]
@@ -399,9 +402,6 @@ for istation in range(len(gaugeinfo)):
 start_day            = model_dates[0]
 ref_date             = 'days since '+str(start_day)
 times_since_in_days = [ ((tt - start_day).total_seconds())/(60.*60.*24.) for tt in model_dates ]
-
-# nodata
-nodata = -9999.0
 
 # ----------------------------------------------
 # write NetCDF
