@@ -32,8 +32,8 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
-convert_obj='1'      # can be 1, 2, and/or 3
+convert_models='SWAT' #'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
+convert_obj='1 2'      # can be 1, 2, and/or 3
 convert_phase='0'      # phase 0: uncalibrated, different phys. setups,
 #                      # phase 1: calibrated,   different phys. setups,
 #                      # phase 2: calibrated,   same phys. setups
@@ -45,16 +45,20 @@ for imodel in ${convert_models} ; do
 
     for iobj in ${convert_obj} ; do
 
-	if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) ]] ; then
-	    add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.csv"
-	else
-	    add_inputs=''
-	fi
-
 	for iphase in ${convert_phase} ; do
 
 	    echo ''
 	    echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
+
+	    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) ]] ; then
+		add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.csv"
+	    else
+		if [[ ( ${imodel} == 'SWAT' ) ]] ; then
+		    add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge_phase_${convert_phase}.csv"
+		else
+		    add_inputs=''
+		fi
+	    fi
 
 	    if [[ ( ${imodel} == 'HYPE' ) ]] ; then
 		input_csv_file=../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_

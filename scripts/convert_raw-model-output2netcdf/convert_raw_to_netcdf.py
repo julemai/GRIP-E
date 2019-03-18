@@ -272,10 +272,11 @@ if (model == 'SWAT'):
     # ---------------
     # read mapping info subbasin ID --> gauge station ID
     # ---------------
-    mapping = fsread(mapping_subbasinID_gaugeID,skip=1,snc=2)
+    mapping = fsread(mapping_subbasinID_gaugeID,skip=1,snc=[0,1,2])
     mapping = np.array(mapping)
-    mapping[:,0] = np.array( [ii.strip() for ii in mapping[:,0]] )   # remove trailing blanks
-    mapping[:,1] = np.array( [ii.strip() for ii in mapping[:,1]] )   # remove trailing blanks
+    mapping[:,0] = np.array( [ii.strip() for ii in mapping[:,0]] )   # remove trailing blanks: subbasin ID
+    mapping[:,1] = np.array( [ii.strip() for ii in mapping[:,1]] )   # remove trailing blanks: USGS/WSC gauge ID
+    mapping[:,2] = np.array( [ii.strip() for ii in mapping[:,2]] )   # remove trailing blanks: variable name in output file
     nstations = np.shape(mapping)[0]
     
     # ---------------
@@ -286,24 +287,31 @@ if (model == 'SWAT'):
     # col 1 :: tmp[idx,0] :: subbasin ID: 1-199 (basins that are important are in mapping)
     # col 2 :: tmp[idx,1] :: Year
     # col 3 :: tmp[idx,2] :: day of the year (1-366)
-    # col 6 :: tmp[idx,3] :: FLOW_OUTcms = Q[m^3/s]
-    tmp = fread(input_file,nc=[0,1,2,5], skip=1,cskip=0,header=False)
+    # col ? :: tmp[idx,3] :: FLOW_OUTcms = Q[m^3/s]
+
+    header = fread(input_file, skip=1,cskip=0,header=True)
+    required_data_vars = np.unique(mapping[:,2])   # ['FLOW_OUTcms','FLOW_INcms']
+    required_data_idx  = [ header.index(rr) for rr in required_data_vars ]  # [5,6]
+    
+    tmp = fread(input_file,nc=[0,1,2]+required_data_idx, skip=1,cskip=0,header=False)
 
     model_stations_all = np.array(np.array(tmp[:,0],np.int),dtype=str)   # this is subbasin IDs
     ntime = np.shape(np.where(model_stations_all==model_stations_all[0])[0])[0]
 
-    model_data = np.ones([nstations,ntime],dtype=np.float32) * -9999.9
+    model_data = np.ones([ntime,nstations],dtype=np.float32) * -9999.9
     model_stations = list(np.array(['None']*nstations,dtype=str))
     for istation,station in enumerate([ str(int(ii)) for ii in mapping[:,0] ]):
 
         idx = np.where(model_stations_all==station)[0]   # lines containing data for current station
-        imodel_data = tmp[idx,3]               # FLOW_OUTcms for current station
-        ndat = np.shape(imodel_data)[0]        # number of data points
+        idx_var = np.where( required_data_vars == mapping[istation,2] )[0]   # find which column the current variable is in
+        # print('var = ',mapping[istation,2], ' in column #',3+idx_var, ' of tmp')
+        imodel_data = tmp[idx,3+idx_var]                 # FLOW_OUTcms for current station
+        ndat = np.shape(imodel_data)[0]                  # number of data points
         if ndat != ntime:
             print('ERROR :: station: ',station, '   # of time steps = ',ndat, '         expected # of time steps = ',ntime)
             stop
         
-        model_data[istation,:] = imodel_data
+        model_data[:,istation] = imodel_data
         model_stations[istation] = station   # this is subbasin IDs    
 
         year = tmp[idx,1]  # YEAR
