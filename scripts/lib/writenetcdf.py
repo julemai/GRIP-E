@@ -2,7 +2,7 @@
 from __future__ import print_function
 import numpy as np                       # array manipulation
 import netCDF4 as nc
-from jams.readnetcdf import readnetcdf
+from readnetcdf import readnetcdf
 
 def writenetcdf(fhandle, vhandle=None, var=None, time=None, isdim=False, name=None, dims=None,
                 attributes=None, fileattributes=None, comp=False, vartype=None, create_var=True ):

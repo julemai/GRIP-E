@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import numpy as np
-from jams.fread import fread
-from jams.sread import sread
+from fread import fread
+from sread import sread
 
 def fsread(file, nc=0, snc=0, skip=0, cskip=0, hskip=0, separator=None,
            squeeze=False, reform=False, skip_blank=False, comment=None,
