@@ -612,6 +612,34 @@ else:
     plt.show()
 
 
+# # --------------------------------------
+# # dump all observations of time period (per objective) to one CSV file
+# # --------------------------------------
+# dates = None
+# # just checking that dates are all the same
+# for dd in dicts_dates[imodel_lc]:
+#     if dates is None:
+#         dates = dicts_dates[imodel_lc][dd]
+#         ndates = np.shape(dates)[0]
+#     else:
+#         if any(dicts_dates[imodel_lc][dd] != dates):
+#             print("gauge = ",dd)
+#             raise ValueError('Dates for current gauge are different then the previous ones...')
+# # write to file
+# gauges = np.sort([dd for dd in dicts_dates[imodel_lc]])
+# asciifile = '.'.join(pdffile.split('.')[:-1])+'.csv'
+# f = open(asciifile, 'w')   # same name as pdf file but different extension
+# f.write( '# YYYY-MM-DD HH:MM:SS,'+','.join(gauges)+'\n')  # header
+# for iday,dd in enumerate(dates):
+#     f.write(str(dd)+','+','.join([ astr(dicts_qobs[imodel_lc][gg][iday],prec=8) for gg in gauges ])+'\n')
+# f.close()
+# # print to screen
+# print("All observations are written to file: ",asciifile)
+
+
+
+
+
 # # plot a selected station: "02GG003" but all model outputs
 # sub.plot(dicts_dates[imodel_lc]['02GG003'],dicts_qobs[imodel_lc]['02GG003']) 
 # sub.plot(dicts_dates[imodel_lc]['02GG003'],dicts_qsim[imodel_lc]['02GG003']) 
