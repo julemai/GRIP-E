@@ -383,9 +383,9 @@ while ii < nn:
 # ------------------------
 unique_stations = list(np.unique(model_stations))
 for uu in unique_stations:
-
-    idx = np.sort(np.where(np.array(model_stations) == uu)[0])
-    for ii in idx[:0:-1]:
+    
+    idx = np.sort(np.where(np.array(model_stations) == uu)[0])    
+    for ii in idx[:-1]: #idx[:0:-1]:
         # delete that column from
         #      model_stations
         #      model_data
