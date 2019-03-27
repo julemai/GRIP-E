@@ -22,6 +22,8 @@ from __future__ import print_function
 #
 # run convert_gauge_csv_2_netcdf.py --filetype 'WSC' --input_files "../../data/objective_1/csv/02GA010.csv" --output_file "test.nc"
 
+# run convert_gauge_csv_2_netcdf.py --filetype 'WSC WSC WSC WSC WSC WSC WSC WSC WSC WSC WSC WSC WSC WSC WSC USGS USGS USGS USGS USGS USGS USGS USGS USGS USGS USGS USGS USGS' --input_files '../../data/objective_1/csv/02GA010.csv ../../data/objective_1/csv/02GA018.csv ../../data/objective_1/csv/02GA038.csv ../../data/objective_1/csv/02GA047.csv ../../data/objective_1/csv/02GB007.csv ../../data/objective_1/csv/02GC002.csv ../../data/objective_1/csv/02GC010.csv ../../data/objective_1/csv/02GC018.csv ../../data/objective_1/csv/02GD004.csv ../../data/objective_1/csv/02GE007.csv ../../data/objective_1/csv/02GG002.csv ../../data/objective_1/csv/02GG003.csv ../../data/objective_1/csv/02GG006.csv ../../data/objective_1/csv/02GG009.csv ../../data/objective_1/csv/02GG013.csv ../../data/objective_1/csv/04159492.txt ../../data/objective_1/csv/04159900.txt ../../data/objective_1/csv/04160600.txt ../../data/objective_1/csv/04161820.txt ../../data/objective_1/csv/04164000.txt ../../data/objective_1/csv/04165500.txt ../../data/objective_1/csv/04166100.txt ../../data/objective_1/csv/04177000.txt ../../data/objective_1/csv/04196800.txt ../../data/objective_1/csv/04197100.txt ../../data/objective_1/csv/04207200.txt ../../data/objective_1/csv/04208504.txt ../../data/objective_1/csv/04213000.txt' --output_file ../../data/objective_1/netcdf/all_gauges.nc --gaugeinfo_file ../../data/objective_1/gauge_info.csv
+
 # -----------------------
 # add subolder scripts/lib to search path
 # -----------------------
