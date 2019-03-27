@@ -19,7 +19,7 @@
 # along with Juliane Mai's personal code library.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -e
+set -ex
 #
 # Converts all raw model outputs in GRIP-E project to NetCDF files.
 #
@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='HYPE' #'LBRM VIC VIC-GRU GEM-Hydro SWAT' # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
+plot_models='MESH-CLASS' #'LBRM VIC VIC-GRU GEM-Hydro SWAT' # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
 plot_obj='1 2'                             # can be 1, 2, and/or 3
 plot_phase='0'                           # phase 0: uncalibrated, different phys. setups,
 #                                        # phase 1: calibrated,   different phys. setups,
