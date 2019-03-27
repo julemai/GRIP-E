@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='HYPE' #'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH, VIC, VIC-GRU, WATFLOOD]
+convert_models='MESH-CLASS' #'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
 convert_obj='1 2'      # can be 1, 2, and/or 3
 convert_phase='0'      # phase 0: uncalibrated, different phys. setups,
 #                      # phase 1: calibrated,   different phys. setups,
@@ -53,7 +53,11 @@ for imodel in ${convert_models} ; do
 	    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) ]] ; then
 		add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.csv"
 	    else
-		add_inputs=''
+		if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
+		    add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.tb0"
+		else
+		    add_inputs=''
+		fi
 	    fi
 
 	    if [[ ( ${imodel} == 'HYPE' ) ]] ; then

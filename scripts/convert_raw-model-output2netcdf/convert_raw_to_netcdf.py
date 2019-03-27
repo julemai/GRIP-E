@@ -57,6 +57,16 @@ from __future__ import print_function
 #    ------------
 #    python convert_raw_to_netcdf.py -m WATFLOOD -i ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.csv -o ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
+#    ------------
+#    MESH-SVS
+#    ------------
+#    python convert_raw_to_netcdf.py -m MESH-SVS -i ../../data/objective_1/model/MESH-SVS/mesh-svs_phase_0_objective_1.csv -o ../../data/objective_1/model/MESH-SVS/mesh-svs_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/MESH-SVS/subid2gauge.tb0
+
+#    ------------
+#    MESH-CLASS
+#    ------------
+#    python convert_raw_to_netcdf.py -m MESH-CLASS -i ../../data/objective_1/model/MESH-CLASS/mesh-class_phase_0_objective_1.csv -o ../../data/objective_1/model/MESH-CLASS/mesh-class_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/MESH-CLASS/subid2gauge.tb0
+
 # -----------------------
 # add subolder scripts/lib to search path
 # -----------------------
@@ -116,13 +126,23 @@ del parser, args
 # nodata
 nodata = -9999.0
 
-if (model != 'LBRM') and (model != 'VIC') and (model != 'VIC-GRU') and (model != 'GEM-Hydro') and (model != 'HYPE') and (model != 'SWAT') and (model != 'WATFLOOD'):
+if ( (model != 'LBRM')      and
+     (model != 'VIC')       and
+     (model != 'VIC-GRU')   and
+     (model != 'GEM-Hydro') and
+     (model != 'HYPE')      and
+     (model != 'SWAT')      and
+     (model != 'WATFLOOD')  and
+     (model != 'MESH-SVS')  and
+     (model != 'MESH-CLASS') ):
     raise ValueError('This model is not supported yet!')
 
-if ( ((model == 'VIC-GRU') and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'VIC') and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'SWAT') and (mapping_subbasinID_gaugeID == '')) ):
-    raise ValueError('For VIC and SWAT model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.')
+if ( ((model == 'VIC-GRU')    and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'VIC')        and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'SWAT')       and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'MESH-SVS')   and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'MESH-CLASS') and (mapping_subbasinID_gaugeID == '')) ):
+    raise ValueError('For VIC and SWAT model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
 
 # read model output file
 if (model == 'HYPE'):
@@ -333,6 +353,40 @@ if (model == 'SWAT'):
         gauge_id = mapping[idx,1]
 
         model_stations[ii] = gauge_id
+
+if (model == 'MESH-SVS' or model == 'MESH-CLASS'):
+    # ---------------
+    # read model outputs
+    # - model outputs are sorted in a way we dont know yet (is in tb0 setup file) --> need remapping
+    # ---------------
+    model_stations = fread(input_file,skip=1,cskip=2,header=True)   # this is just generic column names [QOMEAS1, QOSIM1, QOMEAS2, QOSIM2, ....]   
+    model_data     = fread(input_file,skip=1,cskip=2,header=False,fill=True,fill_value=nodata)
+    model_data     = np.array(model_data,dtype=np.float32)[:,1::2] # only every second column, others are obeservations
+    model_dates    = fread(input_file,skip=1,cskip=0,header=False,fill=True,fill_value=nodata)
+    model_dates    = np.array(model_dates,dtype=np.float32)[:,0:2] # only first two columns: col1=year, col2=doy
+    model_dates    = [ datetime.datetime( int(ii[0]-1),12,31,0,0 ) + datetime.timedelta(int(ii[1])) for ii in model_dates ]
+
+    # ---------------
+    # read names of stations
+    # ---------------
+    input_f = open(mapping_subbasinID_gaugeID, "r")
+    dump = input_f.readlines()
+    input_f.close()
+
+    dump = [ dd.strip() for dd in dump ]    # remove leading and trailing blanks and '\n'
+
+    found = False
+    for dd in dump:
+        first = dd.split()[0]
+        if first.upper() == ':COLUMNNAME':
+            mapping = dd.split()[1:]
+            found = True
+
+    if not(found):
+        raise ValueError('Line starting with :ColumnName not found in file '+mapping_subbasinID_gaugeID)
+    else:
+        model_stations = mapping
+    
 
 # get gauge station file
 gaugeinfo_header = fsread(gaugeinfo_file,comment='#',separator=',',skip=1,header=True)
