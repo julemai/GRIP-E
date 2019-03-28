@@ -150,7 +150,7 @@ if (model == 'HYPE'):
     # read model outputs
     # - every gauge is in a separate file
     # ---------------
-    input_files    = glob.glob(input_file+"*")
+    input_files    = glob.glob(input_file+"*.txt")
     model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
     model_data     = [ [] for ii in input_files ]
     model_dates    = None
