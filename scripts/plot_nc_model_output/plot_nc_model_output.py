@@ -637,18 +637,21 @@ else:
 # print("All observations are written to file: ",asciifile)
 
 
+# # --------------------------------------
+# # dump observations of time period (per objective) to CSV file per gauge (in RAVEN format
+# # --------------------------------------
+# gauges = np.sort([dd for dd in dicts_dates[imodel_lc]])
+# for gg in gauges:
+#     f = open('Qobs_daily_'+gg+'.rvt', 'w')   # same name as pdf file but different extension
+#     f.write( ':ObservationData	HYDROGRAPH	1	m3/s \n')
+#     f.write( ' '+str(dates[0])[0:10]+'  '+str(dates[0])[11:19]+'   1.0  '+str(len(dates))+' \n')
+#     for iday,dd in enumerate(dates):
+#         f.write( astr(dicts_qobs[imodel_lc][gg][iday],prec=8)+'\n')
+#     f.write( ':EndObservationData')
+#     f.close()
 
 
 
-# # plot a selected station: "02GG003" but all model outputs
-# sub.plot(dicts_dates[imodel_lc]['02GG003'],dicts_qobs[imodel_lc]['02GG003']) 
-# sub.plot(dicts_dates[imodel_lc]['02GG003'],dicts_qsim[imodel_lc]['02GG003']) 
-
-# # plot performance at all stations
-# sub.plot(dicts_nse['vic-gru'].keys(),dicts_nse['vic-gru'].values(),linewidth=0.0,marker='o')
-
-# # plot 3 stations per model individually
-# # 
 
 
     

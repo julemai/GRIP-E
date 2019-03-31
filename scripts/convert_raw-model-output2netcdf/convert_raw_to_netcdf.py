@@ -48,6 +48,11 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
+#    RAVEN-GR4J
+#    ------------
+#    python convert_raw_to_netcdf.py -m RAVEN-GR4J -i ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1_ -o ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/RAVEN-GR4J/subid2gauge.csv
+
+#    ------------
 #    SWAT
 #    ------------
 #    python convert_raw_to_netcdf.py -m SWAT -i ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT/subid2gauge.csv
@@ -126,23 +131,25 @@ del parser, args
 # nodata
 nodata = -9999.0
 
-if ( (model != 'LBRM')      and
-     (model != 'VIC')       and
-     (model != 'VIC-GRU')   and
-     (model != 'GEM-Hydro') and
-     (model != 'HYPE')      and
-     (model != 'SWAT')      and
-     (model != 'WATFLOOD')  and
-     (model != 'MESH-SVS')  and
+if ( (model != 'LBRM')       and
+     (model != 'VIC')        and
+     (model != 'VIC-GRU')    and
+     (model != 'GEM-Hydro')  and
+     (model != 'HYPE')       and
+     (model != 'RAVEN-GR4J') and 
+     (model != 'SWAT')       and
+     (model != 'WATFLOOD')   and
+     (model != 'MESH-SVS')   and
      (model != 'MESH-CLASS') ):
     raise ValueError('This model is not supported yet!')
 
 if ( ((model == 'VIC-GRU')    and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'VIC')        and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'RAVEN-GR4J') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'SWAT')       and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'MESH-SVS')   and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'MESH-CLASS') and (mapping_subbasinID_gaugeID == '')) ):
-    raise ValueError('For VIC and SWAT model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
+    raise ValueError('For VIC, SWAT, and RAVEN model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
 
 # read model output file
 if (model == 'HYPE'):
@@ -179,6 +186,66 @@ if (model == 'HYPE'):
                 raise ValueError('Time step in files must be all the same!')
             
 
+    model_data  = np.transpose(np.array(model_data))
+    model_dates = np.transpose(np.array(model_dates))
+
+# read model output file
+if (model == 'RAVEN-GR4J'):
+
+    input_files    = glob.glob(input_file+"*.csv")
+    model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
+    model_data     = [ [] for ii in input_files ]
+    model_dates    = None
+    
+    # ---------------
+    # read mapping info subbasin ID --> gauge station ID
+    # ---------------
+    mapping = fsread(mapping_subbasinID_gaugeID,skip=0,snc=2)
+    mapping = np.array(mapping)
+
+    # ---------------
+    # read model outputs
+    # - every gauge is in a separate file
+    # ---------------
+    for ii,iinput_file in enumerate(input_files):
+        
+        # find column containing discharge "cout"
+        head = fread(iinput_file,skip=1,cskip=4,header=True)
+
+        # find column with subbasin ID matching the gauge ID in file name (saved in 'model_stations')
+        desired_column_header = 'sub'+mapping[np.where(mapping[:,1] == model_stations[ii])[0][0]][0]+' [m3/s]'
+        
+        idx = head.index(desired_column_header)
+        
+        model_data[ii]  = fread(iinput_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)[:,idx]
+
+        # make sure all model dates are same in all files
+        if model_dates is None:
+            # save first file's dates
+            model_dates    = fsread(iinput_file,skip=1,cskip=1,snc=2)
+            model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in model_dates ]
+        else:
+            # check if dates are same as already saved
+            tmp_dates = fsread(iinput_file,skip=1,cskip=1,snc=2)
+            tmp_dates = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in tmp_dates ]
+            if not np.all(tmp_dates == model_dates):
+                print('Time steps first file: ',input_files[0])
+                print('     ',model_dates)
+                print('Time steps current file: ',input_files[ii])
+                print('     ',tmp_dates)
+                raise ValueError('Time step in files must be all the same!')
+
+    # # ---------------
+    # # map subbasin ID's to gauging stations IDs
+    # # ---------------
+    # for ii,isubbasin in enumerate(model_stations):  # they look like "sub676 [m3/s]" --> "676"
+
+    #     subbasin_ID = isubbasin.split(' ')[0].split('sub')[1]
+    #     idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
+    #     gauge_id = mapping[idx,1]
+
+    #     model_stations[ii] = gauge_id
+            
     model_data  = np.transpose(np.array(model_data))
     model_dates = np.transpose(np.array(model_dates))
     
