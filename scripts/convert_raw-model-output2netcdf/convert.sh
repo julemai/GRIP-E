@@ -34,7 +34,7 @@ datapath="../data/"
 
 convert_models='RAVEN-GR4J' #'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD RAVEN-GR4J'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
 convert_obj='1 2'      # can be 1, 2, and/or 3
-convert_phase='0 1'      # phase 0: uncalibrated, different phys. setups,
+convert_phase='1'      # phase 0: uncalibrated, different phys. setups,
 #                      # phase 1: calibrated,   different phys. setups,
 #                      # phase 2: calibrated,   same phys. setups
 
