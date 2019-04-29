@@ -228,11 +228,11 @@ if (model == 'RAVEN-GR4J'):
             if model_dates is None:
                 # save first file's dates
                 model_dates    = fsread(iinput_file,skip=1,cskip=1,snc=2)
-                model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in model_dates ]
+                model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) - datetime.timedelta(days=1) for mm in model_dates ]
             else:
                 # check if dates are same as already saved
                 tmp_dates = fsread(iinput_file,skip=1,cskip=1,snc=2)
-                tmp_dates = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in tmp_dates ]
+                tmp_dates = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) - datetime.timedelta(days=1) for mm in tmp_dates ]
                 if not np.all(tmp_dates == model_dates):
                     print('Time steps first file: ',input_files[0])
                     print('     ',model_dates)
@@ -263,8 +263,9 @@ if (model == 'RAVEN-GR4J'):
         model_data  = np.array(model_data,dtype=np.float32)
 
         # model dates --> THIS IS NOT RAVEN OUTPUT FORMAT!!!!
+        # shifting time because RAven reports period beginning (but observations are period ending)
         model_dates    = fsread(input_file,skip=1,cskip=1,snc=[0])
-        model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[0])[11:13]),int(str(mm[0])[14:16]) ) for mm in model_dates ]
+        model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[0])[11:13]),int(str(mm[0])[14:16]) ) - datetime.timedelta(days=1) for mm in model_dates ]
 
     else:
 
