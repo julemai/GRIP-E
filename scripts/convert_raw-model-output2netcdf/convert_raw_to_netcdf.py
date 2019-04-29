@@ -248,8 +248,8 @@ if (model == 'RAVEN-GR4J'):
         # ---------------
         # read model outputs
         # ---------------
-        # header names look like "'ObsQ_02GA018 [m3/s]', 'SimQ_02GA038 [m3/s]', ..."
-        head = fread(input_file,skip=1,cskip=4,header=True)
+        # header names look like "'ObsQ_02GA018 [m3/s]', 'SimQ_02GA038 [m3/s]', ..."   --> THIS IS NOT RAVEN OUTPUT FORMAT!!!!
+        head = fread(input_file,skip=1,cskip=1,header=True)
 
         # find column with 'SimQ_*'
         idx = [ii for ii, ss in enumerate(head) if 'SimQ' in ss]
@@ -259,7 +259,7 @@ if (model == 'RAVEN-GR4J'):
         model_stations = list(model_stations)
 
         # save simulated data
-        model_data  = fread(input_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)[:,idx]
+        model_data  = fread(input_file,skip=1,cskip=1,header=False,fill=True,fill_value=nodata)[:,idx]
         model_data  = np.array(model_data,dtype=np.float32)
 
         # model dates --> THIS IS NOT RAVEN OUTPUT FORMAT!!!!
