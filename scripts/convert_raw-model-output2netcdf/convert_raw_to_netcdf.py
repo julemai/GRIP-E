@@ -50,7 +50,8 @@ from __future__ import print_function
 #    ------------
 #    RAVEN-GR4J
 #    ------------
-#    python convert_raw_to_netcdf.py -m RAVEN-GR4J -i ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1_ -o ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/RAVEN-GR4J/subid2gauge.csv
+#    python convert_raw_to_netcdf.py -m RAVEN-GR4J -i ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1_ -o ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/RAVEN-GR4J/subid2gauge.csv -s julie
+#    python convert_raw_to_netcdf.py -m RAVEN-GR4J -i ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1.csv -o ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -s hongren
 
 #    ------------
 #    SWAT
@@ -101,6 +102,7 @@ input_file                 = ['lbrm_phase_0_objective_1.csv']
 output_file                = ['lbrm_phase_0_objective_1.nc']
 gaugeinfo_file             = ['gauge_info.csv']
 mapping_subbasinID_gaugeID = ['']
+setup_by                   = None
 parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
 parser.add_argument('-i', '--input_file', action='store',
@@ -118,6 +120,9 @@ parser.add_argument('-a', '--gaugeinfo_file', action='store',
 parser.add_argument('-b', '--mapping_subbasinID_gaugeID', action='store',
                     default=mapping_subbasinID_gaugeID, dest='mapping_subbasinID_gaugeID', metavar='mapping_subbasinID_gaugeID',nargs=1,
                     help='File containing mapping of subbasin ID (col 1) to gauge ID (col 2). All other columns are ignored. One header line. Only required for VIC and VIC-GRU.')
+parser.add_argument('-s', '--setup_by', action='store',
+                    default=setup_by, dest='setup_by', metavar='setup_by',nargs=1,
+                    help='Model was setup by this person. Outputs might vary. E.g. Raven setup by Julie dumps one file for each gauge. Raven setup by Hongren dumps all in same file.')
 
 args                       = parser.parse_args()
 model                      = args.model[0]
@@ -125,6 +130,7 @@ input_file                 = args.input_file[0]
 output_file                = args.output_file[0]
 gaugeinfo_file             = args.gaugeinfo_file[0]
 mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
+setup_by                   = args.setup_by[0]
 
 del parser, args
 
@@ -143,13 +149,18 @@ if ( (model != 'LBRM')       and
      (model != 'MESH-CLASS') ):
     raise ValueError('This model is not supported yet!')
 
-if ( ((model == 'VIC-GRU')    and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'VIC')        and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'RAVEN-GR4J') and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'SWAT')       and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'MESH-SVS')   and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'MESH-CLASS') and (mapping_subbasinID_gaugeID == '')) ):
+if ( ((model == 'VIC-GRU')                            and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'VIC')                                and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'RAVEN-GR4J' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'SWAT')                               and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'MESH-SVS')                           and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'MESH-CLASS')                         and (mapping_subbasinID_gaugeID == '')) ):
     raise ValueError('For VIC, SWAT, and RAVEN model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
+
+if ((model == 'RAVEN-GR4J') and (setup_by is None)):
+    raise ValueError('For RAVEN-GR4J the person who has setup the model needs to be named.')
+if ( ((model == 'RAVEN-GR4J') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
+    raise ValueError('Person who has setup RAVEN-GR4J must be "julie" or "hongren".')
 
 # read model output file
 if (model == 'HYPE'):
@@ -192,44 +203,72 @@ if (model == 'HYPE'):
 # read model output file
 if (model == 'RAVEN-GR4J'):
 
-    input_files    = glob.glob(input_file+"*.csv")
-    model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
-    model_data     = [ [] for ii in input_files ]
-    model_dates    = None
+    if (setup_by == 'julie'):
+        input_files    = glob.glob(input_file+"*.csv")
+        model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
+        model_data     = [ [] for ii in input_files ]
+        model_dates    = None
 
-    # ---------------------------------------------------------------------------
-    # JULIE'S outputs
-    # ---------------------------------------------------------------------------
-    for ii,iinput_file in enumerate(input_files):
-      
-        # find column containing discharge "cout"
-        head = fread(iinput_file,skip=1,cskip=4,header=True)
+        # ---------------------------------------------------------------------------
+        # JULIE'S outputs
+        # ---------------------------------------------------------------------------
+        for ii,iinput_file in enumerate(input_files):
+          
+            # find column containing discharge "cout"
+            head = fread(iinput_file,skip=1,cskip=4,header=True)
 
-        # find column with subbasin ID matching the gauge ID in file name (saved in 'model_stations')
-        desired_column_header = model_stations[ii]+' [m3/s]'
-      
-        idx = head.index(desired_column_header)
-      
-        model_data[ii]  = fread(iinput_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)[:,idx]
+            # find column with subbasin ID matching the gauge ID in file name (saved in 'model_stations')
+            desired_column_header = model_stations[ii]+' [m3/s]'
+          
+            idx = head.index(desired_column_header)
+          
+            model_data[ii]  = fread(iinput_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)[:,idx]
 
-        # make sure all model dates are same in all files
-        if model_dates is None:
-            # save first file's dates
-            model_dates    = fsread(iinput_file,skip=1,cskip=1,snc=2)
-            model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in model_dates ]
-        else:
-            # check if dates are same as already saved
-            tmp_dates = fsread(iinput_file,skip=1,cskip=1,snc=2)
-            tmp_dates = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in tmp_dates ]
-            if not np.all(tmp_dates == model_dates):
-                print('Time steps first file: ',input_files[0])
-                print('     ',model_dates)
-                print('Time steps current file: ',input_files[ii])
-                print('     ',tmp_dates)
-                raise ValueError('Time step in files must be all the same!')
-            
-    model_data  = np.transpose(np.array(model_data))
-    model_dates = np.transpose(np.array(model_dates))
+            # make sure all model dates are same in all files
+            if model_dates is None:
+                # save first file's dates
+                model_dates    = fsread(iinput_file,skip=1,cskip=1,snc=2)
+                model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in model_dates ]
+            else:
+                # check if dates are same as already saved
+                tmp_dates = fsread(iinput_file,skip=1,cskip=1,snc=2)
+                tmp_dates = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[1])[0:2]),int(str(mm[1])[3:5]) ) for mm in tmp_dates ]
+                if not np.all(tmp_dates == model_dates):
+                    print('Time steps first file: ',input_files[0])
+                    print('     ',model_dates)
+                    print('Time steps current file: ',input_files[ii])
+                    print('     ',tmp_dates)
+                    raise ValueError('Time step in files must be all the same!')
+                
+        model_data  = np.transpose(np.array(model_data))
+        model_dates = np.transpose(np.array(model_dates))
+        
+    elif (setup_by == 'hongren'):
+
+        # ---------------
+        # read model outputs
+        # ---------------
+        # header names look like "'ObsQ_02GA018 [m3/s]', 'SimQ_02GA038 [m3/s]', ..."
+        head = fread(input_file,skip=1,cskip=4,header=True)
+
+        # find column with 'SimQ_*'
+        idx = [ii for ii, ss in enumerate(head) if 'SimQ' in ss]
+
+        # save station names
+        model_stations = np.array([ii.split('_')[1].split(' ')[0] for ii in head ])[idx]
+        model_stations = list(model_stations)
+
+        # save simulated data
+        model_data  = fread(input_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)[:,idx]
+        model_data  = np.array(model_data,dtype=np.float32)
+
+        # model dates --> THIS IS NOT RAVEN OUTPUT FORMAT!!!!
+        model_dates    = fsread(input_file,skip=1,cskip=1,snc=[0])
+        model_dates    = [ datetime.datetime( int(str(mm[0])[0:4]),int(str(mm[0])[5:7]),int(str(mm[0])[8:10]),int(str(mm[0])[11:13]),int(str(mm[0])[14:16]) ) for mm in model_dates ]
+
+    else:
+
+        raise ValueError('Person who has setup RAVEN-GR4J must be "julie" or "hongren".')
 
     # ---------------------------------------------------------------------------
     # HONGREN'S outputs
