@@ -121,7 +121,7 @@ parser.add_argument('-b', '--mapping_subbasinID_gaugeID', action='store',
                     default=mapping_subbasinID_gaugeID, dest='mapping_subbasinID_gaugeID', metavar='mapping_subbasinID_gaugeID',nargs=1,
                     help='File containing mapping of subbasin ID (col 1) to gauge ID (col 2). All other columns are ignored. One header line. Only required for VIC and VIC-GRU.')
 parser.add_argument('-s', '--setup_by', action='store',
-                    default=setup_by, dest='setup_by', metavar='setup_by',nargs=1,
+                    default=setup_by, dest='setup_by', metavar='setup_by',
                     help='Model was setup by this person. Outputs might vary. E.g. Raven setup by Julie dumps one file for each gauge. Raven setup by Hongren dumps all in same file.')
 
 args                       = parser.parse_args()
@@ -130,7 +130,7 @@ input_file                 = args.input_file[0]
 output_file                = args.output_file[0]
 gaugeinfo_file             = args.gaugeinfo_file[0]
 mapping_subbasinID_gaugeID = args.mapping_subbasinID_gaugeID[0]
-setup_by                   = args.setup_by[0]
+setup_by                   = args.setup_by
 
 del parser, args
 
@@ -404,7 +404,7 @@ if (model == 'VIC-GRU' or model == 'VIC'):
     model_data     = fread(input_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)
     model_data     = np.array(model_data,dtype=np.float32)
     model_dates    = fsread(input_file,skip=1,cskip=1,snc=2)
-    model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),int(str(ii[1])[0:2]),int(str(ii[1])[3:5]) ) for ii in model_dates ]
+    model_dates    = [ datetime.datetime( int(str(ii[0])[0:4]),int(str(ii[0])[5:7]),int(str(ii[0])[8:10]),int(str(ii[1])[0:2]),int(str(ii[1])[3:5]) ) - datetime.timedelta(days=1) for ii in model_dates ]
 
     # ---------------
     # read mapping info subbasin ID --> gauge station ID
@@ -417,11 +417,12 @@ if (model == 'VIC-GRU' or model == 'VIC'):
     # ---------------
     for ii,isubbasin in enumerate(model_stations):  # they look like "sub676 [m3/s]" --> "676"
 
-        subbasin_ID = isubbasin.split(' ')[0].split('sub')[1]
-        idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
-        gauge_id = mapping[idx,1]
+        if not('observed' in isubbasin):
+            subbasin_ID = isubbasin.split(' ')[0].split('sub')[1]
+            idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
+            gauge_id = mapping[idx,1]
 
-        model_stations[ii] = gauge_id
+            model_stations[ii] = gauge_id
 
 if (model == 'SWAT'):
 

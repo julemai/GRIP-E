@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='RAVEN-GR4J' # 'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD RAVEN-GR4J'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
+convert_models='RAVEN-GR4J VIC VIC-GRU' # 'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD RAVEN-GR4J'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
 setup_by='hongren'          # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'      	    # can be 1, 2, and/or 3
 convert_phase='0 1'         # phase 0: uncalibrated, different phys. setups,
