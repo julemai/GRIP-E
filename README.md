@@ -11,4 +11,4 @@ For any questions regarding the projects please contact Juliane Mai (juliane.mai
 
 Please refer to the [Wiki](https://github.com/julemai/GRIP-E/wiki) for more details and documentation.
 
-This project is funded under the IMPC project of Global Water Futures program.
+This project is funded under the [IMPC](https://gwf.usask.ca/impc/) project of [Global Water Futures](https://gwf.usask.ca) program.
