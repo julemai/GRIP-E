@@ -32,8 +32,8 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='RAVEN-GR4J VIC VIC-GRU' # 'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD RAVEN-GR4J'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
-setup_by='hongren'          # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
+convert_models='RAVEN-GR4J-lp RAVEN-GR4J-sd' # 'LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD RAVEN-GR4J-lp RAVEN-GR4J-sd'  # can be [LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
+setup_by='julie'            # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'      	    # can be 1, 2, and/or 3
 convert_phase='0 1'         # phase 0: uncalibrated, different phys. setups,
 #                      	    # phase 1: calibrated,   different phys. setups,
@@ -51,7 +51,7 @@ for imodel in ${convert_models} ; do
 	    echo ''
 	    echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
 
-	    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'RAVEN-GR4J' && ${setup_by} == 'julie' ) ]] ; then
+	    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'RAVEN-GR4J-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'RAVEN-GR4J-sd' && ${setup_by} == 'julie' ) ]] ; then
 		add_inputs="-b ../../data/objective_${iobj}/model/${imodel}/subid2gauge.csv"
 	    else
 		if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
@@ -61,13 +61,13 @@ for imodel in ${convert_models} ; do
 		fi
 	    fi
 
-	    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'RAVEN-GR4J' && ${setup_by} == 'julie' ) ]] ; then
+	    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'RAVEN-GR4J-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'RAVEN-GR4J-sd' && ${setup_by} == 'julie' ) ]] ; then
 		input_csv_file=../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
 	    else
 		input_csv_file=../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
 	    fi
 
-	    if [[ ( ${imodel} == 'RAVEN-GR4J' ) ]] ; then
+	    if [[ ( ${imodel} == 'RAVEN-GR4J-lp' || ${imodel} == 'RAVEN-GR4J-sd' ) ]] ; then
 		python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ../../data/objective_${iobj}/gauge_info.csv ${add_inputs} -s ${setup_by}
 	    else
 		python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ../../data/objective_${iobj}/gauge_info.csv ${add_inputs}
