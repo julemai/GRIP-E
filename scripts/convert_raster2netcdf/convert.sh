@@ -29,18 +29,21 @@ dprog=$(dirname ${prog})
 isdir=${PWD}
 pid=$$
 
-datapath="../data/"
+datapath="../../data/"
 
-convert_dem=0
-convert_flowacc=0
-convert_flowdir=0
-convert_soil=1
-convert_landcover=1
+convert_dem_90m=0
+convert_flowacc_90m=0
+convert_flowdir_90m=0
+convert_dem_500m=1
+convert_flowacc_500m=1
+convert_flowdir_500m=1
+convert_soil=0
+convert_landcover=0
 
 # -------------------
-# convert DEM
+# convert DEM (90m)
 # -------------------
-if [[ ${convert_dem} -eq 1 ]] ; then
+if [[ ${convert_dem_90m} -eq 1 ]] ; then
     echo "Convert DEM ..." 
     varname="dem"
     vartype="single"
@@ -52,9 +55,9 @@ if [[ ${convert_dem} -eq 1 ]] ; then
 fi
 
 # -------------------
-# convert flow accumulation
+# convert flow accumulation (90m)
 # -------------------
-if [[ ${convert_flowacc} -eq 1 ]] ; then
+if [[ ${convert_flowacc_90m} -eq 1 ]] ; then
     echo "Convert flow accumulation ..."
     varname="flow_acc"
     vartype="int32"
@@ -66,9 +69,9 @@ if [[ ${convert_flowacc} -eq 1 ]] ; then
 fi
 
 # -------------------
-# convert flow direction
+# convert flow direction (90m)
 # -------------------
-if [[ ${convert_flowdir} -eq 1 ]] ; then
+if [[ ${convert_flowdir_90m} -eq 1 ]] ; then
     echo "Convert flow direction ..."
     varname="flow_dir"
     vartype="int32"
@@ -76,6 +79,48 @@ if [[ ${convert_flowdir} -eq 1 ]] ; then
     description="flow direction of grid cell; 1-east, 2-southeast, 4-south, 8-southwest, 16-west, 32-northwest, 64-north, 128-northeast; derived from DEM from HydroSheds by USGS based on conditioned, global SRTM DEM at 3 sec (90m) resolution"
 
     python raster2netcdf.py -i ${datapath}dem_conditioned-SRTM-90m/rect_flow_direction_Erie.txt -o ${datapath}dem_conditioned-SRTM-90m/rect_flow_direction_Erie.nc -v "${varname},${vartype},${unit},${description}"
+
+fi
+
+# -------------------
+# convert DEM (500m)
+# -------------------
+if [[ ${convert_dem_500m} -eq 1 ]] ; then
+    echo "Convert DEM ..." 
+    varname="dem"
+    vartype="single"
+    unit="m"
+    description="digital elevation model from HydroSheds (USGS) based on conditioned, global SRTM DEM at 15 sec (500m) resolution"
+
+    python raster2netcdf.py -i ${datapath}dem_conditioned-SRTM-500m/rect_dem_Erie.txt -o ${datapath}dem_conditioned-SRTM-500m/rect_dem_Erie.nc -v "${varname},${vartype},${unit},${description}"
+
+fi
+
+# -------------------
+# convert flow accumulation (500m)
+# -------------------
+if [[ ${convert_flowacc_500m} -eq 1 ]] ; then
+    echo "Convert flow accumulation ..."
+    varname="flow_acc"
+    vartype="int32"
+    unit="1"
+    description="number of cells draining into this grid cell; derived from DEM from HydroSheds by USGS based on conditioned, global SRTM DEM at 15 sec (500m) resolution"
+
+    python raster2netcdf.py -i ${datapath}dem_conditioned-SRTM-500m/rect_flow_accumulation_Erie.txt -o ${datapath}dem_conditioned-SRTM-500m/rect_flow_accumulation_Erie.nc -v "${varname},${vartype},${unit},${description}"
+
+fi
+
+# -------------------
+# convert flow direction (500m)
+# -------------------
+if [[ ${convert_flowdir_500m} -eq 1 ]] ; then
+    echo "Convert flow direction ..."
+    varname="flow_dir"
+    vartype="int32"
+    unit="1"
+    description="flow direction of grid cell; 1-east, 2-southeast, 4-south, 8-southwest, 16-west, 32-northwest, 64-north, 128-northeast; derived from DEM from HydroSheds by USGS based on conditioned, global SRTM DEM at 15 sec (500m) resolution"
+
+    python raster2netcdf.py -i ${datapath}dem_conditioned-SRTM-500m/rect_flow_direction_Erie.txt -o ${datapath}dem_conditioned-SRTM-500m/rect_flow_direction_Erie.nc -v "${varname},${vartype},${unit},${description}"
 
 fi
 

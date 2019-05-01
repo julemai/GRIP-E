@@ -58,7 +58,7 @@ parser.add_argument('-v', '--varname', action='store',
                     default=varname, dest='varname', metavar='varname', nargs=1,
                     help='Variable name, datatype, unit, longname.')
 parser.add_argument('-a', '--addinfo', action='store',
-                    default=addinfo, dest='addinfo', metavar='addinfo', nargs=1,
+                    default=addinfo, dest='addinfo', metavar='addinfo',
                     help='File containing additional information.')
 
 
@@ -66,7 +66,7 @@ args          = parser.parse_args()
 input_file    = args.input_file[0]
 output_file   = args.output_file[0]
 varname       = np.array(args.varname[0].split(','))
-addinfo       = args.addinfo[0]
+addinfo       = args.addinfo
 
 del parser, args
 
