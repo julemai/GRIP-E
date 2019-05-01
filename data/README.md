@@ -9,9 +9,14 @@
 1. Conditioned SRTM DEM from HydroSHEDS, 3 second (90 m)
    - download:      https://hydrosheds.cr.usgs.gov/index.php
    - folder:        dem_conditioned-SRTM-90m
-   - used to setup: VIC
+   - used to setup: SWAT
+   
+2. Conditioned SRTM DEM from HydroSHEDS, 15 second (500 m)
+   - download:      https://hydrosheds.cr.usgs.gov/index.php
+   - folder:        dem_conditioned-SRTM-500m
+   - used to setup: VIC, VIC-GRU, HYPE
 
-2. ASTER Global DEM from NASA, 1 second (30 m)
+3. ASTER Global DEM from NASA, 1 second (30 m)
    - download:      https://asterweb.jpl.nasa.gov/gdem.asp
    - folder:        
    - used to setup:
