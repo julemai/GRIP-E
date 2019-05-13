@@ -48,15 +48,15 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
-#    RAVEN-GR4J-lp
+#    GR4J-Raven-lp
 #    ------------
-#    python convert_raw_to_netcdf.py -m RAVEN-GR4J-lp -i ../../data/objective_1/model/RAVEN-GR4J-lp/raven-gr4j-lp_phase_0_objective_1_ -o ../../data/objective_1/model/RAVEN-GR4J-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/RAVEN-GR4J-lp/subid2gauge.csv -s julie
-#    python convert_raw_to_netcdf.py -m RAVEN-GR4J-lp -i ../../data/objective_1/model/RAVEN-GR4J/raven-gr4j-lp_phase_0_objective_1.csv -o ../../data/objective_1/model/RAVEN-GR4J-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -s hongren
+#    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1_ -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/GR4J-Raven-lp/subid2gauge.csv -s julie
+#    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/model/GR4J-Raven/raven-gr4j-lp_phase_0_objective_1.csv -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -s hongren
 
 #    ------------
-#    RAVEN-GR4J-sd
+#    GR4J-Raven-sd
 #    ------------
-#    python convert_raw_to_netcdf.py -m RAVEN-GR4J-sd -i ../../data/objective_1/model/RAVEN-GR4J-sd/raven-gr4j-sd_phase_0_objective_1_ -o ../../data/objective_1/model/RAVEN-GR4J-lp/raven-gr4j-sd_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/RAVEN-GR4J-sd/subid2gauge.csv -s julie
+#    python convert_raw_to_netcdf.py -m GR4J-Raven-sd -i ../../data/objective_1/model/GR4J-Raven-sd/raven-gr4j-sd_phase_0_objective_1_ -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-sd_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/GR4J-Raven-sd/subid2gauge.csv -s julie
 
 #    ------------
 #    SWAT
@@ -147,8 +147,8 @@ if ( (model != 'LBRM')          and
      (model != 'VIC-GRU')       and
      (model != 'GEM-Hydro')     and
      (model != 'HYPE')          and
-     (model != 'RAVEN-GR4J-lp') and
-     (model != 'RAVEN-GR4J-sd') and 
+     (model != 'GR4J-Raven-lp') and
+     (model != 'GR4J-Raven-sd') and 
      (model != 'SWAT')          and
      (model != 'WATFLOOD')      and
      (model != 'MESH-SVS')      and
@@ -157,17 +157,17 @@ if ( (model != 'LBRM')          and
 
 if ( ((model == 'VIC-GRU')                               and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'VIC')                                   and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'RAVEN-GR4J-lp' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'RAVEN-GR4J-sd' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'GR4J-Raven-lp' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'GR4J-Raven-sd' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'SWAT')                                  and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'MESH-SVS')                              and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'MESH-CLASS')                            and (mapping_subbasinID_gaugeID == '')) ):
     raise ValueError('For VIC, SWAT, and RAVEN model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
 
-if ((model == 'RAVEN-GR4J-lp' or model == 'RAVEN-GR4J-sd') and (setup_by is None)):
-    raise ValueError('For RAVEN-GR4J-lp and RAVEN-GR4J-sd the person who has setup the model needs to be named.')
-if ( ((model == 'RAVEN-GR4J-lp' or model == 'RAVEN-GR4J-sd') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
-    raise ValueError('Person who has setup RAVEN-GR4J-lp or RAVEN-GR4J-sd must be "julie" or "hongren".')
+if ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd') and (setup_by is None)):
+    raise ValueError('For GR4J-Raven-lp and GR4J-Raven-sd the person who has setup the model needs to be named.')
+if ( ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
+    raise ValueError('Person who has setup GR4J-Raven-lp or GR4J-Raven-sd must be "julie" or "hongren".')
 
 # read model output file
 if (model == 'HYPE'):
@@ -208,7 +208,7 @@ if (model == 'HYPE'):
     model_dates = np.transpose(np.array(model_dates))
 
 # read model output file
-if (model == 'RAVEN-GR4J-lp' or model == 'RAVEN-GR4J-sd'):
+if (model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd'):
 
     if (setup_by == 'julie'):
         input_files    = glob.glob(input_file+"*.csv")
@@ -282,7 +282,7 @@ if (model == 'RAVEN-GR4J-lp' or model == 'RAVEN-GR4J-sd'):
 
     else:
 
-        raise ValueError('Person who has setup RAVEN-GR4J must be "julie" or "hongren".')
+        raise ValueError('Person who has setup GR4J-Raven must be "julie" or "hongren".')
 
     # ---------------------------------------------------------------------------
     # HONGREN'S outputs
