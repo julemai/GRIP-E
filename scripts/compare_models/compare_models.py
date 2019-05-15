@@ -23,7 +23,7 @@ from __future__ import print_function
 # run:
 #
 
-#    python compare_models.py -i '../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc ../../data/objective_1/model/VIC/vic_phase_0_objective_1.nc ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc ../../data/objective_1/model/MESH-CLASS/mesh-class_phase_0_objective_1.nc ../../data/objective_1/model/MESH-SVS/mesh-svs_phase_0_objective_1.nc ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.nc ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.nc' -a '2011-01-01:2014-12-31' -p test.pdf
+#    python compare_models.py -i '../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc ../../data/objective_1/model/VIC/vic_phase_0_objective_1.nc ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc ../../data/objective_1/model/MESH-CLASS/mesh-class_phase_0_objective_1.nc ../../data/objective_1/model/MESH-SVS/mesh-svs_phase_0_objective_1.nc ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.nc ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.nc ../../data/objective_1/model/GR4J-Raven-lp/gr4j-raven-lp_phase_0_objective_1.nc ../../data/objective_1/model/GR4J-Raven-sd/gr4j-raven-sd_phase_0_objective_1.nc' -a '2011-01-01:2014-12-31' -p test.pdf
 
 # -----------------------
 # add subolder scripts/lib to search path
@@ -56,6 +56,7 @@ pngbase     = ''
 pdffile     = 'test.pdf'
 usetex      = False
 time_period = ''
+nosorty     = False
 
 parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
@@ -73,6 +74,8 @@ parser.add_argument('-p', '--pdffile', action='store',
                     help='Name of pdf output file (default: open screen window).')
 parser.add_argument('-t', '--usetex', action='store_true', default=usetex, dest="usetex",
                     help="Use LaTeX to render text in pdf.")
+parser.add_argument('-y', '--nosorty', action='store_true', default=nosorty, dest="nosorty",
+                    help="If given, y-axis will not be sorted.")
 
 args        = parser.parse_args()
 input_files = (args.input_files[0]).split(' ')
@@ -80,6 +83,7 @@ pngbase     = args.pngbase
 pdffile     = args.pdffile
 usetex      = args.usetex
 time_period = args.time_period[0]
+nosorty     = args.nosorty
 
 del parser, args
 
@@ -166,7 +170,7 @@ for iinput_file,input_file in enumerate(input_files):
     dicts_qsim[input_file.split('/')[-1].split('_')[0]]    = dict_qsim
     dicts_info[input_file.split('/')[-1].split('_')[0]]    = dict_info
 
-print("dicts_nse  = ",dicts_nse)
+# print("dicts_nse  = ",dicts_nse)
 
 
 
@@ -336,11 +340,14 @@ iplot = 0
 print('Plot - Fig ', ifig, ' ::  heatmap')
 fig = plt.figure(ifig)
 
-
+model_order = ['lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
 models = np.sort(dicts_nse.keys())
+nmodels = np.shape(models)[0]
+# sort models in model_order and append models not existing in model_order at the end
+# (these should be only new models where I forgot to add them to model_order yet)
+models = np.array([ imodel for imodel in model_order if imodel in models]+[ imodel for imodel in models if not(imodel in model_order) ])
 gauges = np.sort(dicts_nse[models[0]].keys())
 
-nmodels = np.shape(models)[0]
 ngauges = np.shape(gauges)[0]
 
 nse_results = np.array([ [ dicts_nse[imodel][igauge] for igauge in gauges ] for imodel in models ])
@@ -353,7 +360,7 @@ median_NSE = np.array([ np.median(nse_results[imodel,:]) for imodel in np.arange
 nse_results_truncated = copy.deepcopy(nse_results)
 min_nse = 0.0
 max_nse = 0.2 * (np.int(np.max(nse_results)*5.0)+1)   # closest to [..., 0.6, 0.8, 1.0] to spread colorbar a bit
-print('max_nse = ',max_nse)
+# print('max_nse = ',max_nse)
 nse_results_truncated[np.where(nse_results_truncated < min_nse)] = min_nse  # NSE will be truncated to min_nse
 
 
@@ -385,16 +392,18 @@ ax1.set_yticks([]) ### Hides ticks
 # Cross-Validation: Sort the matrix new
 nse_results_sort = copy.deepcopy(nse_results_truncated)
 # Sort columns
-idx2 = Z2['leaves']     ### apply the clustering for the array-dendrograms to the actual matrix data
+idx2             = Z2['leaves']     ### apply the clustering for the array-dendrograms to the actual matrix data
 nse_results_sort = nse_results_sort[:,idx2]
-ind2 = ind2[idx2]       ### JMJM reorder the flat cluster to match the order of the leaves the dendrogram
+ind2             = ind2[idx2]       ### JMJM reorder the flat cluster to match the order of the leaves the dendrogram
+
 # Sort rows
-idx1 = Z1['leaves']     ### apply the clustering for the gene-dendrograms to the actual matrix data
+if nosorty:
+    idx1 = np.arange(nmodels)[::-1]
+else:
+    idx1 = Z1['leaves']     ### apply the clustering for the gene-dendrograms to the actual matrix data
 nse_results_sort = nse_results_sort[idx1,:]   # xt is transformed x
 median_NSE       = median_NSE[idx1]
-ind1 = ind1[idx1]       ### JMJM  reorder the flat cluster to match the order of the leaves the dendrogram
-
-
+ind1             = ind1[idx1]       ### JMJM  reorder the flat cluster to match the order of the leaves the dendrogram
 
 # Plot distance matrix.
 [ax1_x, ax1_y, ax1_w, ax1_h] = [0.2,0.1,0.7,0.3]
@@ -426,7 +435,7 @@ for imodel in np.arange(nmodels):
 axcb    = fig.add_axes([ax4_x, ax4_y, ax4_w, ax4_h],axisbg='none',frame_on=False)
 nticks  = 5.0
 ticks   = [ min_nse + itick/(nticks-1)*(max_nse-min_nse) for itick in np.arange(nticks) ]
-print('ticks = ',ticks)
+# print('ticks = ',ticks)
 cb      = mpl.colorbar.ColorbarBase(axcb, cmap=cmap, alpha=1.0, orientation='horizontal',ticks=ticks,extend='min',
                                         norm=mpl.colors.Normalize(vmin=min_nse, vmax=max_nse))
 cb.set_label('NSE')

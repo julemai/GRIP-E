@@ -46,7 +46,8 @@ for iobj in ${plot_obj} ; do
 	echo '----------------------'
 	files=$(\ls ../../data/objective_${iobj}/model/*/*_phase_${iphase}_objective_${iobj}.nc)
 	files=$(echo ${files})
-	python compare_models.py -i "${files}" -a '2011-01-01:2014-12-31' -p compare_models_phase_${iphase}_objective_${iobj}.pdf
+	# given -y does not sort models (y-axis)
+	python compare_models.py -i "${files}" -a '2011-01-01:2014-12-31' -p compare_models_phase_${iphase}_objective_${iobj}.pdf -y
 	pdfcrop compare_models_phase_${iphase}_objective_${iobj}.pdf
 	mv compare_models_phase_${iphase}_objective_${iobj}-crop.pdf compare_models_phase_${iphase}_objective_${iobj}.pdf
 
