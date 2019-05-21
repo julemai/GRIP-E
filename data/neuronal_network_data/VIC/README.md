@@ -1,6 +1,6 @@
 ## ANN data for VIC-type model setup
 
-The gridded forcing data are only shared via a separate download link
+The gridded forcing data are only shared via a **separate download link**
 since they are too large to be stored on GitHub and the data are under
 licence.
 
