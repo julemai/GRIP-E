@@ -5,6 +5,6 @@ since they are too large to be stored (~1.1GB) on GitHub and the data are under
 licence.
 
 The shapefiles are used to aggregate the gridded forcing data onto the
-sub-watershed discretization level. The outlet of each of the 49
+sub-watershed discretization level. The outlet of each of the 46
 sub-watersheds in this setup corresponds to a streamflow station of
 interest.
