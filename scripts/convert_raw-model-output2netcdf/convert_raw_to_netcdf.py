@@ -43,6 +43,11 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
+#    ANN-LinReg
+#    ------------
+#    python convert_raw_to_netcdf.py -m ANN-LinReg -i ../../data/objective_1/model/ANN-LinReg/ann-linreg_phase_1_objective_1.csv -o ../../data/objective_1/model/ANN-LinReg/ann-linreg_phase_1_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+
+#    ------------
 #    HYPE
 #    ------------
 #    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
@@ -147,6 +152,7 @@ if ( (model != 'LBRM')          and
      (model != 'VIC-GRU')       and
      (model != 'GEM-Hydro')     and
      (model != 'HYPE')          and
+     (model != 'ANN-LinReg')    and
      (model != 'GR4J-Raven-lp') and
      (model != 'GR4J-Raven-sd') and 
      (model != 'SWAT')          and
@@ -396,6 +402,46 @@ if (model == 'WATFLOOD'):
 
     model_stations = list(model_stations_uniq)
     model_dates    = list(model_dates_uniq)
+
+if (model == 'ANN-LinReg'):
+    # ---------------
+    # read model outputs
+    # - model outputs in pickle exported to CSV
+    # - stations are blockwise stored one after each other
+    # - ,date,prediction,actual,station
+    # ---------------
+    model_stations = np.unique(fsread(input_file,skip=1,header=False,snc=[4]))
+    nstations      = np.shape(model_stations)[0]
+
+    # nodata lines are just not written
+    # --> create date range from first to last date
+    first_date = np.sort(np.unique(fsread(input_file,skip=1,snc=[1])))[0]
+    first_date = datetime.datetime(int(str(first_date)[0:4]),int(str(first_date)[5:7]),int(str(first_date)[8:10]),0,0)
+    last_date  = np.sort(np.unique(fsread(input_file,skip=1,snc=[1])))[-1]
+    last_date  = datetime.datetime(int(str(last_date)[0:4]),int(str(last_date)[5:7]),int(str(last_date)[8:10]),0,0)
+    ndays = (last_date-first_date).days+1
+    model_dates = np.array([ first_date + datetime.timedelta(ii) for ii in range(ndays) ])
+
+    # read just everything (f=floats, s=strings)
+    all_data_f, all_data_s = fsread(input_file,skip=1,snc=[1,4],nc=[0,2,3])
+    all_data_s = np.array(all_data_s) # make array
+    # all_data_s[:,0] = np.array([ datetime.datetime(int(str(ii)[0:4]),int(str(ii)[5:7]),int(str(ii)[8:10]),0,0) for ii in all_data_s[:,0] ])
+
+    # allocate final array
+    model_data = np.ones([ndays,nstations]) * nodata
+
+    # map data onto data array
+    for istation in model_stations:
+
+        idx_station = np.where(all_data_s[:,1] == istation)[0]   # all lines of that station
+        iistation   = np.where(model_stations == istation)[0][0]
+        iitime = [ np.where(model_dates == idate)[0][0]  for idate in [ datetime.datetime(int(str(ii)[0:4]),int(str(ii)[5:7]),int(str(ii)[8:10]),0,0) for ii in all_data_s[idx_station,0] ] ]
+        iitime = np.array(iitime)
+        dats = all_data_f[idx_station,1] # columns are [running ID, prediction, actual]
+        dats = np.where(dats<0.0,0.0,dats) 
+        model_data[iitime,iistation] = dats 
+
+    model_stations = list(model_stations)
 
 if (model == 'GEM-Hydro'):
     # ---------------
