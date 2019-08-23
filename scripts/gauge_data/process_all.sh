@@ -21,7 +21,7 @@
 
 set -e
 
-# This script converts all CSV gaugng data files into NetCDF format.
+# This script converts all CSV streamflow gauge data files into NetCDF format.
 
 # Perform a cleanup if script is interupted
 trap cleanup 1 2 3 6
@@ -33,17 +33,19 @@ isdir=${PWD}
 pid=$$
 
 # tell me what to do
-convert_to_single_nc=0       # converts every csv/txt into an individual NetCDF --> "<station-id>.nc"
-convert_to_merged_nc=1       # converts all   csv/txt's into one single NetCDF  --> "all_gauges.nc"
-plot_merged_nc=1             # plots all stations of a NetCDF into pdf          --> "all_gauges.pdf"
+convert_to_single_nc=0       # converts every csv/txt into an individual NetCDF 	   --> "<station-id>.nc"
+convert_to_merged_nc=0       # converts all   csv/txt's into one single NetCDF  	   --> "all_gauges.nc"
+plot_merged_nc=0             # plots all stations of a NetCDF into pdf          	   --> "all_gauges.pdf"
+plot_grouped_gauges=1        # plots stations grouped by watersheds (only for great-lakes) --> "all_gauges_grouped.pdf"
 
 objectives="1 2"
-domain="lake-erie"  # lake-erie or great-lakes
+domain="great-lakes"  # lake-erie or great-lakes
 
 if [[ ${domain} == "great-lakes" ]] ; then
     calvals="calibration validation"
 else
     calvals="None"
+    plot_grouped_gauges=0
 fi
 
 for calval in ${calvals} ; do
@@ -111,5 +113,19 @@ for calval in ${calvals} ; do
 
     done
 done
+
+if [ ${plot_grouped_gauges} == 1 ] ; then
+
+    # time period 2010-2014
+    python plot_gauge_data_grouped.py -i ../../data/objective_1/${domain}/gauge_info.csv ../../data/objective_2/${domain}/gauge_info.csv -p ../../data/all_gauges_grouped_2010-2014.pdf -t -v Q -y 2010:2014
+    pdfcrop ../../data/all_gauges_grouped_2010-2014.pdf
+    mv      ../../data/all_gauges_grouped_2010-2014-crop.pdf ../../data/all_gauges_grouped_2010-2014.pdf
+
+    # time period 2000-2018
+    python plot_gauge_data_grouped.py -i ../../data/objective_1/${domain}/gauge_info.csv ../../data/objective_2/${domain}/gauge_info.csv -p ../../data/all_gauges_grouped_2000-2018.pdf -t -v Q -y 2000:2018
+    pdfcrop ../../data/all_gauges_grouped_2000-2018.pdf
+    mv      ../../data/all_gauges_grouped_2000-2018-crop.pdf ../../data/all_gauges_grouped_2000-2018.pdf
+fi
+
 
 exit 0
