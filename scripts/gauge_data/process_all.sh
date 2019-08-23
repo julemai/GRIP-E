@@ -38,64 +38,78 @@ convert_to_merged_nc=1       # converts all   csv/txt's into one single NetCDF  
 plot_merged_nc=1             # plots all stations of a NetCDF into pdf          --> "all_gauges.pdf"
 
 objectives="1 2"
+domain="lake-erie"  # lake-erie or great-lakes
 
-for objective in ${objectives} ; do
+if [[ ${domain} == "great-lakes" ]] ; then
+    calvals="calibration validation"
+else
+    calvals="None"
+fi
 
-    input_files=""
-    filetype=""
+for calval in ${calvals} ; do
 
-    ids=$( grep -v 'NO,ID,Name,Lat,Lon,Country' ../../data/objective_${objective}/gauge_info.csv | awk -F, '{ print $2 }' )
-    echo ${ids}
-    for ii in ${ids} ; do
+    if [[ ${calval} == "None" ]] ; then
+	calval=""
+    fi
 	
-	ifile="../../data/objective_${objective}/csv/${ii}.txt"   # this is the USGS data
-	if [ -e ${ifile} ] ; then
-	    echo ""
-	    echo ${ifile}
+    for objective in ${objectives} ; do
 
-	    input_files+=${ifile}' '
-	    filetype+='USGS '
+	input_files=""
+	filetype=""
+
+	ids=$( grep -v 'ID,Name,Lat,Lon,Country' ../../data/objective_${objective}/${domain}/gauge_info.csv | awk -F, '{ print $2 }' )
+	echo ${ids}
+	for ii in ${ids} ; do
 	    
-	    # construct output file name
-	    tmp2=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 1  | rev )
-	    tmp1=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 3- | rev )
-	    ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
-	    
-	    if [ ${convert_to_single_nc} == 1 ] ; then
-		python convert_gauge_csv_2_netcdf.py --filetype USGS --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
+	    ifile="../../data/objective_${objective}/${domain}/${calval}/csv/${ii}.txt"   # this is the USGS data
+	    if [ -e ${ifile} ] ; then
+		# echo ""
+		echo ${ifile}
+
+		input_files+=${ifile}' '
+		filetype+='USGS '
+		
+		# construct output file name
+		tmp2=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 1  | rev )
+		tmp1=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 3- | rev )
+		ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
+		
+		if [ ${convert_to_single_nc} == 1 ] ; then
+		    python convert_gauge_csv_2_netcdf.py --filetype USGS --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/${domain}/gauge_info.csv"
+		fi
 	    fi
+
+	    ifile="../../data/objective_${objective}/${domain}/${calval}/csv/${ii}.csv"   # this is the WSC data
+	    if [ -e ${ifile} ] ; then
+		# echo ""
+		echo ${ifile}
+
+		input_files+=${ifile}' '
+		filetype+='WSC '
+		
+		# construct output file name
+		tmp2=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 1  | rev )
+		tmp1=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 3- | rev )
+		ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
+		
+		if [ ${convert_to_single_nc} == 1 ] ; then
+		    python convert_gauge_csv_2_netcdf.py --filetype WSC --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/${domain}/gauge_info.csv"
+		fi
+	    fi
+	done
+
+	if [ ${convert_to_merged_nc} == 1 ] ; then
+	    ofile=$( echo "${tmp1}/netcdf/all_gauges.nc")
+	    python convert_gauge_csv_2_netcdf.py --filetype "$(echo ${filetype})" --input_files "$(echo ${input_files})" --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/${domain}/gauge_info.csv"
 	fi
 
-	ifile="../../data/objective_${objective}/csv/${ii}.csv"   # this is the WSC data
-	if [ -e ${ifile} ] ; then
-	    echo ""
-	    echo ${ifile}
-
-	    input_files+=${ifile}' '
-	    filetype+='WSC '
-	    
-	    # construct output file name
-	    tmp2=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 1  | rev )
-	    tmp1=$( echo ${ifile} | rev | cut -d '.' -f 2- | cut -d '/' -f 3- | rev )
-	    ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
-	    
-	    if [ ${convert_to_single_nc} == 1 ] ; then
-		python convert_gauge_csv_2_netcdf.py --filetype WSC --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
-	    fi
+	if [ ${plot_merged_nc} == 1 ] ; then
+	    python plot_gauge_data.py -i ../../data/objective_${objective}/${domain}/${calval}/netcdf/all_gauges.nc -p ../../data/objective_${objective}/${domain}/${calval}/all_gauges.pdf
+	    pdfcrop ../../data/objective_${objective}/${domain}/${calval}/all_gauges.pdf
+	    mv      ../../data/objective_${objective}/${domain}/${calval}/all_gauges-crop.pdf ../../data/objective_${objective}/${domain}/${calval}/all_gauges.pdf
 	fi
+
     done
-
-    if [ ${convert_to_merged_nc} == 1 ] ; then
-	ofile=$( echo "${tmp1}/netcdf/all_gauges.nc")
-	python convert_gauge_csv_2_netcdf.py --filetype "$(echo ${filetype})" --input_files "$(echo ${input_files})" --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/gauge_info.csv"
-    fi
-
-    if [ ${plot_merged_nc} == 1 ] ; then
-	python plot_gauge_data.py -i ../../data/objective_${objective}/netcdf/all_gauges.nc -p ../../data/objective_${objective}/all_gauges.pdf
-	pdfcrop ../../data/objective_${objective}/all_gauges.pdf
-	mv      ../../data/objective_${objective}/all_gauges-crop.pdf ../../data/objective_${objective}/all_gauges.pdf
-    fi
-
 done
 
 exit 0

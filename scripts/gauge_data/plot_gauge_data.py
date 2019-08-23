@@ -144,7 +144,7 @@ else:
 ncol        = 4           # # of columns of subplots per figure
 nrow        = np.int(np.ceil(nstations/4.))           # # of rows of subplots per figure
 hspace      = 0.05        # x-space between subplots
-vspace      = 0.04        # y-space between subplots
+vspace      = 0.3/nrow    # y-space between subplots
 right       = 0.9         # right space on page
 textsize    = 7           # standard text size
 textsize_clock = 0.6*textsize        # standard text size
@@ -311,8 +311,13 @@ for istation in range(nstations):
         plt.setp(sub, xlabel=xlab)
     else:
         sub.tick_params(axis='x',labelbottom='off')
-    if iplot%ncol == 1:                  # first column
-        plt.setp(sub, ylabel=ylab)
+
+    if nstations/ncol > 8:
+        if iplot%ncol == 1  and ((iplot-1)//ncol+1)%3 == 0:                  # first column, every third row
+            plt.setp(sub, ylabel=ylab)
+    else:
+        if iplot%ncol == 1:                  # first column
+            plt.setp(sub, ylabel=ylab)
 
     # text for gauge ID
     textbox_x = 0.5
@@ -325,19 +330,20 @@ for istation in range(nstations):
 
     # text for gauge name
     # insert line break if station_info (without spaces) is longer than ~20 charachters
-    tmp = station_info[istation].split(':')[2].strip().replace('"','').split(' ')
-    if len(' '.join(tmp)) > 25:
-        try:
-            cut = len(' '.join(tmp))//2
-            nn = np.where( np.cumsum(np.array([ len(ii) for ii in tmp ])) > cut )[0][0]
-            tmp2 = str(' '.join(tmp[0:nn])+' \n '+' '.join(tmp[nn:]))
-        except:
-            tmp2 = str(' '.join(tmp))
-    else:
-        tmp2 = ' '.join(tmp)
-    sub.text(textbox_x, textbox_y, tmp2, transform=sub.transAxes,
-                         rotation=0, fontsize=textsize,
-                         horizontalalignment='center', verticalalignment='bottom')
+    if nstations/ncol <= 8:
+        tmp = station_info[istation].split(':')[2].strip().replace('"','').split(' ')
+        if len(' '.join(tmp)) > 25:
+            try:
+                cut = len(' '.join(tmp))//2
+                nn = np.where( np.cumsum(np.array([ len(ii) for ii in tmp ])) > cut )[0][0]
+                tmp2 = str(' '.join(tmp[0:nn])+' \n '+' '.join(tmp[nn:]))
+            except:
+                tmp2 = str(' '.join(tmp))
+        else:
+            tmp2 = ' '.join(tmp)
+        sub.text(textbox_x, textbox_y, tmp2, transform=sub.transAxes,
+                             rotation=0, fontsize=textsize,
+                             horizontalalignment='center', verticalalignment='bottom')
 
     # limits
     plt.setp(sub,xlim=[mdates.date2num(datetime.datetime(2010,1,1,0,0)),mdates.date2num(datetime.datetime(2015,1,1,0,0))])

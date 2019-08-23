@@ -103,16 +103,17 @@ for ifile,input_file in enumerate(input_files):
 
     # merge multiple blanks and make separator " "
     for cc in content:
-        if station_id[ifile] in cc:
-            ccc = ' '.join(cc.strip().split())
-            if filetype[ifile] == 'USGS':
-                content_slim[ifile].append(ccc)
-            elif filetype[ifile] == 'WSC':
-                if ccc.split(',')[1] == '1':
-                    content_slim[ifile].append(' '.join(ccc.split(',')))
-
-            else:
-                raise ValueError("This filetype is not known!")
+        if not(cc.startswith('#')):
+            if station_id[ifile] in cc:
+                ccc = ' '.join(cc.strip().split())
+                if filetype[ifile] == 'USGS':
+                    content_slim[ifile].append(ccc)
+                elif filetype[ifile] == 'WSC':
+                    if ccc.split(',')[1] == '1':
+                        content_slim[ifile].append(' '.join(ccc.split(',')))
+                        
+                else:
+                    raise ValueError("This filetype is not known!")
 
     # find time period covering all data
     if filetype[ifile] == 'USGS':
@@ -141,6 +142,9 @@ dict_quality_codes["USGS:A"] = "Approved for publication -- Processing and revie
 dict_quality_codes["USGS:P"] = "Provisional data subject to revision."
 dict_quality_codes["USGS:e"] = "Value has been estimated."
 dict_quality_codes["USGS:M"] = "Value is missing."
+dict_quality_codes["USGS:>"] = "Actual value is known to be greater than reported value."
+dict_quality_codes["USGS:<"] = "Actual value is known to be smaller than reported value."
+dict_quality_codes["USGS:R"] = "Records for these data have been revised."
 dict_quality_codes["WSC:A"]  = "partial day"
 dict_quality_codes["WSC:B"]  = "ice conditions"
 dict_quality_codes["WSC:D"]  = "dry"
