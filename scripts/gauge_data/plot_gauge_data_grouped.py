@@ -445,7 +445,7 @@ for group in groups:   # groups[-1:]:
                 plt.setp(sub, ylabel=ylab)
 
         # text for group ID
-        if iplot == 1:
+        if iigauge == 1:
             textbox_x = 0.5
             textbox_y = 1.00
             sub.text(textbox_x, textbox_y, str2tex(group,usetex=usetex), transform=sub.transAxes,
