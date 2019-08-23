@@ -117,12 +117,12 @@ done
 if [ ${plot_grouped_gauges} == 1 ] ; then
 
     # time period 2010-2014
-    python plot_gauge_data_grouped.py -i ../../data/objective_1/${domain}/gauge_info.csv ../../data/objective_2/${domain}/gauge_info.csv -p ../../data/all_gauges_grouped_2010-2014.pdf -t -v Q -y 2010:2014
+    python plot_gauge_data_grouped.py -i ../../data/objective_1/${domain}/gauge_info.csv ../../data/objective_2/${domain}/gauge_info.csv -p ../../data/all_gauges_grouped_2010-2014.pdf -v Q -y 2010:2014
     pdfcrop ../../data/all_gauges_grouped_2010-2014.pdf
     mv      ../../data/all_gauges_grouped_2010-2014-crop.pdf ../../data/all_gauges_grouped_2010-2014.pdf
 
     # time period 2000-2018
-    python plot_gauge_data_grouped.py -i ../../data/objective_1/${domain}/gauge_info.csv ../../data/objective_2/${domain}/gauge_info.csv -p ../../data/all_gauges_grouped_2000-2018.pdf -t -v Q -y 2000:2018
+    python plot_gauge_data_grouped.py -i ../../data/objective_1/${domain}/gauge_info.csv ../../data/objective_2/${domain}/gauge_info.csv -p ../../data/all_gauges_grouped_2000-2018.pdf -v Q -y 2000:2018
     pdfcrop ../../data/all_gauges_grouped_2000-2018.pdf
     mv      ../../data/all_gauges_grouped_2000-2018-crop.pdf ../../data/all_gauges_grouped_2000-2018.pdf
 fi

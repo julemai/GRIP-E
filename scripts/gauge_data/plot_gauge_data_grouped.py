@@ -236,7 +236,7 @@ nrow        = 4           # # of rows of subplots per figure
 hspace      = 0.05        # x-space between subplots
 vspace      = 0.03         # y-space between subplots
 right       = 0.9         # right space on page
-textsize    = 7           # standard text size
+textsize    = 12           # standard text size
 textsize_clock = 0.6*textsize        # standard text size
 dxabc       = 0.95        # % of (max-min) shift to the right from left y-axis for a,b,c,... labels
 dyabc       = 0.9         # % of (max-min) shift up from lower x-axis for a,b,c,... labels
@@ -264,7 +264,7 @@ dobw      = False # True: black & white
 
 # Legend
 llxbbox       = 0.0         # x-anchor legend bounding box
-llybbox       = -0.4        # y-anchor legend bounding box
+llybbox       = -0.30        # y-anchor legend bounding box
 llxbbox_clock = -0.2        # x-anchor legend bounding box clock_plot
 llybbox_clock = 1.08        # y-anchor legend bounding box clock_plot
 llrspace      = 0.          # spacing between rows in legend
@@ -370,7 +370,7 @@ ifig = 0
 # -------------------------------------------------------------------------
 # Fig 1 :: for each group plot discharge (multiple gauge stations
 # -------------------------------------------------------------------------
-for group in groups:
+for group in groups:   # groups[-1:]:
 
     ifig += 1
     iplot = 0
@@ -421,7 +421,7 @@ for group in groups:
     
         plt.setp(line1, linestyle='-',
                         linewidth=lwidth, color=cmap.colors[int(iigauge*256/len(gaugeID_group))],
-                        label=str2tex(igauge+" : "+gaugeinfo_group[iigauge][1]+"  ("+gaugeinfo_group[iigauge][2]+","+gaugeinfo_group[iigauge][4]+")",usetex=usetex))
+                        label=str2tex(igauge+" : "+gaugeinfo_group[iigauge][1]+"  ("+gaugeinfo_group[iigauge][2]+", "+gaugeinfo_group[iigauge][4]+")",usetex=usetex))
 
         if usetex:
             xlab   = r'$\mathrm{time}'
