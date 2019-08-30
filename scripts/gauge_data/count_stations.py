@@ -32,7 +32,8 @@ for objective in range(1,3):
 
     # ifile = '/Users/j6mai/Desktop/GRIP-GL_Raw_data_20190801/GRIP-GL_all_gauges_info_Objective'+str(objective)+'_20190801.csv'
     # ifile = '/Users/j6mai/Desktop/GRIP-GL_Raw_data_20190812/GRIP_GL_gauge_info_20190812_objective_'+str(objective)+'.csv'
-    ifile = '/Users/j6mai/Desktop/GRIP-GL_Raw_data_20190822/GRIP_GL_gauge_info_20190822_objective_'+str(objective)+'.csv'
+    # ifile = '/Users/j6mai/Desktop/GRIP-GL_Raw_data_20190822/GRIP_GL_gauge_info_20190822_objective_'+str(objective)+'.csv'
+    ifile = '../../data/objective_'+str(objective)+'/great-lakes/gauge_info.csv'
 
     header = jams.fsread(ifile,separator=',',skip=1,header=True)
     ncols = len(header)
