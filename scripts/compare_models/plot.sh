@@ -32,10 +32,11 @@ pid=$$
 
 datapath="../data/"
 
-plot_obj='1 2'                             # can be 1, 2, and/or 3
-plot_phase='0 1'                           # phase 0: uncalibrated, different phys. setups,
+plot_obj='1 2'                           # can be 1, 2, and/or 3
+plot_phase='0 1'                         # phase 0: uncalibrated, different phys. setups,
 #                                        # phase 1: calibrated,   different phys. setups,
 #                                        # phase 2: calibrated,   same phys. setups
+domain='lake-erie'                       # [lake-erie, great-lakes]
 
 for iobj in ${plot_obj} ; do
 
@@ -44,12 +45,12 @@ for iobj in ${plot_obj} ; do
 	echo '----------------------'
 	echo "plot:  compare_models_phase_${iphase}_objective_${iobj}.pdf"
 	echo '----------------------'
-	files=$(\ls ../../data/objective_${iobj}/model/*/*_phase_${iphase}_objective_${iobj}.nc)
+	files=$(\ls ../../data/objective_${iobj}/${domain}/model/*/*_phase_${iphase}_objective_${iobj}.nc)
 	files=$(echo ${files})
 	# given -y does not sort models (y-axis)
-	python compare_models.py -i "${files}" -a '2011-01-01:2014-12-31' -p compare_models_phase_${iphase}_objective_${iobj}.pdf -y
-	pdfcrop compare_models_phase_${iphase}_objective_${iobj}.pdf
-	mv compare_models_phase_${iphase}_objective_${iobj}-crop.pdf compare_models_phase_${iphase}_objective_${iobj}.pdf
+	python compare_models.py -i "${files}" -a '2011-01-01:2014-12-31' -p compare_models_phase_${iphase}_objective_${iobj}_${domain}.pdf -y
+	pdfcrop compare_models_phase_${iphase}_objective_${iobj}_${domain}.pdf
+	mv compare_models_phase_${iphase}_objective_${iobj}_${domain}-crop.pdf compare_models_phase_${iphase}_objective_${iobj}_${domain}.pdf
 
     done
 

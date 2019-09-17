@@ -32,9 +32,10 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='ANN-LinReg' # can be [ANN-LinReg, LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD, GR4J-Raven-lp GR4J-Raven-sd]
-plot_obj='1 2'                             # can be 1, 2, and/or 3
-plot_phase='0 1'                           # phase 0: uncalibrated, different phys. setups,
+plot_models='MESH-CLASS'                 # can be [ANN-LinReg, LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD, GR4J-Raven-lp GR4J-Raven-sd]
+domain='lake-erie'                       # [lake-erie, great-lakes]
+plot_obj='1 2'                           # can be 1, 2, and/or 3
+plot_phase='0 '                         # phase 0: uncalibrated, different phys. setups,
 #                                        # phase 1: calibrated,   different phys. setups,
 #                                        # phase 2: calibrated,   same phys. setups
 
@@ -49,13 +50,13 @@ for imodel in ${plot_models} ; do
 
 	    echo ''
 	    echo 'Plot :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
-	    python plot_nc_model_output.py -a '2011-01-01:2014-12-31' -i ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -p ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
-	    pdfcrop ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
-	    pdfsplit ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop.pdf
-	    mv ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop1.pdf ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_hydrographs.pdf
-	    mv ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop2.pdf ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_performance.pdf
-	    rm ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop.pdf
-	    rm ../../data/objective_${iobj}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
+	    python plot_nc_model_output.py -a '2011-01-01:2014-12-31' -i ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -p ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
+	    pdfcrop ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
+	    pdfsplit ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop.pdf
+	    mv ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop1.pdf ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_hydrographs.pdf
+	    mv ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop2.pdf ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_performance.pdf
+	    rm ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop.pdf
+	    rm ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
 
 	done
 

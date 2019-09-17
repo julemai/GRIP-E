@@ -570,6 +570,7 @@ if (model == 'MESH-SVS' or model == 'MESH-CLASS'):
 
     found = False
     for dd in dump:
+        # print("dd: ",dd)
         first = dd.split()[0]
         if first.upper() == ':COLUMNNAME':
             mapping = dd.split()[1:]
