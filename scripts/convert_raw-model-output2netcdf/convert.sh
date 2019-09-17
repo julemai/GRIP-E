@@ -32,11 +32,12 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='MESH-CLASS' # 'ANN-LinReg LBRM VIC VIC-GRU GEM-Hydro SWAT WATFLOOD GR4J-Raven-lp GR4J-Raven-sd'  # can be [ANN-LinReg, LBRM, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU, WATFLOOD]
+convert_models='ML-LinReg'  # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
+#                               WATFLOOD, SWAT, ML-ConvLSTM-w-LC, ML-ConvLSTM-wo-LC, ML-LinReg, ML-XGBoost]
 domain='lake-erie'          # [lake-erie, great-lakes]
 setup_by='julie'            # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'      	    # can be 1, 2, and/or 3
-convert_phase='0 '         # phase 0: uncalibrated, different phys. setups,
+convert_phase='0 1 '        # phase 0: uncalibrated, different phys. setups,
 #                      	    # phase 1: calibrated,   different phys. setups,
 #                      	    # phase 2: calibrated,   same phys. setups
 

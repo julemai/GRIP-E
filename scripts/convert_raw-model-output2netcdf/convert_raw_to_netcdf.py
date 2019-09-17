@@ -43,9 +43,9 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
-#    ANN-LinReg
+#    'ML-ConvLSTM-w-LC' or 'ML-ConvLSTM-wo-LC' or 'ML-LinReg' or 'ML-XGBoost'
 #    ------------
-#    python convert_raw_to_netcdf.py -m ANN-LinReg -i ../../data/objective_1/model/ANN-LinReg/ann-linreg_phase_1_objective_1.csv -o ../../data/objective_1/model/ANN-LinReg/ann-linreg_phase_1_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+#    python convert_raw_to_netcdf.py -m ML-ConvLSTM-w-LC -i ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.csv -o ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
 #    HYPE
@@ -147,17 +147,20 @@ del parser, args
 # nodata
 nodata = -9999.0
 
-if ( (model != 'LBRM')          and
-     (model != 'VIC')           and
-     (model != 'VIC-GRU')       and
-     (model != 'GEM-Hydro')     and
-     (model != 'HYPE')          and
-     (model != 'ANN-LinReg')    and
-     (model != 'GR4J-Raven-lp') and
-     (model != 'GR4J-Raven-sd') and 
-     (model != 'SWAT')          and
-     (model != 'WATFLOOD')      and
-     (model != 'MESH-SVS')      and
+if ( (model != 'LBRM')                 and
+     (model != 'VIC')                  and
+     (model != 'VIC-GRU')              and
+     (model != 'GEM-Hydro')            and
+     (model != 'HYPE')                 and    
+     (model != 'ML-ConvLSTM-w-LC')     and
+     (model != 'ML-ConvLSTM-wo-LC')    and
+     (model != 'ML-LinReg')            and
+     (model != 'ML-XGBoost')           and
+     (model != 'GR4J-Raven-lp')        and
+     (model != 'GR4J-Raven-sd')        and 
+     (model != 'SWAT')                 and
+     (model != 'WATFLOOD')             and
+     (model != 'MESH-SVS')             and    
      (model != 'MESH-CLASS') ):
     raise ValueError('This model is not supported yet!')
 
@@ -403,7 +406,7 @@ if (model == 'WATFLOOD'):
     model_stations = list(model_stations_uniq)
     model_dates    = list(model_dates_uniq)
 
-if (model == 'ANN-LinReg'):
+if (model == 'ML-ConvLSTM-w-LC' or model == 'ML-ConvLSTM-wo-LC' or model == 'ML-LinReg' or model == 'ML-XGBoost'):    #'ANN-LinReg'
     # ---------------
     # read model outputs
     # - model outputs in pickle exported to CSV
