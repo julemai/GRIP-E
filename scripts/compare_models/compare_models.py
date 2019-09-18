@@ -340,7 +340,7 @@ iplot = 0
 print('Plot - Fig ', ifig, ' ::  heatmap')
 fig = plt.figure(ifig)
 
-model_order = ['ann-linreg', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
+model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-xgboost', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
 models = np.sort(dicts_nse.keys())
 nmodels = np.shape(models)[0]
 # sort models in model_order and append models not existing in model_order at the end
