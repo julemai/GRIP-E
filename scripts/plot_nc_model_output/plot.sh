@@ -32,11 +32,11 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='ML-LinReg'                  # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
-#                                            WATFLOOD, SWAT, ML-ConvLSTM-w-LC, ML-ConvLSTM-wo-LC, ML-LinReg, ML-XGBoost]
+plot_models='ML-LinReg ML-XGBoost'       # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
+#                                            WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-DEM-LC, ML-LinReg, ML-XGBoost]
 domain='lake-erie'                       # [lake-erie, great-lakes]
 plot_obj='1 2'                           # can be 1, 2, and/or 3
-plot_phase='0 1 '                         # phase 0: uncalibrated, different phys. setups,
+plot_phase='1 '                          # phase 0: uncalibrated, different phys. setups,
 #                                        # phase 1: calibrated,   different phys. setups,
 #                                        # phase 2: calibrated,   same phys. setups
 
