@@ -263,7 +263,7 @@ if (outtype == 'pdf'):
     from matplotlib.backends.backend_pdf import PdfPages
     # Customize: http://matplotlib.sourceforge.net/users/customizing.html
     mpl.rc('ps', papersize='a4', usedistiller='xpdf') # ps2pdf
-    mpl.rc('figure', figsize=(8.27,11.69)) # a4 portrait
+    mpl.rc('figure', figsize=(10.97,11.69)) # a4 portrait
     if usetex:
         mpl.rc('text', usetex=True)
     else:
@@ -273,7 +273,7 @@ if (outtype == 'pdf'):
 elif (outtype == 'png'):
     mpl.use('Agg') # set directly after import matplotlib
     import matplotlib.pyplot as plt
-    mpl.rc('figure', figsize=(8.27,11.69)) # a4 portrait
+    mpl.rc('figure', figsize=(10.97,11.69)) # a4 portrait
     if usetex:
         mpl.rc('text', usetex=True)
     else:
@@ -283,7 +283,7 @@ elif (outtype == 'png'):
     mpl.rc('savefig', dpi=dpi, format='png')
 else:
     import matplotlib.pyplot as plt
-    mpl.rc('figure', figsize=(4./5.*8.27,4./5.*11.69)) # a4 portrait
+    mpl.rc('figure', figsize=(4./5.*10.97,4./5.*11.69)) # a4 portrait
 mpl.rc('font', size=textsize)
 mpl.rc('lines', linewidth=lwidth, color='black')
 mpl.rc('axes', linewidth=alwidth, labelcolor='black')

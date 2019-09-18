@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM'       # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
+plot_models='ML-ConvLSTM'                # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
 #                                            WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost]
 domain='lake-erie'                       # [lake-erie, great-lakes]
 plot_obj='1 2'                           # can be 1, 2, and/or 3
