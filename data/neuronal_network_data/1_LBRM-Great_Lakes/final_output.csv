@@ -1,0 +1,142 @@
+gage id,basin,subbasin,method,objective,area (km2)
+04166500,eri,1,matching,2 only,484.33
+04174500,eri,2,matching,2 only,1888.11
+04176500,eri,4,matching,2 only,2698.78
+04177000,eri,5,matching,2 only,388.5
+04193500,eri,6,matching,2 only,16394.7
+04185000,eri,6,matching,1,1061.9
+04198000,eri,8,matching,2 only,3240.09
+04197100,eri,8,matching,1,385.91
+04196800,eri,8,new maps,1,608.067
+04199500,eri,9,matching,2 only,678.58
+04199000,eri,9,matching,2 only,960.89
+04200500,eri,10,matching,2 only,1025.64
+04208000,eri,11,matching,2 only,1831.13
+04212100,eri,13,matching,2 only,1774.15
+04213000,eri,15,matching,1 & 2,453.25
+04213500,eri,16,matching,2 only,1129.24
+04215500,eri,17,matching,2 only,349.65
+04215000,eri,17,matching,2 only,249.676
+02GB001,eri,19,matching,2 only,5200
+02GA038,eri,19,new maps,1,326
+02GA018,eri,19,new maps,1,544
+02GA010,eri,19,new maps,1,1030
+02GC007,eri,20,matching,2 only,567
+02GC002,eri,20,matching,1 & 2,331
+02FA001,geo,1,matching,2 only,913
+02FB010,geo,2,matching,2 only,298
+02FB009,geo,2,matching,2 only,587
+02ED102,geo,3,matching,1,216
+02ED101,geo,3,new maps,1,328
+02ED029,geo,3,new maps,1,479
+02ED024,geo,3,matching,1 & 2,244
+02ED015,geo,3,new maps,1,244
+02ED003,geo,3,matching,1,1230
+02EC018,geo,4,new maps,1,347
+02EC003,geo,4,matching,2 only,5850
+02EC002,geo,4,new maps,1,1510
+02EB014,geo,5,new maps,1,605
+02EB011,geo,5,new maps,2 only,4790
+02EA011,geo,6,matching,2 only,2840
+02EA005,geo,6,new maps,1,329
+02DD010,geo,7,matching,2 only,13900
+02DC012,geo,7,new maps,1,1200
+02DB005,geo,8,matching,2 only,3150
+02CF007,geo,9,new maps,1 & 2,277
+02CD001,geo,10,matching,2 only,1350
+02CC005,geo,11,new maps,2 only,1970
+02CB003,geo,11,new maps,1 & 2,1450
+04137500,hur,7,matching,2 only,4504.01
+04136000,hur,7,matching,1,2869.72
+04142000,hur,8,matching,2 only,828.8
+02FE015,hur,14,matching,2 only,2540
+02FE009,hur,14,matching,1,371
+02FC001,hur,16,matching,2 only,3950
+04056500,mic,2,matching,1 & 2,2849
+04059000,mic,5,matching,2 only,2253.3
+04066500,mic,6,new maps,1,660.1094
+04059500,mic,6,matching,1 & 2,1165.5
+04067500,mic,7,matching,2 only,10178.7
+04067958,mic,8,matching,1,1157.73
+04071765,mic,9,matching,2 only,2501.94
+04072150,mic,10,matching,2 only,279.72
+04074950,mic,11,new maps,1,1205.531
+04085200,mic,12,matching,1 & 2,328.93
+04086000,mic,13,matching,2 only,1082.62
+04085427,mic,13,matching,2 only,1362.34
+04087000,mic,14,matching,2 only,1802.64
+04093000,mic,15,matching,2 only,321.16
+04087240,mic,15,matching,2 only,492.1
+04102500,mic,16,matching,2 only,1010.1
+04101800,mic,16,matching,2 only,660.45
+04101500,mic,16,matching,2 only,9494.94
+04102700,mic,17,matching,2 only,216.524
+04119000,mic,20,matching,2 only,12691
+04121970,mic,22,matching,2 only,5990.67
+04122500,mic,23,matching,1 & 2,1763.79
+04122200,mic,23,matching,1 & 2,1051.54
+04125460,mic,24,matching,1,634.55
+04124000,mic,24,matching,1,2219.63
+04126740,mic,25,matching,2 only,323.75
+04126970,mic,26,matching,1 & 2,365.19
+02HA007,ont,1,new maps,2 only,223
+02HA006,ont,1,matching,1 & 2,292
+04218518,ont,1,matching,2 only,211.344
+04218000,ont,1,matching,2 only,903.91
+04231600,ont,3,matching,2 only,6407.66
+04224775,ont,3,new maps,1,231.8445
+04221000,ont,3,new maps,1,750.879
+0423205010,ont,4,matching,2 only,367.78
+04250200,ont,6,matching,2 only,616.42
+04258000,ont,7,matching,2 only,753.69
+04256000,ont,7,new maps,1 & 2,232.4457
+02HM007,ont,10,matching,2 only,700
+02HM003,ont,10,matching,2 only,906.7299805
+02HL005,ont,10,new maps,1,297
+02HL004,ont,10,new maps,1,678
+02HL003,ont,10,new maps,1,429
+02HL001,ont,11,matching,2 only,2590
+02HK003,ont,11,new maps,2 only,1934.689941
+02HF003,ont,11,new maps,2 only,1250
+02HD012,ont,13,matching,1 & 2,242
+02HC024,ont,13,new maps,2 only,318.5
+02HC003,ont,13,new maps,2 only,802.039978
+02HC049,ont,14,matching,1 & 2,257
+02HC030,ont,14,new maps,1 & 2,204.9900055
+04160600,stc,1,matching,2 only,391.09
+04159492,stc,1,matching,2 only,1201.76
+04165500,stc,3,matching,2 only,1901.06
+02GE003,stc,6,matching,2 only,4370
+02GD004,stc,6,new maps,1,306
+02GG009,stc,7,new maps,1 & 2,536
+02GG006,stc,7,new maps,1,249
+02GG003,stc,7,matching,1 & 2,1150
+02GG002,stc,7,matching,1,701
+04024000,sup,1,matching,2 only,8883.7
+04024430,sup,2,matching,1 & 2,1087.8
+04029990,sup,3,matching,2 only,678.58
+04027500,sup,3,matching,2 only,779.59
+04027000,sup,3,matching,1 & 2,1546.23
+04031000,sup,4,matching,1 & 2,518
+04040000,sup,5,matching,2 only,3470.6
+04040500,sup,7,new maps,1,419.8266
+04044724,sup,9,matching,2 only,209.79
+04045500,sup,10,matching,1 & 2,2046.1
+02BF002,sup,12,matching,1,1140
+02BF001,sup,12,matching,1 & 2,1230
+02BD002,sup,14,matching,2 only,5310
+02BB004,sup,16,new maps,2 only,210
+02BB003,sup,16,matching,1 & 2,4220
+02BA003,sup,17,matching,1 & 2,1320
+02AD010,sup,19,new maps,1,652
+02AC002,sup,20,matching,1 & 2,2980
+02AC001,sup,20,matching,1 & 2,726
+02AB017,sup,21,matching,1 & 2,226
+04010500,sup,22,matching,2 only,1577.31
+02LB008,OTTAWA,NA,new maps,1,448.1700134
+02LB005,OTTAWA,NA,new maps,2 only,3770
+02LA007,OTTAWA,NA,new maps,1 & 2,526
+02LA006,OTTAWA,NA,new maps,2 only,411.1199951
+02LA004,OTTAWA,NA,new maps,2 only,3811.139893
+02KF011,OTTAWA,NA,new maps,1,258.480011
+02JC008,OTTAWA,NA,new maps,1,1782.25
