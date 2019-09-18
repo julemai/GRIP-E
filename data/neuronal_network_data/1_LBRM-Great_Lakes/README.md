@@ -13,10 +13,6 @@ The file is too big to be attached via e-mail but I have sent it using a Departm
 
 If you have any questions or comments (or need anything else in the different format) feel free to let me know.
 
-Respectfully,
+Respectfully, Emily Bradley 
 
-Emily Bradley <br>
-Great Lakes Hydraulics & Hydrology Office <br>
-U.S. Army Corps of Engineers - Detroit <br>
-Emily.A.Bradley@usace.army.mil <br>
 ---------------------------
