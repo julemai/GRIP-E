@@ -43,7 +43,7 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
-#    'ML-ConvLSTM-w-LC' or 'ML-ConvLSTM-wo-LC' or 'ML-LinReg' or 'ML-XGBoost'
+#    'ML-ConvLSTM' or 'ML-ConvLSTM-DEM' or 'ML-ConvLSTM-LC' or 'ML-ConvLSTM-LC-DEM' or 'ML-LinReg' or 'ML-XGBoost'
 #    ------------
 #    python convert_raw_to_netcdf.py -m ML-ConvLSTM-w-LC -i ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.csv -o ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
@@ -152,8 +152,10 @@ if ( (model != 'LBRM')                 and
      (model != 'VIC-GRU')              and
      (model != 'GEM-Hydro')            and
      (model != 'HYPE')                 and    
-     (model != 'ML-ConvLSTM-w-LC')     and
-     (model != 'ML-ConvLSTM-wo-LC')    and
+     (model != 'ML-ConvLSTM')          and
+     (model != 'ML-ConvLSTM-DEM')      and
+     (model != 'ML-ConvLSTM-LC')       and
+     (model != 'ML-ConvLSTM-LC-DEM')   and
      (model != 'ML-LinReg')            and
      (model != 'ML-XGBoost')           and
      (model != 'GR4J-Raven-lp')        and
@@ -406,7 +408,7 @@ if (model == 'WATFLOOD'):
     model_stations = list(model_stations_uniq)
     model_dates    = list(model_dates_uniq)
 
-if (model == 'ML-ConvLSTM-w-LC' or model == 'ML-ConvLSTM-wo-LC' or model == 'ML-LinReg' or model == 'ML-XGBoost'):    #'ANN-LinReg'
+if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLSTM-LC' or model == 'ML-ConvLSTM-LC-DEM' or model == 'ML-LinReg' or model == 'ML-XGBoost'):    #'ANN-LinReg'
     # ---------------
     # read model outputs
     # - model outputs in pickle exported to CSV
