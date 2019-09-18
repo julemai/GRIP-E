@@ -15,8 +15,8 @@ If you have any questions or comments (or need anything else in the different fo
 
 Respectfully,
 
-Emily Bradley
-Great Lakes Hydraulics & Hydrology Office
-U.S. Army Corps of Engineers - Detroit
-Emily.A.Bradley@usace.army.mil
+Emily Bradley <br>
+Great Lakes Hydraulics & Hydrology Office <br>
+U.S. Army Corps of Engineers - Detroit <br>
+Emily.A.Bradley@usace.army.mil <br>
 ---------------------------
