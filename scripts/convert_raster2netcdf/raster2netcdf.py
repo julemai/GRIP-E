@@ -157,7 +157,7 @@ nc_out.createVariable(varname[0], varname[1], dimensions=("time", "rlat", "rlon"
 nc_out.variables[varname[0]].setncattr("units",     varname[2])
 nc_out.variables[varname[0]].setncattr("long_name", varname[3])
 nc_out.variables[varname[0]].setncattr("coordinates", "lon lat")
-nc_out.variables[varname[0]].setncattr("missing_value", nodata_value)
+nc_out.variables[varname[0]].setncattr("missing_value", np.array([nodata_value],dtype=varname[1])[0])
 
 if not(addinfo is None):
 
