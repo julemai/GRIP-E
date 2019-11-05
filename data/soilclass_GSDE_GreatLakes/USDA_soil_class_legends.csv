@@ -1,0 +1,23 @@
+# varnames
+soil_class_name,landcover_class_value
+# vartypes
+character,int32
+# units
+1,1,1
+# description
+Name of soil class,Value/code of soil class
+#
+No data,          -9999 
+Sand,             1     
+Loamy sand,       2     
+Sandy loam,       3     
+Silt loam,        4     
+Silt,             5     
+Loam,             6     
+Sandy clay loam,  7     
+Silt clay loam,   8     
+Clay loam,        9     
+Sandy clay,       10    
+Silt clay,        11    
+Clay,             12
+
