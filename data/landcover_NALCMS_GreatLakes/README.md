@@ -1,5 +1,8 @@
 ## NALCMS, 19 land cover classes for North America (30m, Landsat, 2010 from Mexico and Canada, 2011 for U.S.)
 
+External download from:
+http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.zip (345.5 MB)
+
 1.a Data (ASCII raster format; classification information given in separate file)
 
     NALCMS, 19 land cover classes for North America (30m, Landsat, 2010 from Mexico and Canada, 2011 for U.S.)   --> file: rect_landcover_NACLMS_GreatLakes.txt

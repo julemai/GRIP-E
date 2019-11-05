@@ -1,5 +1,8 @@
 ## Conditioned SRTM DEM from HydroSHEDS (3 arcsec; 90m)
 
+External download from:
+http://www.civil.uwaterloo.ca/jmai/GRIP-GL/dem_HydroSHEDS-90m_GreatLakes.zip (577.5 MB)
+
 1.a Data (ASCII raster format)
 
     Conditioned SRTM DEM from HydroSHEDS, 3 second (90 m)    -->  file: rect_dem_GreatLakes.txt
