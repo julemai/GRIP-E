@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='ML-ConvLSTM'           # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
+convert_models='MESH-CLASS'            # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
 #                                          WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost]
 domain='lake-erie'                     # [lake-erie, great-lakes]
 setup_by='julie'                       # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
