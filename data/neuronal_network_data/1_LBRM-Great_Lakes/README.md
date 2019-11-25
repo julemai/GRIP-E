@@ -16,3 +16,19 @@ If you have any questions or comments (or need anything else in the different fo
 Respectfully, Emily Bradley 
 
 ---------------------------
+
+
+
+Sent by Emily Bradley - November 25, 2019
+
+---------------------------
+Hi Julie,
+
+Due to working through some issues in the calibration procedure, I've recently discovered that the previous files sent to you with the storages and forcings were scaled using the area ratio method when this was, in fact, not necessary. This is due to the fact that the units are expressed in mm over the respective area. I sincerely apologize for any inconvenience this may cause, but I wanted to send you the unscaled (corrected) storages and meteorology. Again, I sincerely apologize for any inconvenience this may have cause and if I can provide any further information, feel free to let me know. I will be sending the corrected data (with unscaled storages and precipitation) to you via ARMDEC momentarily if it is of any use to you moving forward.
+
+Thank you for your time.
+
+Respectfully,
+Emily Bradley
+
+---------------------------
