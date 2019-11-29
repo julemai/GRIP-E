@@ -32,13 +32,19 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='MESH-CLASS'                 # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
-#                                            WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost]
-domain='lake-erie'                       # [lake-erie, great-lakes]
-plot_obj='1 2'                           # can be 1, 2, and/or 3
-plot_phase='0 1 '                          # phase 0: uncalibrated, different phys. setups,
-#                                        # phase 1: calibrated,   different phys. setups,
-#                                        # phase 2: calibrated,   same phys. setups
+plot_models='GR4J-Raven-lp GR4J-Raven-sd' 		  # [ LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
+#                                         		      WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost]
+
+# domain='lake-erie,'                     		  # [lake-erie, great-lakes]
+# periods='2011-01-01:2014-12-31'         		  # time period(s) that should be used to derive NSE etc
+domain='great-lakes'                      		  # [lake-erie, great-lakes]
+periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
+
+calval='calibration'                      		  # [calibration, validation]  # only for Great Lakes # choose ONE only
+plot_obj='1 2'                            		  # can be 1, 2, and/or 3
+plot_phase='1'                            		  # phase 0: uncalibrated, different phys. setups,
+#                                         		  # phase 1: calibrated,   different phys. setups,
+#                                         		  # phase 2: calibrated,   same phys. setups
 
 for imodel in ${plot_models} ; do
 
@@ -49,15 +55,25 @@ for imodel in ${plot_models} ; do
 
 	for iphase in ${plot_phase} ; do
 
-	    echo ''
-	    echo 'Plot :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
-	    python plot_nc_model_output.py -a '2011-01-01:2014-12-31' -i ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -p ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
-	    pdfcrop ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
-	    pdfsplit ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop.pdf
-	    mv ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop1.pdf ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_hydrographs.pdf
-	    mv ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop2.pdf ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_performance.pdf
-	    rm ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}-crop.pdf
-	    rm ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.pdf
+	    for period in ${periods} ; do
+
+		echo ''
+		echo 'Plot :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}'   :: Period '${period}
+
+		if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
+		    basename="../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}"
+		else
+		    basename="../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}"
+		fi
+		python plot_nc_model_output.py -a ${period} -i ${basename}.nc -p ${basename}_${period}.pdf
+		pdfcrop ${basename}_${period}.pdf
+		pdfsplit ${basename}_${period}-crop.pdf
+		mv ${basename}_${period}-crop1.pdf ${basename}_${period}_hydrographs.pdf
+		mv ${basename}_${period}-crop2.pdf ${basename}_${period}_performance.pdf
+		rm ${basename}_${period}-crop.pdf
+		rm ${basename}_${period}.pdf
+
+	    done
 
 	done
 
