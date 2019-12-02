@@ -321,7 +321,13 @@ ifig = 0
 # stations that are in objective 1 and 2:
 # '02GB007', '02GC002', '02GC018', '02GE007', '02GG003', '02GG009', '02GG013', '04159900', '04160600', '04165500', '04177000', '04208504', '04213000'
 sel_stations = ['02GC002','02GG003','04160600'] #['02GG006','04207200','04208504'] #['02GG002','02GG003','04196800']
-sel_stations = ['02GC002','02GG003','02LA007']
+sel_stations = ['02GC002','02GG003','04160600',   # stations Lake Erie
+                '02LA007',                        # calibration station for Great Lakes (instead of 04160600)
+                '02AB021', '02GB007', '02CF011'] # validation stations
+
+# filter only stations that are actually available
+sel_stations = [ [ ss for ss in sel_stations if ss in dicts_qobs[imodel_lc.lower()].keys()] for imodel_lc in [ ii.split('/')[-2] for ii in input_files ] ][0]
+print("Stations to plot: ",sel_stations)
 
 # max of simulation across per basin all models
 max_sim_basins = np.array([ np.nanmax( [ dicts_qobs[imodel_lc.lower()][key] for imodel_lc in [ ii.split('/')[-2] for ii in input_files ] ]) for key in sel_stations ])
