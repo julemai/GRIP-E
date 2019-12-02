@@ -43,7 +43,8 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
-#    'ML-ConvLSTM' or 'ML-ConvLSTM-DEM' or 'ML-ConvLSTM-LC' or 'ML-ConvLSTM-LC-DEM' or 'ML-LinReg' or 'ML-XGBoost'
+#    -- Lake Erie   :: 'ML-ConvLSTM' or 'ML-ConvLSTM-DEM' or 'ML-ConvLSTM-LC' or 'ML-ConvLSTM-LC-DEM' or 'ML-LinReg' or 'ML-XGBoost'    
+#    -- Great Lakes :: 'ML-EA-LSTM'
 #    ------------
 #    python convert_raw_to_netcdf.py -m ML-ConvLSTM-w-LC -i ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.csv -o ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
@@ -152,12 +153,13 @@ if ( (model != 'LBRM')                 and
      (model != 'VIC-GRU')              and
      (model != 'GEM-Hydro')            and
      (model != 'HYPE')                 and    
-     (model != 'ML-ConvLSTM')          and
-     (model != 'ML-ConvLSTM-DEM')      and
-     (model != 'ML-ConvLSTM-LC')       and
-     (model != 'ML-ConvLSTM-LC-DEM')   and
-     (model != 'ML-LinReg')            and
-     (model != 'ML-XGBoost')           and
+     (model != 'ML-ConvLSTM')          and          # Lake Erie
+     (model != 'ML-ConvLSTM-DEM')      and          # Lake Erie
+     (model != 'ML-ConvLSTM-LC')       and          # Lake Erie
+     (model != 'ML-ConvLSTM-LC-DEM')   and          # Lake Erie
+     (model != 'ML-LinReg')            and          # Lake Erie
+     (model != 'ML-XGBoost')           and          # Lake Erie
+     (model != 'ML-EA-LSTM')           and          # Great Lakes
      (model != 'GR4J-Raven-lp')        and
      (model != 'GR4J-Raven-sd')        and 
      (model != 'SWAT')                 and
@@ -408,7 +410,7 @@ if (model == 'WATFLOOD'):
     model_stations = list(model_stations_uniq)
     model_dates    = list(model_dates_uniq)
 
-if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLSTM-LC' or model == 'ML-ConvLSTM-LC-DEM' or model == 'ML-LinReg' or model == 'ML-XGBoost'):    #'ANN-LinReg'
+if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLSTM-LC' or model == 'ML-ConvLSTM-LC-DEM' or model == 'ML-LinReg' or model == 'ML-XGBoost' or model == 'ML-EA-LSTM'):    #'ANN-LinReg'
     # ---------------
     # read model outputs
     # - model outputs in pickle exported to CSV
@@ -435,6 +437,10 @@ if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLST
     # allocate final array
     model_data = np.ones([ndays,nstations]) * nodata
 
+    # find which column contains 'prediction'
+    head_input = fsread(input_file,cskip=1,skip=1,header=True)
+    idx_prediction = head_input.index('prediction')
+
     # map data onto data array
     for istation in model_stations:
 
@@ -442,7 +448,7 @@ if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLST
         iistation   = np.where(model_stations == istation)[0][0]
         iitime = [ np.where(model_dates == idate)[0][0]  for idate in [ datetime.datetime(int(str(ii)[0:4]),int(str(ii)[5:7]),int(str(ii)[8:10]),0,0) for ii in all_data_s[idx_station,0] ] ]
         iitime = np.array(iitime)
-        dats = all_data_f[idx_station,1] # columns are [running ID, prediction, actual]
+        dats = all_data_f[idx_station,idx_prediction] # columns are [running ID, prediction, actual] or [running ID, actual, prediction]
         dats = np.where(dats<0.0,0.0,dats) 
         model_data[iitime,iistation] = dats 
 
