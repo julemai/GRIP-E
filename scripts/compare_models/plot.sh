@@ -36,21 +36,48 @@ plot_obj='1 2'                           # can be 1, 2, and/or 3
 plot_phase='1'                         # phase 0: uncalibrated, different phys. setups,
 #                                        # phase 1: calibrated,   different phys. setups,
 #                                        # phase 2: calibrated,   same phys. setups
-domain='lake-erie'                       # [lake-erie, great-lakes]
+
+# domain='lake-erie,'                     		  # [lake-erie, great-lakes]
+# periods='2011-01-01:2014-12-31'         		  # time period(s) that should be used to derive NSE etc
+
+# domain='great-lakes'                      		  # [lake-erie, great-lakes]
+# periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
+# calval='calibration'                      		  # [calibration, validation]  # only for Great Lakes # choose ONE only
+
+domain='great-lakes'                      		  # [lake-erie, great-lakes]
+periods='2001-01-01:2010-12-31'                           # time period(s) that should be used to derive NSE etc
+calval='validation'                      		  # [calibration, validation]  # only for Great Lakes # choose ONE only
+
 
 for iobj in ${plot_obj} ; do
 
+    if [[  ${domain} == 'great-lakes' ]] ; then
+	path="../../data/objective_${iobj}/${domain}/${calval}"
+	ext="_${calval}"
+	period_str=$( echo ${periods//':'/'_'} )
+    else
+	path="../../data/objective_${iobj}/${domain}/"
+	ext=""
+    fi
+
     for iphase in ${plot_phase} ; do
 
-	echo '----------------------'
-	echo "plot:  compare_models_phase_${iphase}_objective_${iobj}.pdf"
-	echo '----------------------'
-	files=$(\ls ../../data/objective_${iobj}/${domain}/model/*/*_phase_${iphase}_objective_${iobj}.nc)
-	files=$(echo ${files})
-	# given -y does not sort models (y-axis)
-	python compare_models.py -i "${files}" -a '2011-01-01:2014-12-31' -p compare_models_phase_${iphase}_objective_${iobj}_${domain}.pdf -y
-	pdfcrop compare_models_phase_${iphase}_objective_${iobj}_${domain}.pdf
-	mv compare_models_phase_${iphase}_objective_${iobj}_${domain}-crop.pdf compare_models_phase_${iphase}_objective_${iobj}_${domain}.pdf
+	for period in ${periods} ; do
+
+	    period_str=$( echo ${period//':'/'_'} )     # "2001-01-01:2010-12-31" --> "2001-01-01_2010-12-31"
+
+	    echo '----------------------'
+	    echo "plot:  compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf"
+	    echo '----------------------'
+	    files=$(\ls ${path}/model/*/*_phase_${iphase}_objective_${iobj}.nc)
+	    files=$( echo ${files} )
+	    
+	    # given -y does not sort models (y-axis)
+	    python compare_models.py -i "${files}" -a ${period} -p compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf -y
+	    pdfcrop compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf
+	    mv compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop.pdf compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf
+
+	done
 
     done
 

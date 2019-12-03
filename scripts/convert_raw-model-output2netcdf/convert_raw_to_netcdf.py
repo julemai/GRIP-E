@@ -44,7 +44,7 @@ from __future__ import print_function
 
 #    ------------
 #    -- Lake Erie   :: 'ML-ConvLSTM' or 'ML-ConvLSTM-DEM' or 'ML-ConvLSTM-LC' or 'ML-ConvLSTM-LC-DEM' or 'ML-LinReg' or 'ML-XGBoost'    
-#    -- Great Lakes :: 'ML-EA-LSTM'
+#    -- Great Lakes :: 'ML-EA-LSTM' or 'ML-LSTM'
 #    ------------
 #    python convert_raw_to_netcdf.py -m ML-ConvLSTM-w-LC -i ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.csv -o ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
@@ -160,6 +160,7 @@ if ( (model != 'LBRM')                 and
      (model != 'ML-LinReg')            and          # Lake Erie
      (model != 'ML-XGBoost')           and          # Lake Erie
      (model != 'ML-EA-LSTM')           and          # Great Lakes
+     (model != 'ML-LSTM')              and          # Great Lakes
      (model != 'GR4J-Raven-lp')        and
      (model != 'GR4J-Raven-sd')        and 
      (model != 'SWAT')                 and
@@ -410,7 +411,7 @@ if (model == 'WATFLOOD'):
     model_stations = list(model_stations_uniq)
     model_dates    = list(model_dates_uniq)
 
-if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLSTM-LC' or model == 'ML-ConvLSTM-LC-DEM' or model == 'ML-LinReg' or model == 'ML-XGBoost' or model == 'ML-EA-LSTM'):    #'ANN-LinReg'
+if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLSTM-LC' or model == 'ML-ConvLSTM-LC-DEM' or model == 'ML-LinReg' or model == 'ML-XGBoost' or model == 'ML-EA-LSTM' or model == 'ML-LSTM'):    #'ANN-LinReg'
     # ---------------
     # read model outputs
     # - model outputs in pickle exported to CSV
