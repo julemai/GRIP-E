@@ -360,6 +360,7 @@ median_NSE = np.array([ np.median(nse_results[imodel,:]) for imodel in np.arange
 nse_results_truncated = copy.deepcopy(nse_results)
 min_nse = 0.0
 max_nse = 0.2 * (np.int(np.max(nse_results)*5.0)+1)   # closest to [..., 0.6, 0.8, 1.0] to spread colorbar a bit
+max_nse = 1.0
 # print('max_nse = ',max_nse)
 nse_results_truncated[np.where(nse_results_truncated < min_nse)] = min_nse  # NSE will be truncated to min_nse
 
@@ -413,7 +414,12 @@ im.set_clim(min_nse,max_nse)
 
 # ticklabels
 sub.set_xticks(np.arange(ngauges))
-sub.set_xticklabels(gauges[idx2],rotation=90)
+if ngauges < 32:
+    sub.set_xticklabels(gauges[idx2],rotation=90)
+elif ngauges < 70:
+    sub.set_xticklabels(gauges[idx2],rotation=90,fontsize='x-small')
+else:
+    sub.set_xticklabels(gauges[idx2],rotation=90,fontsize='xx-small')
 sub.set_yticks(np.arange(nmodels))
 sub.set_yticklabels(models[idx1])
 
