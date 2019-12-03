@@ -32,107 +32,113 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='ML-LSTM'                  # [    Lake Erie:   LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
-#                                                                WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost,
-#                                            #                   
-#                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd, ML-EA-LSTM, ML-LSTM]
+convert_models='ML-XGBoost'                  # [    Lake Erie:   LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
+#                                                                WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost,          
+#                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd, ML-EA-LSTM, ML-LSTM, ML-XGBoost]
 domain='great-lakes'                         # [lake-erie, great-lakes]
-calval='validation'                          # [calibration, validation]  # only for Great Lakes # choose ONE only
-setup_by='julie'                       	     # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
-convert_obj='1 2'                      	     # can be 1, 2, and/or 3
-convert_phase='1'                      	     # phase 0: uncalibrated, different phys. setups,
-#                                      	     # phase 1: calibrated,   different phys. setups,
-#                                      	     # phase 2: calibrated,   same phys. setups
+calvals='calibration validation'             # [calibration, validation]  # only for Great Lakes 
+setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
+convert_obj='1 2'                            # can be 1, 2, and/or 3
+convert_phase='1'                            # phase 0: uncalibrated, different phys. setups,
+#                                            # phase 1: calibrated,   different phys. setups,
+#                                            # phase 2: calibrated,   same phys. setups
 
-for imodel in ${convert_models} ; do
+for calval in ${calvals} ; do
+    
+    for imodel in ${convert_models} ; do
 
-    imodel_lower=$( echo "$imodel" | tr '[:upper:]' '[:lower:]' )
-    echo ${imodel_lower}
+        imodel_lower=$( echo "$imodel" | tr '[:upper:]' '[:lower:]' )
+	echo ""
+	echo "-------------------------"
+        echo ${imodel_lower}
+	echo "-------------------------"
 
-    for iobj in ${convert_obj} ; do
+        for iobj in ${convert_obj} ; do
 
-        for iphase in ${convert_phase} ; do
+            for iphase in ${convert_phase} ; do
 
-	    # ------------------
-	    # for great lakes split gauge-info file into only calibration and only validation stations
-	    # ------------------
-	    file_all_stations="../../data/objective_${iobj}/${domain}/gauge_info.csv"
-	    if [[ ${domain} == 'great-lakes' ]] ; then
-		
-		file_only_cal_or_val="../../data/objective_${iobj}/${domain}/${calval}/gauge_info.csv"
-		
-		if [[  ${calval} == 'calibration' ]] ; then
-		    
-		    head -1 ${file_all_stations}     > ${file_only_cal_or_val}
-		    grep ',C,' ${file_all_stations} >> ${file_only_cal_or_val}
-		    
-		else
-		    
-		    head -1 ${file_all_stations}     > ${file_only_cal_or_val}
-		    grep ',V,' ${file_all_stations} >> ${file_only_cal_or_val}
-		    
-		fi
-	    fi
-	    # ------------------
-
-            echo ''
-            echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
-
-	    if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-		if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
-                    add_inputs="-b ../../data/objective_${iobj}/${domain}/model/${imodel}/subid2gauge.csv"
-		else
-                    if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
-			add_inputs="-b ../../data/objective_${iobj}/${domain}/model/${imodel}/subid2gauge.tb0"
+                # ------------------
+                # for great lakes split gauge-info file into only calibration and only validation stations
+                # ------------------
+                file_all_stations="../../data/objective_${iobj}/${domain}/gauge_info.csv"
+                if [[ ${domain} == 'great-lakes' ]] ; then
+                    
+                    file_only_cal_or_val="../../data/objective_${iobj}/${domain}/${calval}/gauge_info.csv"
+                    
+                    if [[  ${calval} == 'calibration' ]] ; then
+                        
+                        head -1 ${file_all_stations}     > ${file_only_cal_or_val}
+                        grep ',C,' ${file_all_stations} >> ${file_only_cal_or_val}
+                        
                     else
-			add_inputs=''
+                        
+                        head -1 ${file_all_stations}     > ${file_only_cal_or_val}
+                        grep ',V,' ${file_all_stations} >> ${file_only_cal_or_val}
+                        
                     fi
-		fi
-	    else
-		if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
-                    add_inputs="-b ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/subid2gauge.csv"
-		else
-                    if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
-			add_inputs="-b ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/subid2gauge.tb0"
+                fi
+                # ------------------
+
+                echo ''
+                echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
+
+                if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
+                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                        add_inputs="-b ../../data/objective_${iobj}/${domain}/model/${imodel}/subid2gauge.csv"
                     else
-			add_inputs=''
+                        if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
+                            add_inputs="-b ../../data/objective_${iobj}/${domain}/model/${imodel}/subid2gauge.tb0"
+                        else
+                            add_inputs=''
+                        fi
                     fi
-		fi
-	    fi
+                else
+                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                        add_inputs="-b ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/subid2gauge.csv"
+                    else
+                        if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
+                            add_inputs="-b ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/subid2gauge.tb0"
+                        else
+                            add_inputs=''
+                        fi
+                    fi
+                fi
 
-	    if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-		if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
-                    input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
-		else
-                    input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
-		fi
-	    else
-		if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
-                    input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
-		else
-                    input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
-		fi
-	    fi
-		
-	    if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-		if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd' ) ]] ; then
-                    python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_all_stations} ${add_inputs} -s ${setup_by}
-		else
-                    python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_all_stations} ${add_inputs}
-		fi
-	    else
-		if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd' ) ]] ; then
-                    python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_only_cal_or_val} ${add_inputs} -s ${setup_by}
-		else
-                    python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_only_cal_or_val} ${add_inputs}
-		fi
-	    fi
+                if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
+                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                        input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
+                    else
+                        input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
+                    fi
+                else
+                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                        input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
+                    else
+                        input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
+                    fi
+                fi
+                
+                if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
+                    if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd' ) ]] ; then
+                        python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_all_stations} ${add_inputs} -s ${setup_by}
+                    else
+                        python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_all_stations} ${add_inputs}
+                    fi
+                else
+                    if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd' ) ]] ; then
+                        python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_only_cal_or_val} ${add_inputs} -s ${setup_by}
+                    else
+                        python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_only_cal_or_val} ${add_inputs}
+                    fi
+                fi
 
-        done
+            done # convert_phase
 
-    done
+        done # convert_obj
 
-done
+    done # convert_models
+
+done # calvals
 
 echo ''
 echo 'Done.'
