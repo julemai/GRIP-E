@@ -54,7 +54,6 @@ for iobj in ${plot_obj} ; do
     if [[  ${domain} == 'great-lakes' ]] ; then
         path="../../data/objective_${iobj}/${domain}/${calval}"
         ext="_${calval}"
-        period_str=$( echo ${periods//':'/'_'} )
     else
         path="../../data/objective_${iobj}/${domain}/"
         ext=""

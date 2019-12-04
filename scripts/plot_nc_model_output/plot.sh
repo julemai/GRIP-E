@@ -32,23 +32,24 @@ pid=$$
 
 datapath="../data/"
 
-plot_models=' ML-XGBoost'                    # [    Lake Erie:   LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
-#                                                                WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost,
-#                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd, ML-EA-LSTM, ML-LSTM, ML-XGBoost]
+plot_models='GEM-Hydro'                          # [    Lake Erie:   LBRM,  GR4J-Raven-lp GR4J-Raven-sd, HYPE, GEM-Hydro, WRF-Hydro, MESH-SVS, MESH-CLASS, VIC, VIC-GRU,
+#                                                                    WATFLOOD, SWAT, ML-ConvLSTM, ML-ConvLSTM-DEM, ML-ConvLSTM-LC, ML-ConvLSTM-LC-DEM, ML-LinReg, ML-XGBoost,
+#                                                #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd, ML-EA-LSTM, ML-LSTM, ML-XGBoost]
 
-# domain='lake-erie,'                                     # [lake-erie, great-lakes]
-# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+domain='lake-erie'                                      # [lake-erie, great-lakes]
+periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+calvals='calibration'                                   # [calibration, validation]  # only for Great Lakes # choose ONE only
 
 # domain='great-lakes'                                      # [lake-erie, great-lakes]
 # periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
 # calvals='calibration'                                     # [calibration, validation]  # only for Great Lakes # choose ONE only
 
-domain='great-lakes'                                      # [lake-erie, great-lakes]
-periods='2001-01-01:2010-12-31'                           # time period(s) that should be used to derive NSE etc
-calvals='validation'                                      # [calibration, validation]  # only for Great Lakes # choose ONE only
+# domain='great-lakes'                                      # [lake-erie, great-lakes]
+# periods='2001-01-01:2010-12-31'                           # time period(s) that should be used to derive NSE etc
+# calvals='validation'                                      # [calibration, validation]  # only for Great Lakes # choose ONE only
 
 plot_obj='1 2'                                            # can be 1, 2, and/or 3
-plot_phase='1'                                            # phase 0: uncalibrated, different phys. setups,
+plot_phase='0 1'                                          # phase 0: uncalibrated, different phys. setups,
 #                                                         # phase 1: calibrated,   different phys. setups,
 #                                                         # phase 2: calibrated,   same phys. setups
 
@@ -68,6 +69,8 @@ for calval in ${calvals} ; do
 
                 for period in ${periods} ; do
 
+		    period_str=$( echo ${period//':'/'_'} )     # "2001-01-01:2010-12-31" --> "2001-01-01_2010-12-31"
+
                     echo ''
                     echo 'Plot :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}'   :: Period '${period}'   :: '${calval}
 
@@ -76,13 +79,13 @@ for calval in ${calvals} ; do
                     else
                         basename="../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}"
                     fi
-                    python plot_nc_model_output.py -a ${period} -i ${basename}.nc -p ${basename}_${period}.pdf
-                    pdfcrop ${basename}_${period}.pdf
-                    pdfsplit ${basename}_${period}-crop.pdf
-                    mv ${basename}_${period}-crop1.pdf ${basename}_${period}_hydrographs.pdf
-                    mv ${basename}_${period}-crop2.pdf ${basename}_${period}_performance.pdf
-                    rm ${basename}_${period}-crop.pdf
-                    rm ${basename}_${period}.pdf
+                    python plot_nc_model_output.py -a ${period} -i ${basename}.nc -p ${basename}_${period_str}.pdf
+                    pdfcrop ${basename}_${period_str}.pdf
+                    pdfsplit ${basename}_${period_str}-crop.pdf
+                    mv ${basename}_${period_str}-crop1.pdf ${basename}_${period_str}_hydrographs.pdf
+                    mv ${basename}_${period_str}-crop2.pdf ${basename}_${period_str}_performance.pdf
+                    rm ${basename}_${period_str}-crop.pdf
+                    rm ${basename}_${period_str}.pdf
 
                 done # periods
 
