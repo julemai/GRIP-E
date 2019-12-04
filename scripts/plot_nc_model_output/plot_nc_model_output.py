@@ -167,6 +167,9 @@ for iinput_file,input_file in enumerate(input_files):
     dicts_qsim[input_file.split('/')[-1].split('_')[0]]    = dict_qsim
     dicts_info[input_file.split('/')[-1].split('_')[0]]    = dict_info
 
+    #data_obs.close()
+    #data_sim.close()
+
 print("dicts_nse  = ",dicts_nse)
 
 # -------------------------------------------------------------------------
@@ -486,6 +489,8 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
     for element in ['boxes', 'whiskers', 'fliers', 'means', 'medians', 'caps']:
         plt.setp(line1[element], color=edge_color)
     print(">>>>>>>>>>>>>> median NSE = ",np.median(data))
+    print(">>>>>>>>>>>>>> min    NSE = ",np.min(data))
+    print(">>>>>>>>>>>>>> max    NSE = ",np.max(data))
     median = astr(np.median(data), prec=2)
     sub.text(1.1, np.median(data), median, #transform=sub.transAxes,
                              rotation=0, fontsize=textsize-2,
