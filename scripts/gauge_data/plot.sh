@@ -35,7 +35,7 @@ pid=$$
 stations='02HC030              04224775     04045500'
 
 for station in ${stations} ; do
-    python plot_single_gauge.py -i ../../data/objective_1/great-lakes/calibration/netcdf/all_gauges.nc -s ${station} -p ${station}.pdf -v Q -a '2001-01-01:2017-01-01' -m '../../data/objective_1/great-lakes/calibration/model/GR4J-Raven-lp/gr4j-raven-lp_phase_1_objective_1.nc ../../data/objective_1/great-lakes/calibration/model/ML-LSTM/ml-lstm_phase_1_objective_1.nc'
+    python plot_single_gauge.py -i ../../data/objective_1/great-lakes/calibration/netcdf/all_gauges.nc -s ${station} -p ${station}.pdf -v Q -a '2001-01-01:2017-01-01' -m '../../data/objective_1/great-lakes/calibration/model/ML-LSTM/ml-lstm_phase_1_objective_1.nc ../../data/objective_1/great-lakes/calibration/model/GR4J-Raven-lp/gr4j-raven-lp_phase_1_objective_1.nc'
     pdfcrop ${station}.pdf
     mv ${station}-crop.pdf ${station}.pdf
 done

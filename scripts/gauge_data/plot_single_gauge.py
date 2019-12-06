@@ -94,6 +94,8 @@ from readnetcdf import readnetcdf # in lib/
 # -------------------------------------
 # Read modelled values
 # -------------------------------------
+
+model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
         
 if model_qsim_files != 'None':
 
@@ -243,9 +245,6 @@ else:
     idx_station = idx_station[0]
 
 
-stop
-
-
 times = times[idx_period]
 Qobs = var[idx_station,idx_period]
     
@@ -264,11 +263,11 @@ else:
 
 # Main plot
 ncol        = 1           # # of columns of subplots per figure
-nrow        = 4          # # of rows of subplots per figure
+nrow        = 5          # # of rows of subplots per figure
 hspace      = 0.05        # x-space between subplots
-vspace      = 0.35/nrow    # y-space between subplots
+vspace      = 0.05/nrow    # y-space between subplots
 right       = 0.9         # right space on page
-textsize    = 10           # standard text size
+textsize    = 12           # standard text size
 textsize_clock = 0.6*textsize        # standard text size
 dxabc       = 0.95        # % of (max-min) shift to the right from left y-axis for a,b,c,... labels
 dyabc       = 0.9         # % of (max-min) shift up from lower x-axis for a,b,c,... labels
@@ -432,8 +431,12 @@ if ( model_qsim_files == 'None'):
         xlab   = r'time'
         ylab   = r''+var_longname+' [$'+var_unit.replace('**','^').replace('-1','{-1}')+'$]'
         
-    plt.setp(sub, xlabel=xlab)
-    plt.setp(sub, ylabel=ylab)
+    if iplot == len(dicts_qsim.keys()):
+        plt.setp(sub, xlabel=xlab)
+        plt.setp(sub, ylabel=ylab)
+    else:
+        plt.setp(sub, xlabel='')
+        plt.setp(sub, ylabel=ylab)
 
     # text for gauge ID
     textbox_x = 0.5
@@ -441,11 +444,16 @@ if ( model_qsim_files == 'None'):
     sub.text(textbox_x, textbox_y, station_id[idx_station], transform=sub.transAxes,
                          rotation=0, fontsize=textsize,
                          horizontalalignment='center', verticalalignment='bottom')
-    textbox_x = 0.5
-    textbox_y = 1.14
+
+    if iplot == len(dicts_qsim.keys()):
+        sub.tick_params(axis='x',labelbottom='on')
+    else:
+        sub.tick_params(axis='x',labelbottom='off')
 
     # text for gauge name
     # insert line break if station_info (without spaces) is longer than ~20 charachters
+    textbox_x = 0.5
+    textbox_y = 1.14
     if nstations/ncol <= 8:
         tmp = station_info[idx_station].split(':')[2].strip().replace('"','').split(' ')
         if len(' '.join(tmp)) > 25:
@@ -481,114 +489,126 @@ else:
     # --------
     # observations and simulations
     # --------
-    for model in dicts_qsim.keys():
+    for model in model_order:
 
-        iplot += 1
-        sub    = fig.add_axes(position(nrow,ncol,iplot,hspace=hspace,vspace=vspace) )
+        if model in dicts_qsim.keys():
+
+            iplot += 1
+            sub    = fig.add_axes(position(nrow,ncol,iplot,hspace=hspace,vspace=vspace) )
     
-        line1 = sub.plot(times,Qobs,
-                        color = 'gray',
-                        linestyle='-',
-                        linewidth=lwidth,
-                        label=str2tex('$Q_{obs}$'))
-                        #linestyle='None',
-                        #linewidth=lwidth, 
-                        #marker='o', markeredgecolor=lcols[0], markerfacecolor='None',
-                        #markersize=msize*2.5, markeredgewidth=lwidth)
-        Qsim = dicts_qsim[model][station]
-        line1 = sub.plot(dicts_dates[model][station],Qsim,
-                        linestyle='-',
-                        linewidth=lwidth,
-                        label=str2tex('$Q_{sim}^{'+model+'}$'))
+            line1 = sub.plot(times,Qobs,
+                            color = 'gray',
+                            linestyle='-',
+                            linewidth=lwidth,
+                            label=str2tex('$Q_{obs}$'))
+                            #linestyle='None',
+                            #linewidth=lwidth, 
+                            #marker='o', markeredgecolor=lcols[0], markerfacecolor='None',
+                            #markersize=msize*2.5, markeredgewidth=lwidth)
+            Qsim = dicts_qsim[model][station]
+            line1 = sub.plot(dicts_dates[model][station],Qsim,
+                            linestyle='-',
+                            linewidth=lwidth,
+                            label=str2tex('$Q_{sim}^{'+model+'}$'))
 
-        # period 2001-2010:
-        sstart = datetime.datetime(2001, 1, 1,0,0)
-        eend   = datetime.datetime(2010,12,31,0,0)
-        tt_obs = np.where((times>=sstart) & (times<=eend))[0]
-        tt_sim = np.where((dicts_dates[model][station]>=sstart) & (dicts_dates[model][station]<=eend))[0]
-        # check that timesteps are in both time series
-        ttt_obs = np.array([ tt for tt in tt_obs if times[tt] in dicts_dates[model][station] ])
-        ttt_sim = np.array([ tt for tt in tt_sim if dicts_dates[model][station][tt] in times[ttt_obs] ])
-        # calculate NSE
-        performance = float(errormeasures.nse(Qobs[ttt_obs],Qsim[ttt_sim]))
-        performance = "NSE(Q) = {0:6.3f} (2001-2010)".format(performance)
-        # text for performance
-        textbox_x = 0.98
-        textbox_y = 0.98
-        sub.text(textbox_x, textbox_y, performance, transform=sub.transAxes,
-                 rotation=0, fontsize=textsize-2,
-                 horizontalalignment='right', verticalalignment='top')
+            # period 2001-2010:
+            sstart = datetime.datetime(2001, 1, 1,0,0)
+            eend   = datetime.datetime(2010,12,31,0,0)
+            tt_obs = np.where((times>=sstart) & (times<=eend))[0]
+            tt_sim = np.where((dicts_dates[model][station]>=sstart) & (dicts_dates[model][station]<=eend))[0]
+            # check that timesteps are in both time series
+            ttt_obs = np.array([ tt for tt in tt_obs if times[tt] in dicts_dates[model][station] ])
+            ttt_sim = np.array([ tt for tt in tt_sim if dicts_dates[model][station][tt] in times[ttt_obs] ])
+            # calculate NSE
+            performance = float(errormeasures.nse(Qobs[ttt_obs],Qsim[ttt_sim]))
+            performance = "NSE(Q) = {0:6.3f} (2001-2010)".format(performance)
+            # text for performance
+            textbox_x = 0.98
+            textbox_y = 0.98
+            sub.text(textbox_x, textbox_y, performance, transform=sub.transAxes,
+                     rotation=0, fontsize=textsize-2,
+                     horizontalalignment='right', verticalalignment='top')
         
-        # period 2011-2016:
-        sstart = datetime.datetime(2011, 1, 1,0,0)
-        eend   = datetime.datetime(2016,12,31,0,0)
-        tt_obs = np.where((times>=sstart) & (times<=eend))[0]
-        tt_sim = np.where((dicts_dates[model][station]>=sstart) & (dicts_dates[model][station]<=eend))[0]
-        # check that timesteps are in both time series
-        ttt_obs = np.array([ tt for tt in tt_obs if times[tt] in dicts_dates[model][station] ])
-        ttt_sim = np.array([ tt for tt in tt_sim if dicts_dates[model][station][tt] in times[ttt_obs] ])
-        # calculate NSE
-        performance = float(errormeasures.nse(Qobs[ttt_obs],Qsim[ttt_sim]))
-        performance = "NSE(Q) = {0:6.3f} (2011-2016)".format(performance)
+            # period 2011-2016:
+            sstart = datetime.datetime(2011, 1, 1,0,0)
+            eend   = datetime.datetime(2016,12,31,0,0)
+            tt_obs = np.where((times>=sstart) & (times<=eend))[0]
+            tt_sim = np.where((dicts_dates[model][station]>=sstart) & (dicts_dates[model][station]<=eend))[0]
+            # check that timesteps are in both time series
+            ttt_obs = np.array([ tt for tt in tt_obs if times[tt] in dicts_dates[model][station] ])
+            ttt_sim = np.array([ tt for tt in tt_sim if dicts_dates[model][station][tt] in times[ttt_obs] ])
+            # calculate NSE
+            performance = float(errormeasures.nse(Qobs[ttt_obs],Qsim[ttt_sim]))
+            performance = "NSE(Q) = {0:6.3f} (2011-2016)".format(performance)
 
-        # text for performance
-        textbox_x = 0.98
-        textbox_y = 0.9
-        sub.text(textbox_x, textbox_y, performance, transform=sub.transAxes,
-                 rotation=0, fontsize=textsize-2,
-                 horizontalalignment='right', verticalalignment='top')
+            # text for performance
+            textbox_x = 0.98
+            textbox_y = 0.9
+            sub.text(textbox_x, textbox_y, performance, transform=sub.transAxes,
+                     rotation=0, fontsize=textsize-2,
+                     horizontalalignment='right', verticalalignment='top')
 
-        if usetex:
-            xlab   = r'$\mathrm{time}'
-            ylab   = r'$\mathrm{'+var_longname+'} \; ['+var_unit.replace('**','^').replace('-1','{-1}')+']$'
-        else:
-            xlab   = r'time'
-            ylab   = r''+var_longname+' [$'+var_unit.replace('**','^').replace('-1','{-1}')+'$]'
-            
-        plt.setp(sub, xlabel=xlab)
-        plt.setp(sub, ylabel=ylab)
-
-        # text for gauge ID
-        textbox_x = 0.5
-        textbox_y = 1.00
-        sub.text(textbox_x, textbox_y, station_id[idx_station], transform=sub.transAxes,
-                             rotation=0, fontsize=textsize,
-                             horizontalalignment='center', verticalalignment='bottom')
-        textbox_x = 0.5
-        textbox_y = 1.14
-
-        # text for gauge name
-        # insert line break if station_info (without spaces) is longer than ~20 charachters
-        if nstations/ncol <= 8:
-            tmp = station_info[idx_station].split(':')[2].strip().replace('"','').split(' ')
-            if len(' '.join(tmp)) > 25:
-                try:
-                    cut = len(' '.join(tmp))//2
-                    nn = np.where( np.cumsum(np.array([ len(ii) for ii in tmp ])) > cut )[0][0]
-                    tmp2 = str(' '.join(tmp[0:nn])+' \n '+' '.join(tmp[nn:]))
-                except:
-                    tmp2 = str(' '.join(tmp))
+            if usetex:
+                xlab   = r'$\mathrm{time}'
+                ylab   = r'$\mathrm{'+var_longname+'} \; ['+var_unit.replace('**','^').replace('-1','{-1}')+']$'
             else:
-                tmp2 = ' '.join(tmp)
-            sub.text(textbox_x, textbox_y, tmp2, transform=sub.transAxes,
+                xlab   = r'time'
+                ylab   = r''+var_longname+' [$'+var_unit.replace('**','^').replace('-1','{-1}')+'$]'
+
+            if iplot == len(dicts_qsim.keys()):
+                plt.setp(sub, xlabel=xlab)
+                plt.setp(sub, ylabel=ylab)
+            else:
+                plt.setp(sub, xlabel='')
+                plt.setp(sub, ylabel=ylab)
+
+            if iplot == 1:
+                # text for gauge ID
+                textbox_x = 0.5
+                textbox_y = 1.00
+                sub.text(textbox_x, textbox_y, station_id[idx_station], transform=sub.transAxes,
                                  rotation=0, fontsize=textsize,
                                  horizontalalignment='center', verticalalignment='bottom')
+                
+            if iplot == len(dicts_qsim.keys()):
+                sub.tick_params(axis='x',labelbottom='on')
+            else:
+                sub.tick_params(axis='x',labelbottom='off')
 
-        # limits
-        plt.setp(sub,xlim=[mdates.date2num(start),mdates.date2num(end)])
-        plt.setp(sub,ylim=[0.1,np.max(var[idx_station,idx_period])*1.05])
+            # text for gauge name
+            # insert line break if station_info (without spaces) is longer than ~20 charachters
+            textbox_x = 0.5
+            textbox_y = 1.14
+            if nstations/ncol <= 8:
+                tmp = station_info[idx_station].split(':')[2].strip().replace('"','').split(' ')
+                if len(' '.join(tmp)) > 25:
+                    try:
+                        cut = len(' '.join(tmp))//2
+                        nn = np.where( np.cumsum(np.array([ len(ii) for ii in tmp ])) > cut )[0][0]
+                        tmp2 = str(' '.join(tmp[0:nn])+' \n '+' '.join(tmp[nn:]))
+                    except:
+                        tmp2 = str(' '.join(tmp))
+                else:
+                    tmp2 = ' '.join(tmp)
+                sub.text(textbox_x, textbox_y, tmp2, transform=sub.transAxes,
+                                     rotation=0, fontsize=textsize,
+                                     horizontalalignment='center', verticalalignment='bottom')
 
-        # legend
-        if (iplot > 0):
-            illxbbox     =  0.0        # x-anchor legend bounding box
-            illybbox     =  1.0        # y-anchor legend bounding box
-            locat       = 'upper left' #'upper left'   
-            sub.legend(frameon=frameon,
-                           labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
-                           loc=locat, bbox_to_anchor=(illxbbox,illybbox), scatterpoints=1, numpoints=1,fontsize=textsize)
+            # limits
+            plt.setp(sub,xlim=[mdates.date2num(start),mdates.date2num(end)])
+            plt.setp(sub,ylim=[0.1,np.max(var[idx_station,idx_period])*1.05])
 
-        # rotate x-ticks
-        plt.xticks(rotation=45)
+            # legend
+            if (iplot > 0):
+                illxbbox     =  0.0        # x-anchor legend bounding box
+                illybbox     =  1.0        # y-anchor legend bounding box
+                locat       = 'upper left' #'upper left'   
+                sub.legend(frameon=frameon,
+                               labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
+                               loc=locat, bbox_to_anchor=(illxbbox,illybbox), scatterpoints=1, numpoints=1,fontsize=textsize)
+
+            # rotate x-ticks
+            plt.xticks(rotation=45)
 
 if (outtype == 'pdf'):
     pdf_pages.savefig(fig)
