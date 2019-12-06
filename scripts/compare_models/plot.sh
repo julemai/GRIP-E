@@ -27,7 +27,7 @@ set -e
 prog=$0
 pprog=$(basename ${prog})
 dprog=$(dirname ${prog})
-isdir=${PWD}
+isdir=${PWD} 
 pid=$$
 
 datapath="../data/"
@@ -37,16 +37,17 @@ plot_phase='1'                                            # phase 0: uncalibrate
 #                                                         # phase 1: calibrated,   different phys. setups,
 #                                                         # phase 2: calibrated,   same phys. setups
 
-# domain='lake-erie,'                                     # [lake-erie, great-lakes]
-# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+domain='lake-erie'                                        # [lake-erie, great-lakes]
+periods='2011-01-01:2014-12-31'                           # time period(s) that should be used to derive NSE etc
+# periods='2013-01-01:2014-12-31'                           # time period(s) that should be used to derive NSE etc
 
-domain='great-lakes'                                      # [lake-erie, great-lakes]
-periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
-calval='calibration'                                      # [calibration, validation]  # only for Great Lakes # choose ONE only
+# domain='great-lakes'                                      # [lake-erie, great-lakes]
+# periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
+# calval='calibration'                                      # [calibration, validation]  # only for Great Lakes # choose ONE only
 
-# domain='great-lakes'                                    # [lake-erie, great-lakes]
-# periods='2001-01-01:2010-12-31'                           # time period(s) that should be used to derive NSE etc
-# calval='validation'                                     # [calibration, validation]  # only for Great Lakes # choose ONE only
+domain='great-lakes'                                    # [lake-erie, great-lakes]
+periods='2001-01-01:2010-12-31'                         # time period(s) that should be used to derive NSE etc
+calval='validation'                                     # [calibration, validation]  # only for Great Lakes # choose ONE only
 
 
 for iobj in ${plot_obj} ; do
@@ -74,8 +75,11 @@ for iobj in ${plot_obj} ; do
             # given -y does not sort models (y-axis)
             python compare_models.py -i "${files}" -a ${period} -p compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf -y
             pdfcrop compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf
-            mv compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop.pdf compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf
-
+	    pdfsplit compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop.pdf
+            mv compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop1.pdf compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}_NSE.pdf
+	    mv compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop2.pdf compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}_PBIAS.pdf
+	    rm compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop.pdf
+	    rm compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf
         done
 
     done

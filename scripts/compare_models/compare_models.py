@@ -23,7 +23,7 @@ from __future__ import print_function
 # run:
 #
 
-#    python compare_models.py -i '../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc ../../data/objective_1/model/VIC/vic_phase_0_objective_1.nc ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc ../../data/objective_1/model/MESH-CLASS/mesh-class_phase_0_objective_1.nc ../../data/objective_1/model/MESH-SVS/mesh-svs_phase_0_objective_1.nc ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.nc ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.nc ../../data/objective_1/model/GR4J-Raven-lp/gr4j-raven-lp_phase_0_objective_1.nc ../../data/objective_1/model/GR4J-Raven-sd/gr4j-raven-sd_phase_0_objective_1.nc' -a '2011-01-01:2014-12-31' -p test.pdf
+#    run compare_models.py -i '../../data/objective_1/lake-erie//model/GEM-Hydro/gem-hydro_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/GR4J-Raven-lp/gr4j-raven-lp_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/GR4J-Raven-sd/gr4j-raven-sd_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/HYPE/hype_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/LBRM/lbrm_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/MESH-CLASS/mesh-class_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/MESH-SVS/mesh-svs_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/ML-ConvLSTM-DEM/ml-convlstm-dem_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/ML-ConvLSTM-LC-DEM/ml-convlstm-lc-dem_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/ML-ConvLSTM-LC/ml-convlstm-lc_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/ML-ConvLSTM/ml-convlstm_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/ML-LinReg/ml-linreg_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/ML-XGBoost/ml-xgboost_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/SWAT/swat_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/VIC-GRU/vic-gru_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/VIC/vic_phase_1_objective_1.nc ../../data/objective_1/lake-erie//model/WATFLOOD/watflood_phase_1_objective_1.nc' -a 2013-01-01:2014-12-31 -p compare_models_phase_1_objective_1_lake-erie_2013-01-01_2014-12-31.pdf -y
 
 # -----------------------
 # add subolder scripts/lib to search path
@@ -202,7 +202,7 @@ dyabc_clock = 0           # % of (max-min) shift up from lower x-axis for a,b,c,
 dxsig       = 1.23        # % of (max-min) shift to the right from left y-axis for a,b,c,... labels
 dysig       = -0.05       # % of (max-min) shift up from lower x-axis for a,b,c,... labels
 
-lwidth      = 0.5         # linewidth
+lwidth      = 1.0         # linewidth
 elwidth     = 1.0         # errorbar line width
 alwidth     = 0.5         # axis line width
 glwidth     = 0.5         # grid line width
@@ -333,14 +333,14 @@ import scipy.cluster.hierarchy as sch
 # from scipy.spatial.distance import squareform
 import scipy.spatial.distance as dist
 
-ifig = 0
 
-ifig += 1
-iplot = 0
-print('Plot - Fig ', ifig, ' ::  heatmap')
-fig = plt.figure(ifig)
 
 model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
+
+# lines will appear after all models of each group
+models_group = [['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost'],
+                ['lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat']]
+
 models = np.sort(dicts_nse.keys())
 nmodels = np.shape(models)[0]
 # sort models in model_order and append models not existing in model_order at the end
@@ -348,7 +348,24 @@ nmodels = np.shape(models)[0]
 models = np.array([ imodel for imodel in model_order if imodel in models]+[ imodel for imodel in models if not(imodel in model_order) ])
 gauges = np.sort(dicts_nse[models[0]].keys())
 
+# only models in groups that actually are available
+models_group = [ [ list(models).index(imodel) for imodel in igroup if imodel in models ] for igroup in models_group ]
+# find last model in group --> to plot line after
+lines_after_model = [ np.max(igroup) for igroup in models_group if len(igroup) > 0 ]
+
 ngauges = np.shape(gauges)[0]
+
+
+
+# ----------------------------------
+# Figure NSE
+# ----------------------------------
+ifig = 0
+
+ifig += 1
+iplot = 0
+print('Plot - Fig ', ifig, ' ::  heatmap NSE')
+fig = plt.figure(ifig)
 
 nse_results = np.array([ [ dicts_nse[imodel][igauge] for igauge in gauges ] for imodel in models ])
 
@@ -431,9 +448,14 @@ sub.text(  ngauges+0.5, nmodels-0.5, 'median NSE',
     
 # text for median NSE values
 for imodel in np.arange(nmodels):
+    # print("y: ",imodel,"   NSE: ",astr(median_NSE[imodel],prec=2))
     sub.text(  ngauges, imodel, astr(median_NSE[imodel],prec=2),
                         ha = 'left', va = 'center',
                         fontsize=textsize )
+
+# draw line after model groups
+for iline in lines_after_model:
+    sub.plot([-0.5,ngauges-0.5],[nmodels-iline-1.5,nmodels-iline-1.5],linewidth=lwidth,color='black')
 
 
 # Legend
@@ -446,6 +468,131 @@ cb      = mpl.colorbar.ColorbarBase(axcb, cmap=cmap, alpha=1.0, orientation='hor
                                         norm=mpl.colors.Normalize(vmin=min_nse, vmax=max_nse))
 cb.set_label('NSE')
 labels = [ astr(itick,prec=2) for itick in ticks ]
+cb.set_ticklabels(labels)
+
+if (outtype == 'pdf'):
+    pdf_pages.savefig(fig)
+    plt.close(fig)
+elif (outtype == 'png'):
+    pngfile = pngbase+"{0:04d}".format(ifig)+".png"
+    fig.savefig(pngfile, transparent=transparent, bbox_inches=bbox_inches, pad_inches=pad_inches)
+    plt.close(fig)
+
+# ----------------------------------
+# Figure PBIAS
+# ----------------------------------
+ifig = 0
+
+ifig += 1
+iplot = 0
+print('Plot - Fig ', ifig, ' ::  heatmap PBIAS')
+fig = plt.figure(ifig)
+
+pbias_results = np.array([ [ dicts_pbias[imodel][igauge] for igauge in gauges ] for imodel in models ])
+
+
+# median PBIAS
+median_PBIAS = np.array([ np.median(pbias_results[imodel,:]) for imodel in np.arange(nmodels) ])
+median_abs_PBIAS = np.array([ np.median(np.abs(pbias_results[imodel,:])) for imodel in np.arange(nmodels) ])
+
+# truncation of really bad results
+pbias_results_truncated = copy.deepcopy(pbias_results)
+min_pbias = - np.percentile(np.abs(pbias_results),90)
+max_pbias =   np.percentile(np.abs(pbias_results),90)
+min_pbias = - 30.0
+max_pbias =   30.0
+# print('max_pbias = ',max_pbias)
+pbias_results_truncated[np.where(pbias_results_truncated < min_pbias)] = min_pbias  # PBIAS will be truncated to min_pbias
+pbias_results_truncated[np.where(pbias_results_truncated > max_pbias)] = max_pbias  # PBIAS will be truncated to max_pbias
+
+# take sorting from NSE ....
+
+# [ax0_x, ax0_y, ax0_w, ax0_h] = [0.2,0.1,0.01,0.01]
+
+# # Cross-Validation: Clustering of columns
+# d2   = dist.pdist(pbias_results_truncated.T)
+# D2   = dist.squareform(d2)
+# ax2  = fig.add_axes([ax0_x, ax0_y, ax0_w, ax0_h], frame_on=False) # [x,y,w,h]
+# Y2   = sch.linkage(D2, method='single', metric='euclidean')
+# Z2   = sch.dendrogram(Y2,color_threshold=np.inf)
+# ind2 = sch.fcluster(Y2,0.7*max(Y2[:,2]),'distance') ### This is the default behavior of dendrogram
+# ax2.set_xticks([]) ### Hides ticks
+# ax2.set_yticks([]) ### Hides ticks
+
+# [ax0_x, ax0_y, ax0_w, ax0_h] = [0.2,0.1,0.01,0.01]
+
+# # Cross-Validation: Clustering of rows
+# d1   = dist.pdist(pbias_results_truncated)
+# D1   = dist.squareform(d1)
+# ax1  = fig.add_axes([ax0_x, ax0_y, ax0_w, ax0_h], frame_on=False) # [x,y,w,h]
+# Y1   = sch.linkage(D1, method='average', metric='euclidean') 
+# Z1   = sch.dendrogram(Y1,color_threshold=np.inf)
+# ind1 = sch.fcluster(Y1,0.7*max(Y1[:,2]),'distance') ### This is the default behavior of dendrogram
+# ax1.set_xticks([]) ### Hides ticks
+# ax1.set_yticks([]) ### Hides ticks
+
+
+# Cross-Validation: Sort the matrix new
+pbias_results_sort = copy.deepcopy(pbias_results_truncated)
+# Sort columns
+idx2             = Z2['leaves']     ### apply the clustering for the array-dendrograms to the actual matrix data
+pbias_results_sort = pbias_results_sort[:,idx2]
+ind2             = ind2[idx2]       ### JMJM reorder the flat cluster to match the order of the leaves the dendrogram
+
+# Sort rows
+if nosorty:
+    idx1 = np.arange(nmodels)[::-1]
+else:
+    idx1 = Z1['leaves']     ### apply the clustering for the gene-dendrograms to the actual matrix data
+pbias_results_sort = pbias_results_sort[idx1,:]   # xt is transformed x
+median_PBIAS       = median_PBIAS[idx1]
+median_abs_PBIAS   = median_abs_PBIAS[idx1]
+ind1               = ind1[idx1]       ### JMJM  reorder the flat cluster to match the order of the leaves the dendrogram
+
+# Plot distance matrix.
+[ax1_x, ax1_y, ax1_w, ax1_h] = [0.2,0.1,0.7,0.3]
+sub  = fig.add_axes([ax1_x, ax1_y, ax1_w, ax1_h], axisbg='none',frame_on=False)
+im = sub.matshow(pbias_results_sort, aspect='auto', origin='lower', cmap=cmap)
+im.set_clim(min_pbias,max_pbias)
+
+# ticklabels
+sub.set_xticks(np.arange(ngauges))
+if ngauges < 32:
+    sub.set_xticklabels(gauges[idx2],rotation=90)
+elif ngauges < 70:
+    sub.set_xticklabels(gauges[idx2],rotation=90,fontsize='x-small')
+else:
+    sub.set_xticklabels(gauges[idx2],rotation=90,fontsize='xx-small')
+sub.set_yticks(np.arange(nmodels))
+sub.set_yticklabels(models[idx1])
+
+
+# label text for median PBIAS
+sub.text(  ngauges*(1+0.025/0.8), nmodels-0.5, 'median |PBIAS|',
+                        ha = 'center', va = 'bottom', rotation=90,
+                        fontsize=textsize )
+    
+# text for median of absolute PBIAS values
+for imodel in np.arange(nmodels):
+    sub.text( ngauges*(1+0.05/0.8), imodel, astr(median_abs_PBIAS[imodel],prec=1),
+                        ha = 'right', va = 'center',
+                        fontsize=textsize )
+
+# draw line after model groups
+for iline in lines_after_model:
+    sub.plot([-0.5,ngauges-0.5],[nmodels-iline-1.5,nmodels-iline-1.5],linewidth=lwidth,color='black')
+
+
+# Legend
+[ax4_x, ax4_y, ax4_w, ax4_h] = [0.2,0.07,0.7,0.02]
+axcb    = fig.add_axes([ax4_x, ax4_y, ax4_w, ax4_h],axisbg='none',frame_on=False)
+nticks  = 5.0
+ticks   = [ min_pbias + itick/(nticks-1)*(max_pbias-min_pbias) for itick in np.arange(nticks) ]
+# print('ticks = ',ticks)
+cb      = mpl.colorbar.ColorbarBase(axcb, cmap=cmap, alpha=1.0, orientation='horizontal',ticks=ticks,extend='both',
+                                        norm=mpl.colors.Normalize(vmin=min_pbias, vmax=max_pbias))
+cb.set_label('PBIAS [%]')
+labels = [ astr(itick,prec=1) for itick in ticks ]
 cb.set_ticklabels(labels)
 
 if (outtype == 'pdf'):
