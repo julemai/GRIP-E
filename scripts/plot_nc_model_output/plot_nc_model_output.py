@@ -653,13 +653,18 @@ else:
 # # --------------------------------------
 # # dump observations of time period (per objective) to CSV file per gauge (in RAVEN format
 # # --------------------------------------
+# imodel_lc = imodel_lc.lower()
 # gauges = np.sort([dd for dd in dicts_dates[imodel_lc]])
 # for gg in gauges:
 #     f = open('Qobs_daily_'+gg+'.rvt', 'w')   # same name as pdf file but different extension
 #     f.write( ':ObservationData	HYDROGRAPH	1	m3/s \n')
 #     f.write( ' '+str(dates[0])[0:10]+'  '+str(dates[0])[11:19]+'   1.0  '+str(len(dates))+' \n')
 #     for iday,dd in enumerate(dates):
-#         f.write( astr(dicts_qobs[imodel_lc][gg][iday],prec=8)+'\n')
+#         val = dicts_qobs[imodel_lc][gg][iday]
+#         if np.isnan(val):
+#             f.write( '-1.2345 \n')
+#         else:
+#             f.write( astr(dicts_qobs[imodel_lc][gg][iday],prec=8)+'\n')
 #     f.write( ':EndObservationData')
 #     f.close()
 
