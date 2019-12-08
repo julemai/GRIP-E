@@ -32,12 +32,12 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='ML-LSTM'                     # [    Lake Erie:   LBRM  GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
+convert_models='HMETS-Raven-lp'              # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost          
 #                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd ML-EA-LSTM ML-LSTM ML-XGBoost]
 
 domain='great-lakes'                         # [lake-erie great-lakes]
-calvals='calibration validation'             # [calibration validation]  # only for Great Lakes
+calvals='calibration' # validation'             # [calibration validation]  # only for Great Lakes
 
 # domain='lake-erie'                           # [lake-erie great-lakes]
 # calvals='calibration'                        # [calibration validation]  # only for Great Lakes
@@ -88,7 +88,7 @@ for calval in ${calvals} ; do
                 echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
 
                 if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' )  || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie' ) ]] ; then
                         add_inputs="-b ../../data/objective_${iobj}/${domain}/model/${imodel}/subid2gauge.csv"
                     else
                         if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
@@ -98,7 +98,7 @@ for calval in ${calvals} ; do
                         fi
                     fi
                 else
-                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' )  || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie' ) ]] ; then
                         add_inputs="-b ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/subid2gauge.csv"
                     else
                         if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
@@ -110,13 +110,13 @@ for calval in ${calvals} ; do
                 fi
 
                 if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie') ]] ; then
                         input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
                     else
                         input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
                     fi
                 else
-                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) ]] ; then
+                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie') ]] ; then
                         input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
                     else
                         input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
@@ -124,13 +124,13 @@ for calval in ${calvals} ; do
                 fi
                 
                 if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-                    if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd' ) ]] ; then
+                    if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd'  || ${imodel} == 'HMETS-Raven-lp' ) ]] ; then
                         python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_all_stations} ${add_inputs} -s ${setup_by}
                     else
                         python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_all_stations} ${add_inputs}
                     fi
                 else
-                    if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd' ) ]] ; then
+                    if [[ ( ${imodel} == 'GR4J-Raven-lp' || ${imodel} == 'GR4J-Raven-sd'  || ${imodel} == 'HMETS-Raven-lp'  ) ]] ; then
                         python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_only_cal_or_val} ${add_inputs} -s ${setup_by}
                     else
                         python convert_raw_to_netcdf.py -m ${imodel} -i ${input_csv_file} -o ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.nc -a ${file_only_cal_or_val} ${add_inputs}

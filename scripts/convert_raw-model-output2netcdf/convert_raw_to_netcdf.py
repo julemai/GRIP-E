@@ -54,6 +54,11 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
 
 #    ------------
+#    HMETS-Raven-lp
+#    ------------
+#    python convert_raw_to_netcdf.py -m HMETS-Raven-lp -i ../../data/objective_1/model/HMETS-Raven-lp/raven-hmets-lp_phase_1_objective_1_ -o ../../data/objective_1/model/HMETS-Raven-lp/raven-hmets-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/HMETS-Raven-lp/subid2gauge.csv -s julie
+
+#    ------------
 #    GR4J-Raven-lp
 #    ------------
 #    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1_ -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/GR4J-Raven-lp/subid2gauge.csv -s julie
@@ -161,6 +166,7 @@ if ( (model != 'LBRM')                 and
      (model != 'ML-XGBoost')           and          # Lake Erie
      (model != 'ML-EA-LSTM')           and          # Great Lakes
      (model != 'ML-LSTM')              and          # Great Lakes
+     (model != 'HMETS-Raven-lp')       and          # Great Lakes
      (model != 'GR4J-Raven-lp')        and
      (model != 'GR4J-Raven-sd')        and 
      (model != 'SWAT')                 and
@@ -169,19 +175,20 @@ if ( (model != 'LBRM')                 and
      (model != 'MESH-CLASS') ):
     raise ValueError('This model is not supported yet!')
 
-if ( ((model == 'VIC-GRU')                               and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'VIC')                                   and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'GR4J-Raven-lp' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'GR4J-Raven-sd' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'SWAT')                                  and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'MESH-SVS')                              and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'MESH-CLASS')                            and (mapping_subbasinID_gaugeID == '')) ):
+if ( ((model == 'VIC-GRU')                                and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'VIC')                                    and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'HMETS-Raven-lp' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'GR4J-Raven-lp'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'GR4J-Raven-sd'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'SWAT')                                   and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'MESH-SVS')                               and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'MESH-CLASS')                             and (mapping_subbasinID_gaugeID == '')) ):
     raise ValueError('For VIC, SWAT, and RAVEN model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
 
-if ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd') and (setup_by is None)):
-    raise ValueError('For GR4J-Raven-lp and GR4J-Raven-sd the person who has setup the model needs to be named.')
-if ( ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
-    raise ValueError('Person who has setup GR4J-Raven-lp or GR4J-Raven-sd must be "julie" or "hongren".')
+if ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp') and (setup_by is None)):
+    raise ValueError('For GR4J-Raven-lp and GR4J-Raven-sd and HMETS-Raven-lp the person who has setup the model needs to be named.')
+if ( ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
+    raise ValueError('Person who has setup GR4J-Raven-lp or GR4J-Raven-sd and HMETS-Raven-lp must be "julie" or "hongren".')
 
 # read model output file
 if (model == 'HYPE'):
@@ -222,7 +229,7 @@ if (model == 'HYPE'):
     model_dates = np.transpose(np.array(model_dates))
 
 # read model output file
-if (model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd'):
+if (model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp'):
 
     if (setup_by == 'julie'):
         input_files    = glob.glob(input_file+"*.csv")

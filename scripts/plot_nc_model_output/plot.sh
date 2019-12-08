@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='ML-LSTM'                            # [    Lake Erie:   LBRM  GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
+plot_models='HMETS-Raven-lp'                     # [    Lake Erie:   LBRM HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                    WATFLOOD SWAT ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
 #                                                #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd ML-EA-LSTM ML-LSTM ML-XGBoost]
 
@@ -40,13 +40,13 @@ plot_models='ML-LSTM'                            # [    Lake Erie:   LBRM  GR4J-
 # periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
 # calvals='calibration'                                   # [calibration validation]  # only for Great Lakes # choose ONE only
 
-# domain='great-lakes'                                      # [lake-erie great-lakes]
-# periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
-# calvals='calibration'                                     # [calibration validation]  # only for Great Lakes # choose ONE only
-
 domain='great-lakes'                                      # [lake-erie great-lakes]
-periods='2001-01-01:2010-12-31'                           # time period(s) that should be used to derive NSE etc
-calvals='validation'                                      # [calibration validation]  # only for Great Lakes # choose ONE only
+periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
+calvals='calibration'                                     # [calibration validation]  # only for Great Lakes # choose ONE only
+
+# domain='great-lakes'                                      # [lake-erie great-lakes]
+# periods='2001-01-01:2010-12-31'                           # time period(s) that should be used to derive NSE etc
+# calvals='validation'                                      # [calibration validation]  # only for Great Lakes # choose ONE only
 
 plot_obj='1 2'                                            # can be 1, 2, and/or 3
 plot_phase='1'                                            # phase 0: uncalibrated, different phys. setups,

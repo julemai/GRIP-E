@@ -40,13 +40,13 @@ plot_phase='1'                                            # phase 0: uncalibrate
 # domain='lake-erie'                                        # [lake-erie, great-lakes]
 # periods='2011-01-01:2014-12-31 2013-01-01:2014-12-31'     # time period(s) that should be used to derive NSE etc
 
-# domain='great-lakes'                                      # [lake-erie, great-lakes]
-# periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
-# calval='calibration'                                      # [calibration, validation]  # only for Great Lakes # choose ONE only
+domain='great-lakes'                                      # [lake-erie, great-lakes]
+periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
+calval='calibration'                                      # [calibration, validation]  # only for Great Lakes # choose ONE only
 
-domain='great-lakes'                                    # [lake-erie, great-lakes]
-periods='2001-01-01:2010-12-31'                         # time period(s) that should be used to derive NSE etc
-calval='validation'                                     # [calibration, validation]  # only for Great Lakes # choose ONE only
+# domain='great-lakes'                                    # [lake-erie, great-lakes]
+# periods='2001-01-01:2010-12-31'                         # time period(s) that should be used to derive NSE etc
+# calval='validation'                                     # [calibration, validation]  # only for Great Lakes # choose ONE only
 
 
 for iobj in ${plot_obj} ; do

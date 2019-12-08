@@ -339,7 +339,7 @@ model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 
 
 # lines will appear after all models of each group
 models_group = [['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost'],
-                ['lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat']]
+                ['lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'hmets-raven-lp', 'swat']]
 
 models = np.sort(dicts_nse.keys())
 nmodels = np.shape(models)[0]
