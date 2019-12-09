@@ -95,7 +95,7 @@ from readnetcdf import readnetcdf # in lib/
 # Read modelled values
 # -------------------------------------
 
-model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'swat', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
+model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'hmets-raven-lp', 'swat', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
         
 if model_qsim_files != 'None':
 
@@ -300,7 +300,7 @@ llxbbox_clock = -0.2        # x-anchor legend bounding box clock_plot
 llybbox_clock = 1.08        # y-anchor legend bounding box clock_plot
 llrspace      = 0.          # spacing between rows in legend
 llcspace      = 1.0         # spacing between columns in legend
-llhtextpad    = 0.4         # the pad between the legend handle and text
+llhtextpad    = 0.0         # the pad between the legend handle and text
 llhlength     = 1.5         # the length of the legend handles
 frameon       = False       # if True, draw a frame around the legend. If None, use rc
 
@@ -521,7 +521,7 @@ else:
             ttt_sim = np.array([ tt for tt in tt_sim if dicts_dates[model][station][tt] in times[ttt_obs] ])
             # calculate NSE
             performance = float(errormeasures.nse(Qobs[ttt_obs],Qsim[ttt_sim]))
-            performance = "NSE(Q) = {0:6.3f} (2001-2010)".format(performance)
+            performance = "Calibration: NSE(Q) = {0:6.3f}".format(performance)
             # text for performance
             textbox_x = 0.98
             textbox_y = 0.98
@@ -539,7 +539,7 @@ else:
             ttt_sim = np.array([ tt for tt in tt_sim if dicts_dates[model][station][tt] in times[ttt_obs] ])
             # calculate NSE
             performance = float(errormeasures.nse(Qobs[ttt_obs],Qsim[ttt_sim]))
-            performance = "NSE(Q) = {0:6.3f} (2011-2016)".format(performance)
+            performance = "Validation: NSE(Q) = {0:6.3f}".format(performance)
 
             # text for performance
             textbox_x = 0.98
@@ -601,11 +601,11 @@ else:
             # legend
             if (iplot > 0):
                 illxbbox     =  0.0        # x-anchor legend bounding box
-                illybbox     =  1.0        # y-anchor legend bounding box
+                illybbox     =  1.05        # y-anchor legend bounding box
                 locat       = 'upper left' #'upper left'   
                 sub.legend(frameon=frameon,
                                labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
-                               loc=locat, bbox_to_anchor=(illxbbox,illybbox), scatterpoints=1, numpoints=1,fontsize=textsize)
+                               loc=locat, bbox_to_anchor=(illxbbox,illybbox), scatterpoints=1, numpoints=1,fontsize=textsize-2)
 
             # rotate x-ticks
             plt.xticks(rotation=45)

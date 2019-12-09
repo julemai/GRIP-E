@@ -31,11 +31,14 @@ isdir=${PWD}
 pid=$$
 
 #         temporal validation:
-#         bad for all models   bad for ML   bad for GR4J
-stations='02HC030              04224775     04045500'
+#         bad for GR4J         bad for GR4J      bad for GR4J      bad for GR4J      bad for GR4J      bad for GR4J      good for GR4J   
+#         bad for HMETS        good for HMETS    bad for HMETS     bad for HMETS     bad for HMETS     bad for HMETS     good for HMETS 
+#         bad for ML           good for ML       good for ML       good for ML       good for ML       good for ML       good for ML
+stations='02HC030              04045500          04040500          04059500          04056500          04066500          02BF001'
 
 for station in ${stations} ; do
     python plot_single_gauge.py -i ../../data/objective_1/great-lakes/calibration/netcdf/all_gauges.nc -s ${station} -p ${station}.pdf -v Q -a '2001-01-01:2017-01-01' -m '../../data/objective_1/great-lakes/calibration/model/ML-LSTM/ml-lstm_phase_1_objective_1.nc ../../data/objective_1/great-lakes/calibration/model/GR4J-Raven-lp/gr4j-raven-lp_phase_1_objective_1.nc'
+    python plot_single_gauge.py -i ../../data/objective_1/great-lakes/calibration/netcdf/all_gauges.nc -s ${station} -p ${station}.pdf -v Q -a '2001-01-01:2017-01-01' -m '../../data/objective_1/great-lakes/calibration/model/ML-LSTM/ml-lstm_phase_1_objective_1.nc ../../data/objective_1/great-lakes/calibration/model/HMETS-Raven-lp/hmets-raven-lp_phase_1_objective_1.nc'
     pdfcrop ${station}.pdf
     mv ${station}-crop.pdf ${station}.pdf
 done
