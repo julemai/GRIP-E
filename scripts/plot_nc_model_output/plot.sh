@@ -19,7 +19,7 @@
 # along with Juliane Mai's personal code library.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -ex
+set -e
 #
 # Converts all raw model outputs in GRIP-E project to NetCDF files.
 #
