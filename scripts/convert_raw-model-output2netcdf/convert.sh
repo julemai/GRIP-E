@@ -32,11 +32,12 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='MESH-SVS'              # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
-#                                                                WATFLOOD SWAT ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost          
+convert_models='mHM-UFZ mHM-Waterloo'        # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
+#                                                                WATFLOOD SWAT ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
+#                                                                mHM-UFZ mHM-Waterloo
 #                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd ML-EA-LSTM ML-LSTM ML-XGBoost]
 
-# domain='great-lakes'                         # [lake-erie great-lakes]
+# domain='great-lakes'                       # [lake-erie great-lakes]
 # calvals='calibration' # validation'             # [calibration validation]  # only for Great Lakes
 
 domain='lake-erie'                           # [lake-erie great-lakes]
@@ -44,7 +45,7 @@ calvals='calibration'                        # [calibration validation]  # only 
 
 setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'                            # can be 1, 2, and/or 3
-convert_phase='1'                            # phase 0: uncalibrated, different phys. setups,
+convert_phase='0 1'                          # phase 0: uncalibrated, different phys. setups,
 #                                            # phase 1: calibrated,   different phys. setups,
 #                                            # phase 2: calibrated,   same phys. setups
 
@@ -110,13 +111,13 @@ for calval in ${calvals} ; do
                 fi
 
                 if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie') ]] ; then
+                    if [[ ( ${imodel} == 'mHM-UFZ' ) || ( ${imodel} == 'mHM-Waterloo' ) || ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie') ]] ; then
                         input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
                     else
                         input_csv_file=../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv
                     fi
                 else
-                    if [[ ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie') ]] ; then
+                    if [[ ( ${imodel} == 'mHM-UFZ' ) || ( ${imodel} == 'mHM-Waterloo' ) || ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie') ]] ; then
                         input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
                     else
                         input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv

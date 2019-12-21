@@ -105,6 +105,7 @@ import copy                    # deep copy objects, arrays etc
 import datetime                # converting dates
 import netCDF4 as nc           # NetCDF writing
 import glob                    # for file listing
+import xarray as xr
 
 #import netcdf4     as     nc4         # in lib/
 from fread         import fread        # in lib/
@@ -172,7 +173,9 @@ if ( (model != 'LBRM')                 and
      (model != 'SWAT')                 and
      (model != 'WATFLOOD')             and
      (model != 'MESH-SVS')             and    
-     (model != 'MESH-CLASS') ):
+     (model != 'MESH-CLASS')           and    
+     (model != 'mHM-Waterloo')         and    
+     (model != 'mHM-UFZ') ):
     raise ValueError('This model is not supported yet!')
 
 if ( ((model == 'VIC-GRU')                                and (mapping_subbasinID_gaugeID == '')) or
@@ -190,11 +193,46 @@ if ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Rav
 if ( ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
     raise ValueError('Person who has setup GR4J-Raven-lp or GR4J-Raven-sd and HMETS-Raven-lp must be "julie" or "hongren".')
 
+if (model == 'mHM-UFZ' or model == 'mHM-Waterloo'):
+    # ---------------
+    # read model outputs
+    # - every gauge is in a separate file (NetCDF)
+    # ---------------
+    input_files    = glob.glob(input_file+"*.nc")
+    model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
+    model_data     = [ [] for ii in input_files ]
+    model_dates    = None
+    for ii,iinput_file in enumerate(input_files):
+
+        tmp = xr.open_dataset(iinput_file)
+
+        # find variable that contains simulation results
+        var_sim=[s for s in tmp.variables.keys() if 'Qsim' in s][0]
+
+        model_data[ii] = tmp[var_sim].data
+
+        # make sure all model dates are same in all files
+        if model_dates is None:
+            # save first file's dates
+            model_dates = tmp[var_sim].time.data
+            model_dates = [ itt.astype('M8[ms]').astype('O') for itt in model_dates ]
+        else:
+            # check if dates are same as already saved
+            tmp_dates = tmp[var_sim].time.data
+            tmp_dates = [ itt.astype('M8[ms]').astype('O') for itt in tmp_dates ]
+            if not np.all(tmp_dates == model_dates):
+                print('Time steps first file: ',input_files[0])
+                print('     ',model_dates)
+                print('Time steps current file: ',input_files[ii])
+                print('     ',tmp_dates)
+                raise ValueError('Time step in files must be all the same!')
+        
+
 # read model output file
 if (model == 'HYPE'):
     # ---------------
     # read model outputs
-    # - every gauge is in a separate file
+    # - every gauge is in a separate file (ASCII)
     # ---------------
     input_files    = glob.glob(input_file+"*.txt")
     model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
