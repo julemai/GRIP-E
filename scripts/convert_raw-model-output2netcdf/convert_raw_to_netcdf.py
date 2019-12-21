@@ -215,17 +215,20 @@ if (model == 'mHM-UFZ' or model == 'mHM-Waterloo'):
         if model_dates is None:
             # save first file's dates
             model_dates = tmp[var_sim].time.data
-            model_dates = [ itt.astype('M8[ms]').astype('O') for itt in model_dates ]
+            model_dates = [ itt.astype('M8[D]').astype('O') for itt in model_dates ]
         else:
             # check if dates are same as already saved
             tmp_dates = tmp[var_sim].time.data
-            tmp_dates = [ itt.astype('M8[ms]').astype('O') for itt in tmp_dates ]
+            tmp_dates = [ itt.astype('M8[D]').astype('O') for itt in tmp_dates ]
             if not np.all(tmp_dates == model_dates):
                 print('Time steps first file: ',input_files[0])
                 print('     ',model_dates)
                 print('Time steps current file: ',input_files[ii])
                 print('     ',tmp_dates)
                 raise ValueError('Time step in files must be all the same!')
+
+    model_data  = np.transpose(np.array(model_data))
+    model_dates = np.transpose(np.array(model_dates))
         
 
 # read model output file
