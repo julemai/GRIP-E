@@ -40,7 +40,7 @@ http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.zip (345.
     http://www.civil.uwaterloo.ca/jmai/
     https://www.researchgate.net/profile/Juliane_Mai
 
-2.c ata conversion
+2.c Data conversion into NetCDF
 
 	NOT CONVERTED!!!!
 
@@ -57,3 +57,5 @@ http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.zip (345.
 			        -o ${datapath}landcover_MODIS/rect_landcover_UMD_scheme_MODIS_Erie.nc
 			        -v "${varname},${vartype},${unit},${description}"
 			        -a ${datapath}landcover_MODIS/UMD_scheme_MODIS_legends.csv
+
+2.d Data conversion into TIFF
