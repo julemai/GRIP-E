@@ -29,7 +29,7 @@ http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.tif.zip (
 
     NOT converted since lat/lon are in [m] and not [degree]
 
-2.b Converted by
+2.b Converted into NetCDF by
 
     Juliane Mai PhD
     Department Civil & Environmental Engineering
@@ -58,5 +58,17 @@ http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.tif.zip (
 			        -o ${datapath}landcover_MODIS/rect_landcover_UMD_scheme_MODIS_Erie.nc
 			        -v "${varname},${vartype},${unit},${description}"
 			        -a ${datapath}landcover_MODIS/UMD_scheme_MODIS_legends.csv
+				
+2.d Converted into TIF by
 
-2.d Data conversion into TIFF
+    Hongren Shen 
+    Ph.D. Student
+    Department of Civil and Environmental Engineering 
+    University of Waterloo 
+    200 University Avenue West 
+    Waterloo, Ontario, Canada, N2L3G1 
+    Office: E2-2359
+    Phone: +1 (226)-899-3796 
+    Email: hongren.shen@uwaterloo.ca, shrhongren@gmail.com
+
+2.d Data conversion into TIF
