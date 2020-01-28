@@ -7,6 +7,7 @@ character,int32,character
 # description
 Name of land cover class,Value of land cover class,Description of land cover class
 #
+No data                                                 , 0,  No data available at this location
 Temperate or sub-polar needleleaf forest		, 1,  Forests generally taller than 3 meters and more than 20% of total vegetation cover. This type occurs across the northern United States, Canada and mountainous zones of Mexico. The tree crown cover contains at least 75 percent of needleleaved species
 Sub-polar taiga needleleaf forest			, 2,  Forest and woodlands with trees generally taller than 3 meters and more than 5% of total vegetation cover with shrubs and lichens commonly present in the understory. The tree crown cover contains at least 75 percent of needleleaved species. This type occurs across Alaska and northern Canada and may consist of treed muskeg or wetlands. Forest canopies are variable and often sparse, with generally greater tree cover in the southern latitude parts of the zone than the north.
 Tropical or sub-tropical broadleaf evergreen forest	, 3,  Forests generally taller than 5 meters and more than 20% of total vegetation cover. These occur in the southern United States and Mexico. These forests have greater than 75 percent of tree crown cover represented by evergreen species. 
