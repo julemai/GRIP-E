@@ -167,6 +167,8 @@ if ( (model != 'LBRM')                 and
      (model != 'ML-XGBoost')           and          # Lake Erie
      (model != 'ML-EA-LSTM')           and          # Great Lakes
      (model != 'ML-LSTM')              and          # Great Lakes
+     (model != 'LBRM-ML-LSTM')         and          # Great Lakes
+     (model != 'LBRM-MG')              and          # Great Lakes
      (model != 'HMETS-Raven-lp')       and          # Great Lakes
      (model != 'GR4J-Raven-lp')        and
      (model != 'GR4J-Raven-sd')        and 
@@ -459,7 +461,7 @@ if (model == 'WATFLOOD'):
     model_stations = list(model_stations_uniq)
     model_dates    = list(model_dates_uniq)
 
-if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLSTM-LC' or model == 'ML-ConvLSTM-LC-DEM' or model == 'ML-LinReg' or model == 'ML-XGBoost' or model == 'ML-EA-LSTM' or model == 'ML-LSTM'):    #'ANN-LinReg'
+if (model == 'ML-ConvLSTM' or model == 'ML-ConvLSTM-DEM' or model == 'ML-ConvLSTM-LC' or model == 'ML-ConvLSTM-LC-DEM' or model == 'ML-LinReg' or model == 'ML-XGBoost' or model == 'ML-EA-LSTM' or model == 'ML-LSTM' or model == 'LBRM-MG' or model == 'LBRM-ML-LSTM' ):    #'ANN-LinReg'
     # ---------------
     # read model outputs
     # - model outputs in pickle exported to CSV

@@ -32,16 +32,16 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='mHM-UFZ'        # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
+convert_models='LBRM-MG LBRM-ML-LSTM'           # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
 #                                                                mHM-UFZ mHM-Waterloo
-#                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd ML-EA-LSTM ML-LSTM ML-XGBoost]
+#                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd LBRM-MG LBRM-ML-LSTM ML-EA-LSTM ML-LSTM ML-XGBoost]
 
-# domain='great-lakes'                       # [lake-erie great-lakes]
-# calvals='calibration' # validation'             # [calibration validation]  # only for Great Lakes
+domain='great-lakes'                       # [lake-erie great-lakes]
+calvals='calibration' # validation'             # [calibration validation]  # only for Great Lakes
 
-domain='lake-erie'                           # [lake-erie great-lakes]
-calvals='calibration'                        # [calibration validation]  # only for Great Lakes
+# domain='lake-erie'                           # [lake-erie great-lakes]
+# calvals='calibration'                        # [calibration validation]  # only for Great Lakes
 
 setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'                            # can be 1, 2, and/or 3

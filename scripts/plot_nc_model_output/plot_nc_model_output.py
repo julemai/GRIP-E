@@ -103,7 +103,14 @@ for iinput_file,input_file in enumerate(input_files):
     data_obs = xr.open_dataset(os.path.dirname(input_file)+'/../../netcdf/all_gauges.nc')
 
     # sort all according to observations
-    idx_station = [ list(data_sim.station_id).index(ii) for ii in data_obs.station_id ]
+    idx_station = []
+    for ii in data_obs.station_id:
+        if ii in list(data_sim.station_id):
+            idx_station.append(list(data_sim.station_id).index(ii))
+        else:
+            print("WARNING:: Station not found: ", str(ii.data))
+            
+    # idx_station = [ list(data_sim.station_id).index(ii) for ii in data_obs.station_id ]
     idx_time    = [ np.where(data_obs.time==sim_tt)[0][0] for sim_tt in data_sim.time ]
 
     # cut out time period requested
@@ -126,35 +133,44 @@ for iinput_file,input_file in enumerate(input_files):
     dict_qobs    = {}
     dict_qsim    = {}
     dict_info    = {}
-    nstations    = len(data_obs.station_id)
+    nstations    = len(data_obs.station_id)   #len(data_obs.station_id)
     for istation in range(nstations):
+        
         stat_id = str(data_obs.station_id[istation].data)
-        Qobs    = data_obs.Q[istation,idx_time]
-        Qsim    = data_sim.Q[idx_station[istation],:]
-        dates   = data_sim.time.data
+        #print("   Station: ",stat_id)
+
+        if stat_id in list(data_sim.station_id.data):
+            #print("   ---> found")
+            idx_station_qobs = list(data_obs.station_id.data).index(stat_id)
+            idx_station_qsim = list(data_sim.station_id.data).index(stat_id)
+            Qobs    = data_obs.Q[idx_station_qobs,idx_time]
+            Qsim    = data_sim.Q[idx_station_qsim,:]
+            dates   = data_sim.time.data
         
-        if time_period != '':
-            Qobs  = Qobs[idx_period]
-            Qsim  = Qsim[idx_period]
-            dates = dates[idx_period]
-        nse     = float(errormeasures.nse(Qobs,Qsim).data)
-        rmse    = float(errormeasures.rmse(Qobs,Qsim).data)
-        pbias   = float(errormeasures.pbias(Qobs,Qsim).data)
-        ttidx = np.where((Qsim > 0.0) & (Qobs > 0.0))[0]
-        lognse  = float(errormeasures.nse(np.log(Qobs[ttidx]),np.log(Qsim[ttidx])).data)
-        sqrtnse = float(errormeasures.nse(np.sqrt(Qobs),np.sqrt(Qsim)).data)
+            if time_period != '':
+                Qobs  = Qobs[idx_period]
+                Qsim  = Qsim[idx_period]
+                dates = dates[idx_period]
+            nse     = float(errormeasures.nse(Qobs,Qsim).data)
+            rmse    = float(errormeasures.rmse(Qobs,Qsim).data)
+            pbias   = float(errormeasures.pbias(Qobs,Qsim).data)
+            ttidx = np.where((Qsim > 0.0) & (Qobs > 0.0))[0]
+            lognse  = float(errormeasures.nse(np.log(Qobs[ttidx]),np.log(Qsim[ttidx])).data)
+            sqrtnse = float(errormeasures.nse(np.sqrt(Qobs),np.sqrt(Qsim)).data)
         
-        dict_nse[stat_id]     = nse
-        dict_rmse[stat_id]    = rmse
-        dict_pbias[stat_id]   = pbias
-        dict_lognse[stat_id]  = lognse
-        dict_sqrtnse[stat_id] = sqrtnse
-        dict_qobs[stat_id]    = Qobs.data
-        dict_qsim[stat_id]    = Qsim.data
-        # convert from numpy.datetime64 to datetime.datetime
-        dict_dates[stat_id]   = np.array([ pd.Timestamp(itime).to_pydatetime() for itime in dates ])
-        # station long name
-        dict_info[stat_id]    = data_obs['station_info'][istation]
+            dict_nse[stat_id]     = nse
+            dict_rmse[stat_id]    = rmse
+            dict_pbias[stat_id]   = pbias
+            dict_lognse[stat_id]  = lognse
+            dict_sqrtnse[stat_id] = sqrtnse
+            dict_qobs[stat_id]    = Qobs.data
+            dict_qsim[stat_id]    = Qsim.data
+            # convert from numpy.datetime64 to datetime.datetime
+            dict_dates[stat_id]   = np.array([ pd.Timestamp(itime).to_pydatetime() for itime in dates ])
+            # station long name
+            dict_info[stat_id]    = data_obs['station_info'][istation]
+        # else:
+            
 
     # save everything in dictionaries
     dicts_nse[input_file.split('/')[-1].split('_')[0]]     = dict_nse
@@ -326,14 +342,16 @@ ifig = 0
 sel_stations = ['02GC002','02GG003','04160600'] #['02GG006','04207200','04208504'] #['02GG002','02GG003','04196800']
 sel_stations = ['02GC002','02GG003','04160600',   # stations Lake Erie
                 '02LA007',                        # calibration station for Great Lakes (instead of 04160600)
-                '02AB021', '02GB007', '02CF011'] # validation stations
+                '02AB021', '02GB007', '02CF011',  # validation stations
+                '04067958', '04074950']           # stations for incomplete LBRM-MG and LBRM-ML-LSTM
+                
 
 # filter only stations that are actually available
-sel_stations = [ [ ss for ss in sel_stations if ss in dicts_qobs[imodel_lc.lower()].keys()] for imodel_lc in [ ii.split('/')[-2] for ii in input_files ] ][0]
+sel_stations = [ [ ss for ss in sel_stations if ss in dicts_qsim[imodel_lc.lower()].keys()] for imodel_lc in [ ii.split('/')[-2] for ii in input_files ] ][0]
 print("Stations to plot: ",sel_stations)
 
 # max of simulation across per basin all models
-max_sim_basins = np.array([ np.nanmax( [ dicts_qobs[imodel_lc.lower()][key] for imodel_lc in [ ii.split('/')[-2] for ii in input_files ] ]) for key in sel_stations ])
+max_sim_basins = np.array([ np.nanmax( [ dicts_qsim[imodel_lc.lower()][key] for imodel_lc in [ ii.split('/')[-2] for ii in input_files ] ]) for key in sel_stations ])
 
 for imodel in [ ii.split('/')[-2] for ii in input_files ]:
     
@@ -488,9 +506,9 @@ for imodel in [ ii.split('/')[-2] for ii in input_files ]:
     edge_color = 'black'
     for element in ['boxes', 'whiskers', 'fliers', 'means', 'medians', 'caps']:
         plt.setp(line1[element], color=edge_color)
-    print(">>>>>>>>>>>>>> median NSE = ",np.median(data))
-    print(">>>>>>>>>>>>>> min    NSE = ",np.min(data))
-    print(">>>>>>>>>>>>>> max    NSE = ",np.max(data))
+    print(">>>>>>>>>>>>>> median NSE = ",np.median(data), '    (based on ', len(dicts_qobs[imodel_lc].keys()), ' stations)' )
+    print(">>>>>>>>>>>>>> min    NSE = ",np.min(data), '    (based on ', len(dicts_qobs[imodel_lc].keys()), ' stations)' )
+    print(">>>>>>>>>>>>>> max    NSE = ",np.max(data), '    (based on ', len(dicts_qobs[imodel_lc].keys()), ' stations)' )
     median = astr(np.median(data), prec=2)
     sub.text(1.1, np.median(data), median, #transform=sub.transAxes,
                              rotation=0, fontsize=textsize-2,
