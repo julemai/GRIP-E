@@ -25,7 +25,16 @@
         respectively. The averaging is based on weights of soil
         depths.
 	3.  The USDA-based soil classes are identified based on the soil texture triangle. 
-		Each grid cell corresponds to only one soil class.
+	Each grid cell corresponds to only one soil class.
+
+	Dataset got updated March 2, 2020:
+	Updates:
+
+	(1) The extent of the domain has been enlarged to contain both the wfdei-gem-capa and the rdrs_version2 forcing grids.
+	(2) An important bug has been fixed when aggregate the 8-layer
+	    soil texture into one layer.
+	    Soil class checked more consistent with the HWSD dataset after this modification.
+
 
 ### 1.b Downloaded from
 
