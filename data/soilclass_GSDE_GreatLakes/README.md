@@ -1,4 +1,4 @@
-## Harmonized World soil data (FAO), 30 second (1 km) 
+## Global Soil Dataset for Earth System Modeling (GSDE), 30 second (1 km) 
 
 ### 1.a Data (ASCII raster format; classification information given in separate file)
 
