@@ -335,11 +335,11 @@ import scipy.spatial.distance as dist
 
 
 
-model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'hmets-raven-lp', 'swat', 'mhm-waterloo', 'mhm-ufz', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
+model_order = ['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost', 'lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'hmets-raven-lp', 'raven-blended', 'swat', 'mhm-waterloo', 'mhm-ufz', 'hype', 'vic', 'vic-gru', 'gem-hydro', 'mesh-svs', 'mesh-class', 'watflood', 'wrf-hydro']
 
 # lines will appear after all models of each group
 models_group = [['ml-linreg', 'ml-convlstm', 'ml-convlstm-dem', 'ml-convlstm-lc', 'ml-convlstm-lc-dem', 'ml-lstm', 'ml-ea-lstm', 'ml-xgboost'],
-                ['lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'hmets-raven-lp', 'swat', 'mhm-waterloo']]
+                ['lbrm', 'gr4j-raven-lp', 'gr4j-raven-sd', 'hmets-raven-lp', 'raven-blended', 'swat', 'mhm-waterloo']]
 
 models = np.sort(dicts_nse.keys())
 nmodels = np.shape(models)[0]

@@ -59,6 +59,11 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m HMETS-Raven-lp -i ../../data/objective_1/model/HMETS-Raven-lp/raven-hmets-lp_phase_1_objective_1_ -o ../../data/objective_1/model/HMETS-Raven-lp/raven-hmets-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/HMETS-Raven-lp/subid2gauge.csv -s julie
 
 #    ------------
+#    Raven-blended
+#    ------------
+#    python convert_raw_to_netcdf.py -m Raven-blended -i ../../data/objective_1/model/Raven-blended/raven-blended_phase_1_objective_1_ -o ../../data/objective_1/model/Raven-blended/raven-blended_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/Raven-blended/subid2gauge.csv -s julie
+
+#    ------------
 #    GR4J-Raven-lp
 #    ------------
 #    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1_ -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/GR4J-Raven-lp/subid2gauge.csv -s julie
@@ -171,7 +176,8 @@ if ( (model != 'LBRM')                 and
      (model != 'LBRM-MG')              and          # Great Lakes
      (model != 'HMETS-Raven-lp')       and          # Great Lakes
      (model != 'GR4J-Raven-lp')        and
-     (model != 'GR4J-Raven-sd')        and 
+     (model != 'GR4J-Raven-sd')        and
+     (model != 'Raven-blended')        and          # Lake Erie
      (model != 'SWAT')                 and
      (model != 'WATFLOOD')             and
      (model != 'MESH-SVS')             and    
@@ -183,6 +189,7 @@ if ( (model != 'LBRM')                 and
 if ( ((model == 'VIC-GRU')                                and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'VIC')                                    and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'HMETS-Raven-lp' and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'Raven-blended'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'GR4J-Raven-lp'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'GR4J-Raven-sd'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'SWAT')                                   and (mapping_subbasinID_gaugeID == '')) or
@@ -190,10 +197,10 @@ if ( ((model == 'VIC-GRU')                                and (mapping_subbasinI
      ((model == 'MESH-CLASS')                             and (mapping_subbasinID_gaugeID == '')) ):
     raise ValueError('For VIC, SWAT, and RAVEN model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
 
-if ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp') and (setup_by is None)):
-    raise ValueError('For GR4J-Raven-lp and GR4J-Raven-sd and HMETS-Raven-lp the person who has setup the model needs to be named.')
-if ( ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
-    raise ValueError('Person who has setup GR4J-Raven-lp or GR4J-Raven-sd and HMETS-Raven-lp must be "julie" or "hongren".')
+if ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp' or model == 'Raven-blended') and (setup_by is None)):
+    raise ValueError('For GR4J-Raven-lp and GR4J-Raven-sd and HMETS-Raven-lp and Raven-blended the person who has setup the model needs to be named.')
+if ( ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp' or model == 'Raven-blended') and not(setup_by == 'julie' or setup_by == 'hongren')) ):
+    raise ValueError('Person who has setup GR4J-Raven-lp or GR4J-Raven-sd and HMETS-Raven-lp and Raven-blended must be "julie" or "hongren".')
 
 if (model == 'mHM-UFZ' or model == 'mHM-Waterloo'):
     # ---------------
@@ -272,7 +279,7 @@ if (model == 'HYPE'):
     model_dates = np.transpose(np.array(model_dates))
 
 # read model output file
-if (model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp'):
+if (model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp' or model == 'Raven-blended'):
 
     if (setup_by == 'julie'):
         input_files    = glob.glob(input_file+"*.csv")
@@ -297,7 +304,15 @@ if (model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Rave
             # find column with subbasin ID matching the gauge ID in file name (saved in 'model_stations')
             subID = mapping[np.where(mapping[:,1]==model_stations[ii])[0][0]][0]
             desired_column_header = 'sub'+subID+' [m3/s]'
-            idx = head.index(desired_column_header)
+
+            if desired_column_header in head:
+                idx = head.index(desired_column_header)
+            else:
+                desired_column_header = 'raven-weighted [m3/s]'
+                if desired_column_header in head:
+                    idx = head.index(desired_column_header)
+                else:
+                    raise ValueError('Column header not found in '+iinput_file)
           
             model_data[ii]  = fread(iinput_file,skip=1,cskip=4,header=False,fill=True,fill_value=nodata)[:,idx]
 
