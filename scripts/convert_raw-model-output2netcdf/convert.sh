@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='SWAT-Guelph'                 # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
+convert_models='Raven-blended'               # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
 #                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT-EPA SWAT-Guelph
 #                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
