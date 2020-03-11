@@ -75,9 +75,14 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m GR4J-Raven-sd -i ../../data/objective_1/model/GR4J-Raven-sd/raven-gr4j-sd_phase_0_objective_1_ -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-sd_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/GR4J-Raven-sd/subid2gauge.csv -s julie
 
 #    ------------
-#    SWAT
+#    SWAT-EPA
 #    ------------
-#    python convert_raw_to_netcdf.py -m SWAT -i ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT/swat_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT/subid2gauge.csv
+#    python convert_raw_to_netcdf.py -m SWAT-EPA -i ../../data/objective_1/model/SWAT-EPA/swat-epa_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT-EPA/swat-epa_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT-EPA/subid2gauge.csv
+
+#    ------------
+#    SWAT-Guelph
+#    ------------
+#    python convert_raw_to_netcdf.py -m SWAT-Guelph -i ../../data/objective_1/model/SWAT-Guelph/swat-guelph_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT-Guelph/swat-guelph_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT-Guelph/subid2gauge.csv
 
 #    ------------
 #    WATFLOOD
@@ -178,7 +183,8 @@ if ( (model != 'LBRM')                 and
      (model != 'GR4J-Raven-lp')        and
      (model != 'GR4J-Raven-sd')        and
      (model != 'Raven-blended')        and          # Lake Erie
-     (model != 'SWAT')                 and
+     (model != 'SWAT-EPA')             and
+     (model != 'SWAT-Guelph')          and
      (model != 'WATFLOOD')             and
      (model != 'MESH-SVS')             and    
      (model != 'MESH-CLASS')           and    
@@ -192,10 +198,11 @@ if ( ((model == 'VIC-GRU')                                and (mapping_subbasinI
      ((model == 'Raven-blended'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'GR4J-Raven-lp'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'GR4J-Raven-sd'  and setup_by == 'julie') and (mapping_subbasinID_gaugeID == '')) or
-     ((model == 'SWAT')                                   and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'SWAT-EPA')                               and (mapping_subbasinID_gaugeID == '')) or
+     ((model == 'SWAT-Guelph')                            and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'MESH-SVS')                               and (mapping_subbasinID_gaugeID == '')) or
      ((model == 'MESH-CLASS')                             and (mapping_subbasinID_gaugeID == '')) ):
-    raise ValueError('For VIC, SWAT, and RAVEN model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
+    raise ValueError('For VIC, SWAT-EPA, SWAT-Guelph, and RAVEN model CSV file containing the mapping of subbasin ID (col 1) to gauge ID (col 2) needs to be provided. All other columns in that file will be ignored. Exactly one header line needs to be provided.\n For MESH-SVS and MESH-CLASS the file is assumed to be a model setup tb0 file where only the line with :ColumnName is read. It should contain the gauge names. The order of the gauges in :ColumnName is assumed to be the order of the columns in the MESH csv output files.')
 
 if ((model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp' or model == 'Raven-blended') and (setup_by is None)):
     raise ValueError('For GR4J-Raven-lp and GR4J-Raven-sd and HMETS-Raven-lp and Raven-blended the person who has setup the model needs to be named.')
@@ -560,7 +567,7 @@ if (model == 'VIC-GRU' or model == 'VIC'):
 
             model_stations[ii] = gauge_id
 
-if (model == 'SWAT'):
+if (model == 'SWAT-EPA'):
 
     # ---------------
     # read mapping info subbasin ID --> gauge station ID
@@ -583,6 +590,7 @@ if (model == 'SWAT'):
     # col ? :: tmp[idx,3] :: FLOW_OUTcms = Q[m^3/s]
 
     header = fread(input_file, skip=1,cskip=0,header=True)
+    
     required_data_vars = np.unique(mapping[:,2])   # ['FLOW_OUTcms','FLOW_INcms']
     required_data_idx  = [ header.index(rr) for rr in required_data_vars ]  # [5,6]
     
@@ -609,6 +617,82 @@ if (model == 'SWAT'):
 
         year = tmp[idx,1]  # YEAR
         doy  = tmp[idx,2]  # MON = day of the year (1...366)
+
+    model_dates = [ dec2date(date2dec(yr=year[ii],mo=1,dy=1)-1.0 + doy[ii]) for ii in range(len(year)) ]
+    model_dates = [ datetime.datetime( ii[0],ii[1],ii[2],0,0 ) for ii in model_dates ]
+    
+    # ---------------
+    # map subbasin ID's to gauging stations IDs
+    # ---------------
+    for ii,isubbasin in enumerate(model_stations):  # they look like "sub676 [m3/s]" --> "676"
+
+        subbasin_ID = str(isubbasin) # isubbasin.split(' ')[0].split('sub')[1]
+        idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
+        gauge_id = mapping[idx,1]
+
+        model_stations[ii] = gauge_id
+
+if (model == 'SWAT-Guelph'):
+
+    # ---------------
+    # read mapping info subbasin ID --> gauge station ID
+    # ---------------
+    mapping = fsread(mapping_subbasinID_gaugeID,skip=1,snc=[0,1,2])
+    mapping = np.array(mapping)
+    mapping[:,0] = np.array( [ii.strip() for ii in mapping[:,0]] )   # remove trailing blanks: subbasin ID
+    mapping[:,1] = np.array( [ii.strip() for ii in mapping[:,1]] )   # remove trailing blanks: USGS/WSC gauge ID
+    mapping[:,2] = np.array( [ii.strip() for ii in mapping[:,2]] )   # remove trailing blanks: variable name in output file
+    nstations = np.shape(mapping)[0]
+    
+    # ---------------
+    # read model outputs
+    # - model outputs contain subbasin ID and not gauge ID --> need to be remapped
+    # ---------------
+    #
+    # col 1 :: REACH  (only string)
+    # col 2 :: reach ID: 1-699 (something)
+    # col 3 :: GIS    (whole time 0)
+    # col 4 :: MON day of the year (1-366)
+    # col ? :: FLOW_INcms   = Q[m^3/s]
+    # col ? :: FLOW_OUTcms  = Q[m^3/s]
+
+    header = fread(input_file, skip=1,cskip=0,full_header=True,header=True,separator=' ',strip=True,squeeze=True)[0]
+    header = ' '.join(header.strip().split())   # merge several blanks to one blank
+    header = header.split()
+
+    required_data_vars = np.unique(mapping[:,2])   # ['FLOW_OUTcms','FLOW_INcms']
+    required_data_idx  = [ header.index(rr) for rr in required_data_vars ]  # [5,6]
+    
+    tmp = fread(input_file,nc=[1,3]+required_data_idx, skip=1,cskip=0,header=False)          # No YEAR!!!
+
+    model_stations_all = np.array(np.array(tmp[:,0],np.int),dtype=str)   # this is subbasin IDs
+    ntime = np.shape(np.where(model_stations_all==model_stations_all[0])[0])[0]
+
+    model_data = np.ones([ntime,nstations],dtype=np.float32) * -9999.9
+    model_stations = list(np.array(['None']*nstations,dtype=str))
+    for istation,station in enumerate([ str(int(ii)) for ii in mapping[:,0] ]):
+
+        idx = np.where(model_stations_all==station)[0]   # lines containing data for current station
+        idx_var = np.where( required_data_vars == mapping[istation,2] )[0]   # find which column the current variable is in
+        # print('var = ',mapping[istation,2], ' in column #',3+idx_var, ' of tmp')
+        imodel_data = tmp[idx,2+idx_var]                 # FLOW_OUTcms for current station
+        ndat = np.shape(imodel_data)[0]                  # number of data points
+        if ndat != ntime:
+            print('ERROR :: station: ',station, '   # of time steps = ',ndat, '         expected # of time steps = ',ntime)
+            stop
+        
+        model_data[:,istation] = imodel_data
+        model_stations[istation] = station   # this is subbasin IDs
+
+        doy  = tmp[idx,1]  # MON = day of the year (1...366)
+
+        # create YEAR array since it is missing in file output
+        year = np.ones(ntime,dtype=np.int) * 2011                        # <<<<<<<<<<<< ASSUMED start year 2011
+        for itime in range(1,ntime):
+            if doy[itime] != 1:
+                year[itime] = year[itime-1]
+            else:
+                year[itime] = year[itime-1] + 1        
 
     model_dates = [ dec2date(date2dec(yr=year[ii],mo=1,dy=1)-1.0 + doy[ii]) for ii in range(len(year)) ]
     model_dates = [ datetime.datetime( ii[0],ii[1],ii[2],0,0 ) for ii in model_dates ]

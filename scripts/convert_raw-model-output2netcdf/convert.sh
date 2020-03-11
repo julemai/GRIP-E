@@ -19,7 +19,7 @@
 # along with Juliane Mai's personal code library.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -ex
+set -e
 #
 # Converts all raw model outputs in GRIP-E project to NetCDF files.
 #
@@ -32,8 +32,10 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='Raven-blended' #LBRM-MG LBRM-ML-LSTM'     # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
-#                                                                WATFLOOD SWAT ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
+convert_models='SWAT-Guelph'                 # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
+#                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
+#                                                                WATFLOOD SWAT-EPA SWAT-Guelph
+#                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
 #                                                                mHM-UFZ mHM-Waterloo
 #                                                                Raven-blended
 #                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd LBRM-MG LBRM-ML-LSTM ML-EA-LSTM ML-LSTM ML-XGBoost]
@@ -90,7 +92,7 @@ for calval in ${calvals} ; do
                 echo 'Convert :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}
 
                 if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' )  || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie' )  || ( ${imodel} == 'Raven-blended' && ${setup_by} == 'julie' ) ]] ; then
+                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT-EPA' ) || ( ${imodel} == 'SWAT-Guelph' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' )  || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie' )  || ( ${imodel} == 'Raven-blended' && ${setup_by} == 'julie' ) ]] ; then
                         add_inputs="-b ../../data/objective_${iobj}/${domain}/model/${imodel}/subid2gauge.csv"
                     else
                         if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then
@@ -100,7 +102,7 @@ for calval in ${calvals} ; do
                         fi
                     fi
                 else
-                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' ) || ( ${imodel} == 'SWAT' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' )  || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie' )  || ( ${imodel} == 'Raven-blended' && ${setup_by} == 'julie' ) ]] ; then
+                    if [[ ( ${imodel} == 'VIC' ) || ( ${imodel} == 'VIC-GRU' )  || ( ${imodel} == 'SWAT-EPA' ) || ( ${imodel} == 'SWAT-Guelph' ) || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie' ) || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' )  || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie' )  || ( ${imodel} == 'Raven-blended' && ${setup_by} == 'julie' ) ]] ; then
                         add_inputs="-b ../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/subid2gauge.csv"
                     else
                         if [[ ( ${imodel} == 'MESH-SVS' ) || ( ${imodel} == 'MESH-CLASS' ) ]] ; then

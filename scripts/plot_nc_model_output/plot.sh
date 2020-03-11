@@ -32,10 +32,13 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='Raven-blended' #'LBRM-MG LBRM-ML-LSTM' # ML-EA-LSTM ML-LSTM ML-XGBoost '               # [    Lake Erie:   LBRM HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
-#                                                                    WATFLOOD SWAT ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
-#                                                                    mHM-UFZ mHM-Waterloo
-#                                                #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd LBRM-MG LBRM-ML-LSTM ML-EA-LSTM ML-LSTM ML-XGBoost]
+plot_models='SWAT-Guelph'                    # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
+#                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
+#                                                                WATFLOOD SWAT-EPA SWAT-Guelph
+#                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
+#                                                                mHM-UFZ mHM-Waterloo
+#                                                                Raven-blended
+#                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd LBRM-MG LBRM-ML-LSTM ML-EA-LSTM ML-LSTM ML-XGBoost]
 
 domain='lake-erie'                                      # [lake-erie great-lakes]
 periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
