@@ -169,11 +169,11 @@ if not(addinfo is None):
         if not(line.startswith("#")):
             found = True
             f.close()
-    nvars = np.shape(line.split(','))[0] 
+    nvars = np.shape(line.split(';'))[0] 
     #print('line  = ',line)
     #print('nvars = ',nvars)
     
-    addinfo_data = fsread(addinfo,comment='#',separator=',',snc=nvars)
+    addinfo_data = fsread(addinfo,comment='#',separator=';',snc=nvars)
 
     varnames    = addinfo_data.pop(0)
     vartypes    = addinfo_data.pop(0)
