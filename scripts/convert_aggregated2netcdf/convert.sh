@@ -36,7 +36,7 @@ convert_landcover_NACLMS=0
 
 
 grid='RDRS-v2'
-# grid='WFDEI-GEM-CaPA'
+grid='WFDEI-GEM-CaPA'
 
 # -------------------
 # convert soil classes of GSDE
@@ -84,7 +84,7 @@ if [[ ${convert_soil_GSDE} -eq 1 ]] ; then
 
     outputfile=$( echo $( echo ${inputfile} | rev | cut -d '/' -f 2- | rev )"_${grid}.nc" )
     
-    echo "python aggregated2netcdf.py -i ${inputfile} -g ${gridfile} -o ${outputfile} -l ${varinfofile}"
+    python aggregated2netcdf.py -i ${inputfile} -g ${gridfile} -o ${outputfile} -l ${varinfofile}
 
 fi
 
