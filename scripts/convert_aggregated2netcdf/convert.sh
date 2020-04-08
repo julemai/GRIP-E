@@ -31,8 +31,8 @@ pid=$$
 
 datapath="../../data/"
 
-convert_soil_GSDE=1
-convert_landcover_NACLMS=0
+convert_soil_GSDE=0
+convert_landcover_NACLMS=1
 
 
 grid='RDRS-v2'
@@ -101,14 +101,26 @@ if [[ ${convert_landcover_NACLMS} -eq 1 ]] ; then
     if [[ ${grid} == 'RDRS-v2' ]] ; then
 	inputfile="${datapath}landcover_NALCMS_GreatLakes/landcover_NALCMS_GreatLakes_aggregated/GL_NALCMS_landcover_rdrs_v2.txt"
 	gridfile="${datapath}meteo_forcing_RDRS-v2/grip-gl_rdrs-v2-gridonly.nc"
-	legendsfile="${datapath}landcover_NALCMS_GreatLakes/NACLMS_legends.csv"
-	varinfofile=""
+	#
+	# # stores variables 4D (time, lat, lon, n_LC_types)
+	# legendsfile="${datapath}landcover_NALCMS_GreatLakes/NACLMS_legends.csv"
+	# varinfofile=""
+	#
+	# stores variables 3D (time, lat, lon) in <n_LC_types> separate variables
+	legendsfile=""  
+	varinfofile="${datapath}landcover_NALCMS_GreatLakes/landcover_NALCMS_GreatLakes_aggregated/variable_info.csv"
     else
 	if [[ ${grid} == 'WFDEI-GEM-CaPA' ]] ; then
 	    inputfile="${datapath}landcover_NALCMS_GreatLakes/landcover_NALCMS_GreatLakes_aggregated/GL_NALCMS_landcover_wfdei_gem_capa.txt"
 	    gridfile="${datapath}meteo_forcings_WFDEI-GEM-CaPA/grip-gl_wfdei-gem-capa_gridonly.nc"
-	    legendsfile="${datapath}landcover_NALCMS_GreatLakes/NACLMS_legends.csv"
-	    varinfofile=""
+	    #
+	    # # stores variables 4D (time, lat, lon, n_LC_types)
+	    # legendsfile="${datapath}landcover_NALCMS_GreatLakes/NACLMS_legends.csv"
+	    # varinfofile=""
+	    #
+	    # stores variables 3D (time, lat, lon) in <n_LC_types> separate variables
+	    legendsfile="" 
+	    varinfofile="${datapath}landcover_NALCMS_GreatLakes/landcover_NALCMS_GreatLakes_aggregated/variable_info.csv"
 	fi
     fi
 
@@ -137,8 +149,12 @@ if [[ ${convert_landcover_NACLMS} -eq 1 ]] ; then
     fi
 
     outputfile=$( echo $( echo ${inputfile} | rev | cut -d '/' -f 2- | rev )"_${grid}.nc" )
-    
-    python aggregated2netcdf.py -i ${inputfile} -g ${gridfile} -o ${outputfile} -v "${varname},${vartype},${unit},${description}" -a ${legendsfile}
+
+    # stores variables 4D (time, lat, lon, n_LC_types)
+    # python aggregated2netcdf.py -i ${inputfile} -g ${gridfile} -o ${outputfile} -v "${varname},${vartype},${unit},${description}" -a ${legendsfile}
+
+    # stores variables 3D (time, lat, lon) in <n_LC_types> separate variables
+    python aggregated2netcdf.py -i ${inputfile} -g ${gridfile} -o ${outputfile} -v "${varname},${vartype},${unit},${description}" -l ${varinfofile}
 
 fi
 
