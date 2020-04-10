@@ -274,20 +274,20 @@ for iline in range(nlines):
     if iline % 1000 == 999:
         print("    ",iline+1," lines of ",nlines," processed ...")
 
-    # # find right index: look for grid lat/lon that is closest to lon and lat values in aggregated file 
-    # res_lon = np.where( np.abs(grid_lon-lon_data[iline]) == np.min(np.abs(grid_lon-lon_data[iline])) )   # (array([ 94, 337]), array([612, 542]))
-    # res_lat = np.where( np.abs(grid_lat-lat_data[iline]) == np.min(np.abs(grid_lat-lat_data[iline])) )   # (array([337]), array([542]))
-    # res = list(set(res_lon[0]).intersection(res_lat[0])) + list(set(res_lon[1]).intersection(res_lat[1]))  # [337, 542]
+    # find right index: look for grid lat/lon that is closest to lon and lat values in aggregated file 
+    res_lon = np.where( np.abs(grid_lon-lon_data[iline]) == np.min(np.abs(grid_lon-lon_data[iline])) )   # (array([ 94, 337]), array([612, 542]))
+    res_lat = np.where( np.abs(grid_lat-lat_data[iline]) == np.min(np.abs(grid_lat-lat_data[iline])) )   # (array([337]), array([542]))
+    res = list(set(res_lon[0]).intersection(res_lat[0])) + list(set(res_lon[1]).intersection(res_lat[1]))  # [337, 542]
 
-    # print("res = ",res, "   --> ",col_data[iline],row_data[iline])
-    # if (len(res) != 2) :
+    print("res = ",res, "   --> ",row_data[iline],col_data[iline])
+    if (len(res) != 2) :
 
-    #     print("iline   = ",iline)
-    #     print("res_lon = ",res_lon)
-    #     print("res_lat = ",res_lat)
-    #     print("res     = ",res)
-    #     print("NOT MATCHING! :(")
-    #     stop
+        print("iline   = ",iline)
+        print("res_lon = ",res_lon)
+        print("res_lat = ",res_lat)
+        print("res     = ",res)
+        print("NOT MATCHING! :(")
+        stop
     
     grid_row_idx = np.int(row_data[iline][0])   # res[0]
     grid_col_idx = np.int(col_data[iline][0])   # res[1]
