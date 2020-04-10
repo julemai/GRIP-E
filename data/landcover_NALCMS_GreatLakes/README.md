@@ -1,11 +1,11 @@
 ## NALCMS, 19 land cover classes for North America (30m, Landsat, 2010 from Mexico and Canada, 2011 for U.S.)
 
 External download from:<br>
-http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.txt.zip (ASCII raster format; 345.5 MB)<br>
-http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.tif.zip (TIF format incl projection information; 370.9 MB)
+http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes_v1.0.txt.zip (ASCII raster format; 345.5 MB)<br>
+http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.tif_v1.1.zip (TIF format incl projection information; 817.5 MB)
 
 Aggregated landcover to RDRS-v2 and WFDEI-GEM-CaPA grid as external download link from: <br>
-http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes_aggregated.zip (ASCII raster format; 1.3MB)
+http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes_aggregated_v1.1.zip (ASCII raster format; 1.3MB)
 
 1.a Data (ASCII raster format; classification information given in separate file)
 
