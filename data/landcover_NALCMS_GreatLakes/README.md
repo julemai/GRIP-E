@@ -3,10 +3,10 @@
 External Download links:
 * Landcover classes (30m; meter-grid) in TIF format <br>
   http://www.civil.uwaterloo.ca/jmai/GRIP-GL/landcover_NALCMS_GreatLakes.tif_v1.1.zip (817.5 MB)
-* Landcover classes (30m; meter-grid) in ASCII raster format <br>
-  http://www.civil.uwaterloo.ca/jmai/GRIP-GL/rect_landcover_NALCMS_GreatLakes_v1.0.txt.zip (345.5 MB)
+* Landcover classes (30m; original meter-grid) in ASCII raster format <br>
+  http://www.civil.uwaterloo.ca/jmai/GRIP-GL/rect_landcover_NACLMS_GreatLakes_raw-meter-grid_v1.1.txt.zip (458.4 MB)
 * Landcover classes (~30m; projected to degree-grid) in ASCII raster format <br>
-  ???
+  http://www.civil.uwaterloo.ca/jmai/GRIP-GL/rect_landcover_NACLMS_GreatLakes_projected-degree-grid_v1.1.txt.zip (336.1 MB)
 * Landcover classses aggregated to forcing grids in tabulated TXT format <br>
   https://github.com/julemai/GRIP-E/blob/master/data/landcover_NALCMS_GreatLakes/landcover_NALCMS_GreatLakes_aggregated_v1.1.zip
 * Landcover classses aggregated to forcing grids in NetCDF format <br>
