@@ -1,7 +1,17 @@
 ## Conditioned SRTM DEM from HydroSHEDS (3 arcsec; 90m)
 
 External download from:
-http://www.civil.uwaterloo.ca/jmai/GRIP-GL/dem_HydroSHEDS-90m_GreatLakes.zip (577.5 MB)
+
+* DEM, flow direction and accumulation (3'', ~90m grid) in ASCII raster format<br>
+  http://www.civil.uwaterloo.ca/jmai/GRIP-GL/dem_HydroSHEDS-90m_GreatLakes.zip (577.5 MB)
+* Slope derived from DEM (3'', ~90m grid) in TIF format<br>
+  http://www.civil.uwaterloo.ca/jmai/GRIP-GL/slope_HydroSHEDS-90m_GreatLakes.tif_v1.1.zip (322.1 MB)
+* Aggregated slope to forcing grids in tabulated TXT format<br>
+  https://github.com/julemai/GRIP-E/blob/master/data/dem_HydroSHEDS-90m_GreatLakes/slope_HydroSHEDS-90m_GreatLakes_aggregated_v1.1.zip
+* Aggregated slope to forcing grids in NetCDF format<br>
+  https://github.com/julemai/GRIP-E/blob/master/data/dem_HydroSHEDS-90m_GreatLakes/slope_HydroSHEDS-90m_GreatLakes_aggregated_v1.1_RDRS-v2.nc <br>
+  https://github.com/julemai/GRIP-E/blob/master/data/dem_HydroSHEDS-90m_GreatLakes/slope_HydroSHEDS-90m_GreatLakes_aggregated_v1.1_WFDEI-GEM-CaPA.nc
+  
 
 1.a Data (ASCII raster format)
 
