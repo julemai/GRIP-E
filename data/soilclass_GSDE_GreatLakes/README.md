@@ -1,5 +1,19 @@
 ## Global Soil Dataset for Earth System Modeling (GSDE), 30 second (1 km) 
 
+External Download links:
+* Soil classes (1km) in ASCII raster format <br>
+  https://github.com/julemai/GRIP-E/blob/master/data/soilclass_GSDE_GreatLakes/rect_GSDE_soil_class.txt.zip
+* Soil classes (1km) in NetCDF format <br>
+  https://github.com/julemai/GRIP-E/blob/master/data/soilclass_GSDE_GreatLakes/rect_GSDE_soil_class.nc
+* Soil textures (sand, silt, clay, bulk density; 1km) in ASCII raster format <br>
+  https://github.com/julemai/GRIP-E/blob/master/data/soilclass_GSDE_GreatLakes/rect_GSDE_soil_texture.zip
+* Soil classses and textures aggregated to forcing grids in tabulated TXT format <br>
+  https://github.com/julemai/GRIP-E/blob/master/data/soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.1.zip
+* Soil classses and textures aggregated to forcing grids in NetCDF format <br>
+  https://github.com/julemai/GRIP-E/blob/master/data/soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.1_RDRS-v2.nc <br>
+  https://github.com/julemai/GRIP-E/blob/master/data/soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.1_WFDEI-GEM-CaPA.nc
+  
+
 ### 1.a Data (ASCII raster format; classification information given in separate file)
 
     Global Soil Dataset for Earth System Modeling, 30 second (1 km)   --> file: rect_GSDE_soil_class.txt
