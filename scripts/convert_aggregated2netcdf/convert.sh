@@ -32,13 +32,65 @@ pid=$$
 datapath="../../data/"
 
 convert_soil_GSDE=0
-convert_landcover_NACLMS=1
+convert_landcover_NACLMS=
+convert_slope_HydroSHEDS_90m=1
 
 
 grids='RDRS-v2 WFDEI-GEM-CaPA'
 
 
 for grid in ${grids} ; do
+
+    # -------------------
+    # convert slope derived from HydroSHEDS 90m DEM
+    # -------------------
+    if [[ ${convert_slope_HydroSHEDS_90m} -eq 1 ]] ; then
+	echo "Convert aggregated slope data derived from 90m HydroSHEDS DEM into ${grid} grid ..."
+
+	if [[ ${grid} == 'RDRS-v2' ]] ; then
+	    inputfile="${datapath}dem_HydroSHEDS-90m_GreatLakes/slope_HydroSHEDS-90m_GreatLakes_aggregated_v1.1/gl_slope_rdrs_v2.txt"
+	    gridfile="${datapath}meteo_forcing_RDRS-v2/grip-gl_rdrs-v2-gridonly.nc"
+	    legendsfile=""
+	    varinfofile="${datapath}dem_HydroSHEDS-90m_GreatLakes/slope_HydroSHEDS-90m_GreatLakes_aggregated_v1.1/variable_info.csv"
+	else
+	    if [[ ${grid} == 'WFDEI-GEM-CaPA' ]] ; then
+		inputfile="${datapath}dem_HydroSHEDS-90m_GreatLakes/slope_HydroSHEDS-90m_GreatLakes_aggregated_v1.1/gl_slope_wfdei_gem_capa.txt"
+		gridfile="${datapath}meteo_forcings_WFDEI-GEM-CaPA/grip-gl_wfdei-gem-capa_gridonly.nc"
+		legendsfile=""
+		varinfofile="${datapath}dem_HydroSHEDS-90m_GreatLakes/slope_HydroSHEDS-90m_GreatLakes_aggregated_v1.1/variable_info.csv"
+	    fi
+	fi
+
+	if [ ! -e ${inputfile} ]; then
+	    echo "Inputfile ${inputfile} does not exist!"
+	    exit
+	fi
+
+	if [ ! -e ${gridfile} ]; then
+	    echo "Grid defining file ${gridfile} does not exist!"
+	    exit
+	fi
+
+	if [[ ${legendsfile} != "" ]] ; then
+	    if [ ! -e ${legendsfile} ]; then
+		echo "File with legends ${legendsfile} does not exist!"
+		exit
+	    fi
+	fi
+
+	if [[ ${varinfofile} != "" ]] ; then
+	    if [ ! -e ${varinfofile} ]; then
+		echo "File with variable infos ${varinfofile} does not exist!"
+		exit
+	    fi
+	fi
+
+	outputfile=$( echo $( echo ${inputfile} | rev | cut -d '/' -f 2- | rev )"_${grid}.nc" )
+
+	echo "python aggregated2netcdf.py -i ${inputfile} -g ${gridfile} -o ${outputfile} -l ${varinfofile}"
+	python aggregated2netcdf.py -i ${inputfile} -g ${gridfile} -o ${outputfile} -l ${varinfofile}
+
+    fi
     
     # -------------------
     # convert soil classes of GSDE
