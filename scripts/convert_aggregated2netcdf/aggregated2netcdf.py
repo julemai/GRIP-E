@@ -279,15 +279,15 @@ for iline in range(nlines):
     res_lat = np.where( np.abs(grid_lat-lat_data[iline]) == np.min(np.abs(grid_lat-lat_data[iline])) )   # (array([337]), array([542]))
     res = list(set(res_lon[0]).intersection(res_lat[0])) + list(set(res_lon[1]).intersection(res_lat[1]))  # [337, 542]
 
-    print("res = ",res, "   --> ",row_data[iline],col_data[iline])
-    if (len(res) != 2) :
+    # print("res = ",res, "   --> ",row_data[iline],col_data[iline])
+    # if (len(res) != 2) :
 
-        print("iline   = ",iline)
-        print("res_lon = ",res_lon)
-        print("res_lat = ",res_lat)
-        print("res     = ",res)
-        print("NOT MATCHING! :(")
-        stop
+    #     print("iline   = ",iline)
+    #     print("res_lon = ",res_lon)
+    #     print("res_lat = ",res_lat)
+    #     print("res     = ",res)
+    #     print("NOT MATCHING! :(")
+    #     stop
     
     grid_row_idx = np.int(row_data[iline][0])   # res[0]
     grid_col_idx = np.int(col_data[iline][0])   # res[1]

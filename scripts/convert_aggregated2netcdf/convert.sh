@@ -31,9 +31,9 @@ pid=$$
 
 datapath="../../data/"
 
-convert_soil_GSDE=0
-convert_landcover_NACLMS=
-convert_slope_HydroSHEDS_90m=1
+convert_soil_GSDE=1
+convert_landcover_NACLMS=0
+convert_slope_HydroSHEDS_90m=0
 
 
 grids='RDRS-v2 WFDEI-GEM-CaPA'
@@ -99,16 +99,16 @@ for grid in ${grids} ; do
 	echo "Convert aggregated soil classes and texture based on GSDE into ${grid} grid ..."
 
 	if [[ ${grid} == 'RDRS-v2' ]] ; then
-	    inputfile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.1/GL_GSDE_usda_soil_class_rdrs_v2.txt"
+	    inputfile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.2/GL_GSDE_usda_soil_class_rdrs_v2.txt"
 	    gridfile="${datapath}meteo_forcing_RDRS-v2/grip-gl_rdrs-v2-gridonly.nc"
 	    legendsfile=""
-	    varinfofile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.1/variable_info.csv"
+	    varinfofile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.2/variable_info.csv"
 	else
 	    if [[ ${grid} == 'WFDEI-GEM-CaPA' ]] ; then
-		inputfile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.1/GL_GSDE_usda_soil_class_wfdei_gem_capa.txt"
+		inputfile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.2/GL_GSDE_usda_soil_class_wfdei_gem_capa.txt"
 		gridfile="${datapath}meteo_forcings_WFDEI-GEM-CaPA/grip-gl_wfdei-gem-capa_gridonly.nc"
 		legendsfile=""
-		varinfofile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.1/variable_info.csv"
+		varinfofile="${datapath}soilclass_GSDE_GreatLakes/soilclass_GSDE_GreatLakes_aggregated_v1.2/variable_info.csv"
 	    fi
 	fi
 
