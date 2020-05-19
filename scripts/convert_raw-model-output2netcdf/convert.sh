@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='GEM-Hydro'                   # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
+convert_models='SWAT-Guelph'                   # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
 #                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT-EPA SWAT-Guelph
 #                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-XGBoost
@@ -48,7 +48,7 @@ calvals='calibration'                        # [calibration validation]  # only 
 
 setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'                            # can be 1, 2, and/or 3
-convert_phase='1'                          # phase 0: uncalibrated, different phys. setups,
+convert_phase='0'                          # phase 0: uncalibrated, different phys. setups,
 #                                            # phase 1: calibrated,   different phys. setups,
 #                                            # phase 2: calibrated,   same phys. setups
 
