@@ -48,7 +48,7 @@ calvals='calibration'                        # [calibration validation]  # only 
 
 setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'                            # can be 1, 2, and/or 3
-convert_phase='0'                          # phase 0: uncalibrated, different phys. setups,
+convert_phase='1'                          # phase 0: uncalibrated, different phys. setups,
 #                                            # phase 1: calibrated,   different phys. setups,
 #                                            # phase 2: calibrated,   same phys. setups
 
