@@ -19,7 +19,7 @@
 # along with Juliane Mai's personal code library.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -e
+set -ex
 
 # This script converts all CSV streamflow gauge data files into NetCDF format.
 
@@ -34,17 +34,18 @@ pid=$$
 
 # tell me what to do
 convert_to_single_nc=0       # converts every csv/txt into an individual NetCDF 	   --> "<station-id>.nc"
-convert_to_merged_nc=0       # converts all   csv/txt's into one single NetCDF  	   --> "all_gauges.nc"
+convert_to_merged_nc=1       # converts all   csv/txt's into one single NetCDF  	   --> "all_gauges.nc"
 plot_merged_nc=0             # plots all stations of a NetCDF into pdf          	   --> "all_gauges.pdf"
-plot_grouped_gauges=1        # plots stations grouped by watersheds (only for great-lakes) --> "all_gauges_grouped.pdf"
+plot_grouped_gauges=0        # plots stations grouped by watersheds (only for great-lakes) --> "all_gauges_grouped.pdf"
 
 objectives="1 2"
-domain="great-lakes"  # lake-erie or great-lakes
+domain="lake-erie"           # lake-erie or great-lakes   # choose only ONE
+calvals="validation"         # calibration validation     # choose as many as you want
 
-if [[ ${domain} == "great-lakes" ]] ; then
-    calvals="calibration validation"
-else
-    calvals="None"
+
+    
+
+if [[ ${domain} == "lake-erie" ]] ; then
     plot_grouped_gauges=0
 fi
 
@@ -56,10 +57,16 @@ for calval in ${calvals} ; do
 	
     for objective in ${objectives} ; do
 
+	if [[ ${domain} == 'great-lakes' ]] ; then
+	    gaugeinfofile="../../data/objective_${objective}/${domain}/gauge_info.csv"
+	else
+	    gaugeinfofile="../../data/objective_${objective}/${domain}/${calval}/gauge_info.csv"
+	fi
+
 	input_files=""
 	filetype=""
 
-	ids=$( grep -v 'ID,Name,Lat,Lon,Country' ../../data/objective_${objective}/${domain}/gauge_info.csv | awk -F, '{ print $2 }' )
+	ids=$( grep -v 'ID,Name,Lat,Lon,Country' "${gaugeinfofile}" | awk -F, '{ print $2 }' )
 	echo ${ids}
 	for ii in ${ids} ; do
 	    
@@ -77,7 +84,7 @@ for calval in ${calvals} ; do
 		ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
 		
 		if [ ${convert_to_single_nc} == 1 ] ; then
-		    python convert_gauge_csv_2_netcdf.py --filetype USGS --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/${domain}/gauge_info.csv"
+		    python convert_gauge_csv_2_netcdf.py --filetype USGS --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "${gaugeinfofile}"
 		fi
 	    fi
 
@@ -95,14 +102,14 @@ for calval in ${calvals} ; do
 		ofile=$( echo "${tmp1}/netcdf/${tmp2}.nc")
 		
 		if [ ${convert_to_single_nc} == 1 ] ; then
-		    python convert_gauge_csv_2_netcdf.py --filetype WSC --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/${domain}/gauge_info.csv"
+		    python convert_gauge_csv_2_netcdf.py --filetype WSC --input_files ${ifile} --output_file ${ofile} --gaugeinfo_file "${gaugeinfofile}"
 		fi
 	    fi
 	done
 
 	if [ ${convert_to_merged_nc} == 1 ] ; then
 	    ofile=$( echo "${tmp1}/netcdf/all_gauges.nc")
-	    python convert_gauge_csv_2_netcdf.py --filetype "$(echo ${filetype})" --input_files "$(echo ${input_files})" --output_file ${ofile} --gaugeinfo_file "../../data/objective_${objective}/${domain}/gauge_info.csv"
+	    python convert_gauge_csv_2_netcdf.py --filetype "$(echo ${filetype})" --input_files "$(echo ${input_files})" --output_file ${ofile} --gaugeinfo_file "${gaugeinfofile}"
 	fi
 
 	if [ ${plot_merged_nc} == 1 ] ; then
@@ -125,6 +132,7 @@ if [ ${plot_grouped_gauges} == 1 ] ; then
     python plot_gauge_data_grouped.py -i ../../data/objective_1/${domain}/gauge_info.csv ../../data/objective_2/${domain}/gauge_info.csv -p ../../data/all_gauges_grouped_2000-2018.pdf -v Q -y 2000:2018
     pdfcrop ../../data/all_gauges_grouped_2000-2018.pdf
     mv      ../../data/all_gauges_grouped_2000-2018-crop.pdf ../../data/all_gauges_grouped_2000-2018.pdf
+    
 fi
 
 
