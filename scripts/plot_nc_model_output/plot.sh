@@ -42,15 +42,19 @@ plot_models='ML-XGBoost'                      # [    Lake Erie:   LBRM  HMETS-Ra
 
 domain='lake-erie'                                      # [lake-erie great-lakes]
 periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
-calvals='calibration'                                   # [calibration validation]  # only for Great Lakes # choose ONE only
+calvals='calibration'                                   # [calibration validation]  # choose ONE only
+
+# domain='lake-erie'                                      # [lake-erie great-lakes]
+# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+# calvals='validation'                                    # [calibration validation]  # choose ONE only
 
 # domain='great-lakes'                                      # [lake-erie great-lakes]
 # periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
-# calvals='calibration'                                     # [calibration validation]  # only for Great Lakes # choose ONE only
+# calvals='calibration'                                     # [calibration validation] # choose ONE only
 
 # domain='great-lakes'                                      # [lake-erie great-lakes]
 # periods='2001-01-01:2010-12-31'                           # time period(s) that should be used to derive NSE etc
-# calvals='validation'                                      # [calibration validation]  # only for Great Lakes # choose ONE only
+# calvals='validation'                                      # [calibration validation]  # choose ONE only
 
 plot_obj='1 2'                                            # can be 1, 2, and/or 3
 plot_phase='1'                                          # phase 0: uncalibrated, different phys. setups,
@@ -78,11 +82,8 @@ for calval in ${calvals} ; do
                     echo ''
                     echo 'Plot :: '${imodel}'  :: Objective #'${iobj}'  :: Phase '${iphase}'   :: Period '${period}'   :: '${calval}
 
-                    if [[ ( ${domain} == 'lake-erie' ) ]] ; then 
-                        basename="../../data/objective_${iobj}/${domain}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}"
-                    else
-                        basename="../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}"
-                    fi
+                    basename="../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}"
+                    
                     python plot_nc_model_output.py -a ${period} -i ${basename}.nc -p ${basename}_${period_str}.pdf
                     pdfcrop ${basename}_${period_str}.pdf
                     pdfsplit ${basename}_${period_str}-crop.pdf

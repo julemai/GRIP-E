@@ -33,31 +33,31 @@ pid=$$
 datapath="../data/"
 
 plot_obj='1 2'                                            # can be 1, 2, and/or 3
-plot_phase='1'                                            # phase 0: uncalibrated, different phys. setups,
+plot_phase='0'                                            # phase 0: uncalibrated, different phys. setups,
 #                                                         # phase 1: calibrated,   different phys. setups,
 #                                                         # phase 2: calibrated,   same phys. setups
 
 domain='lake-erie'                                        # [lake-erie, great-lakes]
-periods='2011-01-01:2014-12-31' # 2013-01-01:2014-12-31'     # time period(s) that should be used to derive NSE etc
+periods='2011-01-01:2014-12-31'                           # time period(s) that should be used to derive NSE etc
+calval='calibration'                                      # [calibration, validation]  # choose ONE only
 
-# domain='great-lakes'                                      # [lake-erie, great-lakes]
-# periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
-# calval='calibration'                                      # [calibration, validation]  # only for Great Lakes # choose ONE only
+# domain='lake-erie'                                      # [lake-erie, great-lakes]
+# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+# calval='validation'                                     # [calibration, validation]  # choose ONE only
+
+# domain='great-lakes'                                    # [lake-erie, great-lakes]
+# periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'   # time period(s) that should be used to derive NSE etc
+# calval='calibration'                                    # [calibration, validation]  # choose ONE only
 
 # domain='great-lakes'                                    # [lake-erie, great-lakes]
 # periods='2001-01-01:2010-12-31'                         # time period(s) that should be used to derive NSE etc
-# calval='validation'                                     # [calibration, validation]  # only for Great Lakes # choose ONE only
+# calval='validation'                                     # [calibration, validation]  # choose ONE only
 
 
 for iobj in ${plot_obj} ; do
 
-    if [[  ${domain} == 'great-lakes' ]] ; then
-        path="../../data/objective_${iobj}/${domain}/${calval}"
-        ext="_${calval}"
-    else
-        path="../../data/objective_${iobj}/${domain}/"
-        ext=""
-    fi
+    path="../../data/objective_${iobj}/${domain}/${calval}"
+    ext="_${calval}"
 
     for iphase in ${plot_phase} ; do
 
