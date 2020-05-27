@@ -25,79 +25,84 @@ from __future__ import print_function
 #    ------------
 #    LBRM
 #    ------------
-#    python convert_raw_to_netcdf.py -m LBRM -i ../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.csv -o ../../data/objective_1/model/LBRM/lbrm_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+#    python convert_raw_to_netcdf.py -m LBRM -i ../../data/objective_1/lake-erie/calibration/model/LBRM/lbrm_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/LBRM/lbrm_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
 #
 #    ------------
 #    VIC
 #    ------------
-#    python convert_raw_to_netcdf.py -m VIC -i ../../data/objective_1/model/VIC/vic_phase_0_objective_1.csv -o ../../data/objective_1/model/VIC/vic_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/VIC/subid2gauge.csv
+#    python convert_raw_to_netcdf.py -m VIC -i ../../data/objective_1/lake-erie/calibration/model/VIC/vic_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/VIC/vic_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/VIC/subid2gauge.csv
 
 #    ------------
 #    VIC-GRU
 #    ------------
-#    python convert_raw_to_netcdf.py -m VIC-GRU -i ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.csv -o ../../data/objective_1/model/VIC-GRU/vic-gru_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/VIC-GRU/subid2gauge.csv
+#    python convert_raw_to_netcdf.py -m VIC-GRU -i ../../data/objective_1/lake-erie/calibration/model/VIC-GRU/vic-gru_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/VIC-GRU/vic-gru_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/VIC-GRU/subid2gauge.csv
 
 #    ------------
 #    GEM-Hydro
 #    ------------
-#    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+#    python convert_raw_to_netcdf.py -m GEM-Hydro -i ../../data/objective_1/lake-erie/calibration/model/GEM-Hydro/gem-hydro_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/GEM-Hydro/gem-hydro_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
 
 #    ------------
 #    -- Lake Erie   :: 'ML-ConvLSTM' or 'ML-ConvLSTM-DEM' or 'ML-ConvLSTM-LC' or 'ML-ConvLSTM-LC-DEM' or 'ML-LinReg' or 'ML-XGBoost'    
 #    -- Great Lakes :: 'ML-EA-LSTM' or 'ML-LSTM'
 #    ------------
-#    python convert_raw_to_netcdf.py -m ML-ConvLSTM-w-LC -i ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.csv -o ../../data/objective_1/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+#    python convert_raw_to_netcdf.py -m ML-ConvLSTM-w-LC -i ../../data/objective_1/lake-erie/calibration/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/ML-ConvLSTM-w-LC/ml-convlstm-w-lc_phase_1_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
 
 #    ------------
 #    HYPE
 #    ------------
-#    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+#    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
+
+#    ------------
+#    HYMOD
+#    ------------
+#    python convert_raw_to_netcdf.py -m HYMOD -i ../../data/objective_1/lake-erie/calibration/model/HYMOD/hymod_phase_0_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/HYMOD/hymod_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
 
 #    ------------
 #    HMETS-Raven-lp
 #    ------------
-#    python convert_raw_to_netcdf.py -m HMETS-Raven-lp -i ../../data/objective_1/model/HMETS-Raven-lp/raven-hmets-lp_phase_1_objective_1_ -o ../../data/objective_1/model/HMETS-Raven-lp/raven-hmets-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/HMETS-Raven-lp/subid2gauge.csv -s julie
+#    python convert_raw_to_netcdf.py -m HMETS-Raven-lp -i ../../data/objective_1/lake-erie/calibration/model/HMETS-Raven-lp/raven-hmets-lp_phase_1_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/HMETS-Raven-lp/raven-hmets-lp_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/HMETS-Raven-lp/subid2gauge.csv -s julie
 
 #    ------------
 #    Raven-blended
 #    ------------
-#    python convert_raw_to_netcdf.py -m Raven-blended -i ../../data/objective_1/model/Raven-blended/raven-blended_phase_1_objective_1_ -o ../../data/objective_1/model/Raven-blended/raven-blended_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/Raven-blended/subid2gauge.csv -s julie
+#    python convert_raw_to_netcdf.py -m Raven-blended -i ../../data/objective_1/lake-erie/calibration/model/Raven-blended/raven-blended_phase_1_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/Raven-blended/raven-blended_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/Raven-blended/subid2gauge.csv -s julie
 
 #    ------------
 #    GR4J-Raven-lp
 #    ------------
-#    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1_ -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/GR4J-Raven-lp/subid2gauge.csv -s julie
-#    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/model/GR4J-Raven/raven-gr4j-lp_phase_0_objective_1.csv -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -s hongren
+#    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven-lp/subid2gauge.csv -s julie
+#    python convert_raw_to_netcdf.py -m GR4J-Raven-lp -i ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven/raven-gr4j-lp_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven-lp/raven-gr4j-lp_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -s hongren
 
 #    ------------
 #    GR4J-Raven-sd
 #    ------------
-#    python convert_raw_to_netcdf.py -m GR4J-Raven-sd -i ../../data/objective_1/model/GR4J-Raven-sd/raven-gr4j-sd_phase_0_objective_1_ -o ../../data/objective_1/model/GR4J-Raven-lp/raven-gr4j-sd_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/GR4J-Raven-sd/subid2gauge.csv -s julie
+#    python convert_raw_to_netcdf.py -m GR4J-Raven-sd -i ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven-sd/raven-gr4j-sd_phase_0_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven-lp/raven-gr4j-sd_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/GR4J-Raven-sd/subid2gauge.csv -s julie
 
 #    ------------
 #    SWAT-EPA
 #    ------------
-#    python convert_raw_to_netcdf.py -m SWAT-EPA -i ../../data/objective_1/model/SWAT-EPA/swat-epa_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT-EPA/swat-epa_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT-EPA/subid2gauge.csv
+#    python convert_raw_to_netcdf.py -m SWAT-EPA -i ../../data/objective_1/lake-erie/calibration/model/SWAT-EPA/swat-epa_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/SWAT-EPA/swat-epa_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/SWAT-EPA/subid2gauge.csv
 
 #    ------------
 #    SWAT-Guelph
 #    ------------
-#    python convert_raw_to_netcdf.py -m SWAT-Guelph -i ../../data/objective_1/model/SWAT-Guelph/swat-guelph_phase_0_objective_1.csv -o ../../data/objective_1/model/SWAT-Guelph/swat-guelph_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/SWAT-Guelph/subid2gauge.csv
+#    python convert_raw_to_netcdf.py -m SWAT-Guelph -i ../../data/objective_1/lake-erie/calibration/model/SWAT-Guelph/swat-guelph_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/SWAT-Guelph/swat-guelph_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/SWAT-Guelph/subid2gauge.csv
 
 #    ------------
 #    WATFLOOD
 #    ------------
-#    python convert_raw_to_netcdf.py -m WATFLOOD -i ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.csv -o ../../data/objective_1/model/WATFLOOD/watflood_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv
+#    python convert_raw_to_netcdf.py -m WATFLOOD -i ../../data/objective_1/lake-erie/calibration/model/WATFLOOD/watflood_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/WATFLOOD/watflood_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
 
 #    ------------
 #    MESH-SVS
 #    ------------
-#    python convert_raw_to_netcdf.py -m MESH-SVS -i ../../data/objective_1/model/MESH-SVS/mesh-svs_phase_0_objective_1.csv -o ../../data/objective_1/model/MESH-SVS/mesh-svs_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/MESH-SVS/subid2gauge.tb0
+#    python convert_raw_to_netcdf.py -m MESH-SVS -i ../../data/objective_1/lake-erie/calibration/model/MESH-SVS/mesh-svs_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/MESH-SVS/mesh-svs_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/MESH-SVS/subid2gauge.tb0
 
 #    ------------
 #    MESH-CLASS
 #    ------------
-#    python convert_raw_to_netcdf.py -m MESH-CLASS -i ../../data/objective_1/model/MESH-CLASS/mesh-class_phase_0_objective_1.csv -o ../../data/objective_1/model/MESH-CLASS/mesh-class_phase_0_objective_1.nc -a ../../data/objective_1/gauge_info.csv -b ../../data/objective_1/model/MESH-CLASS/subid2gauge.tb0
+#    python convert_raw_to_netcdf.py -m MESH-CLASS -i ../../data/objective_1/lake-erie/calibration/model/MESH-CLASS/mesh-class_phase_0_objective_1.csv -o ../../data/objective_1/lake-erie/calibration/model/MESH-CLASS/mesh-class_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv -b ../../data/objective_1/lake-erie/calibration/model/MESH-CLASS/subid2gauge.tb0
 
 # -----------------------
 # add subolder scripts/lib to search path
@@ -116,6 +121,7 @@ import datetime                # converting dates
 import netCDF4 as nc           # NetCDF writing
 import glob                    # for file listing
 import xarray as xr
+import scipy.io                # to read *.mat files
 
 #import netcdf4     as     nc4         # in lib/
 from fread         import fread        # in lib/
@@ -134,7 +140,7 @@ parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormat
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
 parser.add_argument('-i', '--input_file', action='store',
                     default=input_file, dest='input_file', metavar='input_file', nargs=1,
-                    help='Name of input file (raw model output file; for HYPE basename (filename to be expected to be basename<gaugeId>.txt).')
+                    help='Name of input file (raw model output file; for HYPE, HYMOD, and Raven basename (filename to be expected to be basename<gaugeId>.txt).')
 parser.add_argument('-o', '--output_file', action='store',
                     default=output_file, dest='output_file', metavar='output_file', nargs=1,
                     help='Name of output file (NetCDF file).')
@@ -168,7 +174,8 @@ if ( (model != 'LBRM')                 and
      (model != 'VIC')                  and
      (model != 'VIC-GRU')              and
      (model != 'GEM-Hydro')            and
-     (model != 'HYPE')                 and    
+     (model != 'HYPE')                 and
+     (model != 'HYMOD')                and  
      (model != 'ML-ConvLSTM')          and          # Lake Erie
      (model != 'ML-ConvLSTM-DEM')      and          # Lake Erie
      (model != 'ML-ConvLSTM-LC')       and          # Lake Erie
@@ -284,6 +291,45 @@ if (model == 'HYPE'):
 
     model_data  = np.transpose(np.array(model_data))
     model_dates = np.transpose(np.array(model_dates))
+
+
+# read model output file
+if (model == 'HYMOD'):
+    # ---------------
+    # read model outputs
+    # - every gauge is in a separate file (MAT)
+    # ---------------
+    input_files    = glob.glob(input_file+"*.mat")
+    model_stations = [ ii.split(input_file)[1].split('.')[0] for ii in input_files ]
+    model_data     = [ [] for ii in input_files ]
+    model_dates    = None
+    for ii,iinput_file in enumerate(input_files):
+
+        # read matlab file
+        mat = scipy.io.loadmat(iinput_file)
+
+        model_data[ii]  = mat['hymod_result']['simulated_flow'][0][0][:,0] 
+
+        # make sure all model dates are same in all files
+        if model_dates is None:
+            # save first file's dates
+            model_dates = mat['hymod_result']['simulation_period'][0][0]  # formatted as, e.g. 01-Jan-2010
+            model_dates = [ datetime.datetime.strptime(iii, '%d-%b-%Y') for iii in model_dates ]
+        else:
+            # check if dates are same as already saved
+            tmp_dates = mat['hymod_result']['simulation_period'][0][0]  # formatted as, e.g. 01-Jan-2010
+            tmp_dates = [ datetime.datetime.strptime(iii, '%d-%b-%Y') for iii in tmp_dates ]
+            if not np.all(tmp_dates == model_dates):
+                print('Time steps first file: ',input_files[0])
+                print('     ',model_dates)
+                print('Time steps current file: ',input_files[ii])
+                print('     ',tmp_dates)
+                raise ValueError('Time step in files must be all the same!')
+            
+
+    model_data  = np.transpose(np.array(model_data))
+    model_dates = np.transpose(np.array(model_dates))
+    
 
 # read model output file
 if (model == 'GR4J-Raven-lp' or model == 'GR4J-Raven-sd' or model == 'HMETS-Raven-lp' or model == 'Raven-blended'):

@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='ML-XGBoost'                   # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
+convert_models='HYMOD'                      # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE HYMOD
 #                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT-EPA SWAT-Guelph
 #                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-LSTM ML-XGBoost
@@ -48,7 +48,7 @@ calvals='calibration'                        # [calibration validation]
 
 setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'                            # can be 1, 2, and/or 3
-convert_phase='1'                          # phase 0: uncalibrated, different phys. setups,
+convert_phase='0'                            # phase 0: uncalibrated, different phys. setups,
 #                                            # phase 1: calibrated,   different phys. setups,
 #                                            # phase 2: calibrated,   same phys. setups
 
@@ -100,7 +100,7 @@ for calval in ${calvals} ; do
                     fi
                 fi
 
-                if [[ ( ${imodel} == 'mHM-UFZ' ) || ( ${imodel} == 'mHM-Waterloo' ) || ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie')  || ( ${imodel} == 'Raven-blended' && ${setup_by} == 'julie' ) ]] ; then
+                if [[ ( ${imodel} == 'mHM-UFZ' ) || ( ${imodel} == 'mHM-Waterloo' ) || ( ${imodel} == 'HYPE' )  || ( ${imodel} == 'HYMOD' )  || ( ${imodel} == 'GR4J-Raven-lp' && ${setup_by} == 'julie') || ( ${imodel} == 'GR4J-Raven-sd' && ${setup_by} == 'julie' ) || ( ${imodel} == 'HMETS-Raven-lp' && ${setup_by} == 'julie')  || ( ${imodel} == 'Raven-blended' && ${setup_by} == 'julie' ) ]] ; then
                     input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}_
                 else
                     input_csv_file=../../data/objective_${iobj}/${domain}/${calval}/model/${imodel}/${imodel_lower}_phase_${iphase}_objective_${iobj}.csv

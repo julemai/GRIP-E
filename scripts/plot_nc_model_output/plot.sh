@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='ML-XGBoost'                      # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE
+plot_models='HYMOD'                         # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE HYMOD
 #                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT-EPA SWAT-Guelph
 #                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-LSTM ML-XGBoost
@@ -57,7 +57,7 @@ calvals='calibration'                                   # [calibration validatio
 # calvals='validation'                                      # [calibration validation]  # choose ONE only
 
 plot_obj='1 2'                                            # can be 1, 2, and/or 3
-plot_phase='1'                                          # phase 0: uncalibrated, different phys. setups,
+plot_phase='0'                                          # phase 0: uncalibrated, different phys. setups,
 #                                                         # phase 1: calibrated,   different phys. setups,
 #                                                         # phase 2: calibrated,   same phys. setups
 

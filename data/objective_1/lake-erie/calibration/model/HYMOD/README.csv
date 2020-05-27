@@ -1,6 +1,0 @@
-import scipy.io
-
-mat = scipy.io.loadmat('hymod_phase_0_objective_1.mat')
-Qsim = mat['RESULT']['Qsim']
-
-mat['RESULT']['Time']
