@@ -19,7 +19,7 @@
 # along with Juliane Mai's personal code library.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-set -ex
+set -e
 
 # This script converts all CSV streamflow gauge data files into NetCDF format.
 
@@ -66,7 +66,7 @@ for calval in ${calvals} ; do
 	input_files=""
 	filetype=""
 
-	ids=$( grep -v 'ID,Name,Lat,Lon,Country' "${gaugeinfofile}" | awk -F, '{ print $2 }' )
+	ids=$( grep -i -v 'ID,Name,Lat,Lon' "${gaugeinfofile}" | awk -F, '{ print $2 }' )
 	echo ${ids}
 	for ii in ${ids} ; do
 	    
