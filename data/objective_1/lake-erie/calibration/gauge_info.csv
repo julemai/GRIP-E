@@ -14,7 +14,7 @@ NO,ID,Name,Lat,Lon,Country,Drainage_area,Regulation,Regulated/Natural_Period,Ref
 13,02GG006,BEAR CREEK NEAR PETROLIA,42.90583038,-82.11911011,CA,249,Natural,All,,1966-2017,52, STCLAIR,,,,,Obj1,C
 14,02GG009,BEAR CREEK BELOW BRIGDEN,42.81203079,-82.29842377,CA,536,Natural,All,,1981-2017,37, STCLAIR,,,,,Obj1&2,C
 15,02GG013,BLACK CREEK NEAR BRADSHAW,42.76243973,-82.25921631,CA,213,Natural,1900-End,,2006-2017,12, STCLAIR,,,,,Obj1&2,C
-16,04159492,BLACK RIVER NEAR JEDDO MI,43.152527,-82.624092,US,1197.787,Natural,,Non-ref,1944-2018,75, STCLAIR,FALSE,TRUE,Diurnal fluctuation, principally during low flow; caused by an unknown source upstream from station.,upstream small towns; forested riparian; some channelization in hw,Obj1,C
+16,04159492,BLACK RIVER NEAR JEDDO MI,43.152527,-82.624092,US,1197.787,Natural,,Non-ref,1944-2018,75, STCLAIR,FALSE,TRUE,Diurnal fluctuation; principally during low flow; caused by an unknown source upstream from station.,upstream small towns; forested riparian; some channelization in hw,Obj1,C
 17,04159900,MILL CREEK NEAR AVOCA MI,43.054471,-82.734649,US,438.7401,Natural,,Non-ref,1963-2018,56, STCLAIR,FALSE,TRUE,,upstrm town; intensive ag & channelization in hw,Obj1&2,C
 18,04160600,BELLE RIVER AT MEMPHIS MI,42.900862,-82.769091,US,390.8754,Natural,,Non-ref,1962-2018,57, STCLAIR,FALSE,TRUE,,upstrm channelizatoin & ag drains,Obj1&2,C
 19,04161820,CLINTON RIVER AT STERLING HEIGHTS MI,42.614478,-83.026593,US,802.8077,Natural,,Non-ref,1978-2018,40, STCLAIR,FALSE,FALSE,,suburban,Obj1,C
