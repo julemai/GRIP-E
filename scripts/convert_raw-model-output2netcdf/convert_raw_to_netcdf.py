@@ -54,9 +54,9 @@ from __future__ import print_function
 #    python convert_raw_to_netcdf.py -m HYPE -i ../../data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_0_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
 
 #    ------------
-#    HYMOD
+#    HYMOD2-DS
 #    ------------
-#    python convert_raw_to_netcdf.py -m HYMOD -i ../../data/objective_1/lake-erie/calibration/model/HYMOD/hymod_phase_0_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/HYMOD/hymod_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
+#    python convert_raw_to_netcdf.py -m HYMOD2-DS -i ../../data/objective_1/lake-erie/calibration/model/HYMOD2-DS/hymod_phase_0_objective_1_ -o ../../data/objective_1/lake-erie/calibration/model/HYMOD2-DS/hymod_phase_0_objective_1.nc -a ../../data/objective_1/lake-erie/calibration/gauge_info.csv
 
 #    ------------
 #    HMETS-Raven-lp
@@ -140,7 +140,7 @@ parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormat
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
 parser.add_argument('-i', '--input_file', action='store',
                     default=input_file, dest='input_file', metavar='input_file', nargs=1,
-                    help='Name of input file (raw model output file; for HYPE, HYMOD, and Raven basename (filename to be expected to be basename<gaugeId>.txt).')
+                    help='Name of input file (raw model output file; for HYPE, HYMOD2-DS, and Raven basename (filename to be expected to be basename<gaugeId>.txt).')
 parser.add_argument('-o', '--output_file', action='store',
                     default=output_file, dest='output_file', metavar='output_file', nargs=1,
                     help='Name of output file (NetCDF file).')
@@ -175,7 +175,7 @@ if ( (model != 'LBRM')                 and
      (model != 'VIC-GRU')              and
      (model != 'GEM-Hydro')            and
      (model != 'HYPE')                 and
-     (model != 'HYMOD')                and  
+     (model != 'HYMOD2-DS')            and  
      (model != 'ML-ConvLSTM')          and          # Lake Erie
      (model != 'ML-ConvLSTM-DEM')      and          # Lake Erie
      (model != 'ML-ConvLSTM-LC')       and          # Lake Erie
@@ -294,7 +294,7 @@ if (model == 'HYPE'):
 
 
 # read model output file
-if (model == 'HYMOD'):
+if (model == 'HYMOD2-DS'):
     # ---------------
     # read model outputs
     # - every gauge is in a separate file (MAT)
