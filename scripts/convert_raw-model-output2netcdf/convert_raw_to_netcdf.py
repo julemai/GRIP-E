@@ -608,10 +608,13 @@ if (model == 'VIC-GRU' or model == 'VIC'):
 
         if not('observed' in isubbasin):
             subbasin_ID = isubbasin.split(' ')[0].split('sub')[1]
-            idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
-            gauge_id = mapping[idx,1]
 
-            model_stations[ii] = gauge_id
+            if len(np.where(mapping[:,0]==subbasin_ID)[0]) > 0:
+                # column is an actual gauge
+                idx = np.where(mapping[:,0]==subbasin_ID)[0][0]
+                gauge_id = mapping[idx,1]
+
+                model_stations[ii] = gauge_id
 
 if (model == 'SWAT-EPA'):
 
