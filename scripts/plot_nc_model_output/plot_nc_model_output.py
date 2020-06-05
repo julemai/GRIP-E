@@ -340,10 +340,11 @@ ifig = 0
 # stations that are in objective 1 and 2:
 # '02GB007', '02GC002', '02GC018', '02GE007', '02GG003', '02GG009', '02GG013', '04159900', '04160600', '04165500', '04177000', '04208504', '04213000'
 sel_stations = ['02GC002','02GG003','04160600'] #['02GG006','04207200','04208504'] #['02GG002','02GG003','04196800']
-sel_stations = ['02GC002','02GG003','04160600',   # stations Lake Erie
-                '02LA007',                        # calibration station for Great Lakes (instead of 04160600)
-                '02AB021', '02GB007', '02CF011',  # validation stations
-                '04067958', '04074950']           # stations for incomplete LBRM-MG and LBRM-ML-LSTM
+sel_stations = ['02GC002','02GG003','04160600',     # stations Lake Erie (calibration)
+                '04167000', '04168000', '04185000', # stations for Lake Erie (validation)
+                '02LA007',                          # calibration station for Great Lakes (instead of 04160600)
+                '02AB021', '02GB007', '02CF011',    # validation stations
+                '04067958', '04074950']             # stations for incomplete LBRM-MG and LBRM-ML-LSTM
                 
 
 # filter only stations that are actually available
