@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-convert_models='HYMOD2-DS'                  # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE HYMOD2-DS
+convert_models='SWAT-Guelph'                 # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE HYMOD2-DS
 #                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT-EPA SWAT-Guelph
 #                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-LSTM ML-XGBoost
@@ -44,11 +44,12 @@ convert_models='HYMOD2-DS'                  # [    Lake Erie:   LBRM  HMETS-Rave
 # calvals='calibration validation' # validation'             # [calibration validation]  # only for Great Lakes
 
 domain='lake-erie'                           # [lake-erie great-lakes]
-calvals='calibration'                        # [calibration validation] 
+calvals='calibration'                        # [calibration validation]
+calvals='validation'                         # [calibration validation] 
 
 setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'                            # can be 1, 2, and/or 3
-convert_phase='0 1'                          # phase 0: uncalibrated, different phys. setups,
+convert_phase='1'                            # phase 0: uncalibrated, different phys. setups,
 #                                            # phase 1: calibrated,   different phys. setups,
 #                                            # phase 2: calibrated,   same phys. setups
 
@@ -59,7 +60,7 @@ for calval in ${calvals} ; do
         imodel_lower=$( echo "$imodel" | tr '[:upper:]' '[:lower:]' )
 	echo ""
 	echo "-------------------------"
-        echo ${imodel_lower}
+        echo "${imodel_lower} (${calval})"
 	echo "-------------------------"
 
         for iobj in ${convert_obj} ; do

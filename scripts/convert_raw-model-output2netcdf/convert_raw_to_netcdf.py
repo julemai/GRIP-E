@@ -686,11 +686,25 @@ if (model == 'SWAT-Guelph'):
     # ---------------
     # read mapping info subbasin ID --> gauge station ID
     # ---------------
-    mapping = fsread(mapping_subbasinID_gaugeID,skip=1,snc=[0,1,2])
+    header  = fsread(mapping_subbasinID_gaugeID,skip=1,header=True)
+    if len(header) == 3:
+        # Subbasin,Gauge,Column_name_output
+        mapping = fsread(mapping_subbasinID_gaugeID,skip=1,snc=[0,1,2])
+        has_weight = False
+    elif len(header) == 4:
+        # Subbasin,Gauge,Column_name_output,weight
+        mapping = fsread(mapping_subbasinID_gaugeID,skip=1,snc=[0,1,2,3])
+        has_weight = True
+    else:
+        raise ValueError('Not sure about the header of the inputfile given with -b option.')
+    
     mapping = np.array(mapping)
-    mapping[:,0] = np.array( [ii.strip() for ii in mapping[:,0]] )   # remove trailing blanks: subbasin ID
-    mapping[:,1] = np.array( [ii.strip() for ii in mapping[:,1]] )   # remove trailing blanks: USGS/WSC gauge ID
-    mapping[:,2] = np.array( [ii.strip() for ii in mapping[:,2]] )   # remove trailing blanks: variable name in output file
+    mapping[:,0] = np.array( [ii.strip() for ii in mapping[:,0]] )       # remove trailing blanks: subbasin ID
+    mapping[:,1] = np.array( [ii.strip() for ii in mapping[:,1]] )       # remove trailing blanks: USGS/WSC gauge ID
+    mapping[:,2] = np.array( [ii.strip() for ii in mapping[:,2]] )       # remove trailing blanks: variable name in output file
+    if has_weight:
+        mapping[:,3] = np.array( [ii.strip() for ii in mapping[:,3]] )   # remove trailing blanks: variable name in output file
+        
     nstations = np.shape(mapping)[0]
     
     # ---------------
@@ -717,7 +731,10 @@ if (model == 'SWAT-Guelph'):
     model_stations_all = np.array(np.array(tmp[:,0],np.int),dtype=str)   # this is subbasin IDs
     ntime = np.shape(np.where(model_stations_all==model_stations_all[0])[0])[0]
 
-    model_data = np.ones([ntime,nstations],dtype=np.float32) * -9999.9
+    if has_weight:
+        model_data = np.ones([ntime,nstations],dtype=np.float32) * 0.0   # will be added using the weight factor
+    else:
+        model_data = np.ones([ntime,nstations],dtype=np.float32) * -9999.0   # will be added using the weight factor
     model_stations = list(np.array(['None']*nstations,dtype=str))
     for istation,station in enumerate([ str(int(ii)) for ii in mapping[:,0] ]):
 
@@ -729,8 +746,12 @@ if (model == 'SWAT-Guelph'):
         if ndat != ntime:
             print('ERROR :: station: ',station, '   # of time steps = ',ndat, '         expected # of time steps = ',ntime)
             stop
-        
-        model_data[:,istation] = imodel_data
+
+        if has_weight:
+            print('Use SWAT reach '+station+' with weight '+mapping[istation,3]+' to derive streamflow at gauge '+mapping[istation,1])
+            model_data[:,istation] += imodel_data * np.float(mapping[istation,3])
+        else:
+            model_data[:,istation]  = imodel_data
         model_stations[istation] = station   # this is subbasin IDs
 
         doy  = tmp[idx,1]  # MON = day of the year (1...366)
