@@ -95,6 +95,10 @@ if [ -e compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calib
     convert -density 300 -quality 95 compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.png
 fi
 
+python barchart.py -p barchart.pdf
+pdfcrop barchart.pdf
+mv barchart-crop.pdf barchart.pdf
+
 echo ''
 echo 'Done.'
 echo ''
