@@ -98,6 +98,8 @@ dicts_qsim    = {}
 dicts_info    = {}  # station info, i.e. station long name
 
 for iinput_file,input_file in enumerate(input_files):
+
+    print("   Reading: ",input_file)
     
     # simulated streamflow
     data_sim = xr.open_dataset(input_file)
@@ -106,7 +108,8 @@ for iinput_file,input_file in enumerate(input_files):
     data_obs = xr.open_dataset(os.path.dirname(input_file)+'/../../netcdf/all_gauges.nc')
 
     # sort all according to observations
-    idx_station = [ list(data_sim.station_id).index(ii) for ii in data_obs.station_id ]
+    idx_station = [ list(data_sim.station_id).index(ii) if (ii in list(data_sim.station_id)) else None for ii in data_obs.station_id  ]
+    print("   Station idx: ",idx_station)
     idx_time    = [ np.where(data_obs.time==sim_tt)[0][0] for sim_tt in data_sim.time ]
 
     # cut out time period requested
@@ -114,6 +117,7 @@ for iinput_file,input_file in enumerate(input_files):
         start = time_period.split(':')[0]
         end   = time_period.split(':')[1]
         idx_period = np.where((data_sim.time>=np.datetime64(start)).data & (data_sim.time<=np.datetime64(end)).data)[0]
+    ntime = len(idx_period)
 
     # some stuff for labels in plots
     var_longname = data_obs['Q'].long_name
@@ -132,28 +136,42 @@ for iinput_file,input_file in enumerate(input_files):
     nstations    = len(data_obs.station_id)
     for istation in range(nstations):
         stat_id = str(data_obs.station_id[istation].data)
-        Qobs    = data_obs.Q[istation,idx_time]
-        Qsim    = data_sim.Q[idx_station[istation],:]
         dates   = data_sim.time.data
+        Qobs    = data_obs.Q[istation,idx_time]
+        if not(idx_station[istation] is None):
+            Qsim    = data_sim.Q[idx_station[istation],:]
         
         if time_period != '':
-            Qobs  = Qobs[idx_period]
-            Qsim  = Qsim[idx_period]
             dates = dates[idx_period]
-        nse     = float(errormeasures.nse(Qobs,Qsim).data)
-        rmse    = float(errormeasures.rmse(Qobs,Qsim).data)
-        pbias   = float(errormeasures.pbias(Qobs,Qsim).data)
-        ttidx = np.where((Qsim > 0.0) & (Qobs > 0.0))[0]
-        lognse  = float(errormeasures.nse(np.log(Qobs[ttidx]),np.log(Qsim[ttidx])).data)
-        sqrtnse = float(errormeasures.nse(np.sqrt(Qobs),np.sqrt(Qsim)).data)
-        
+            Qobs  = Qobs[idx_period]
+            if not(idx_station[istation] is None):
+                Qsim  = Qsim[idx_period]
+
+        if not(idx_station[istation] is None):
+            nse     = float(errormeasures.nse(Qobs,Qsim).data)
+            rmse    = float(errormeasures.rmse(Qobs,Qsim).data)
+            pbias   = float(errormeasures.pbias(Qobs,Qsim).data)
+            ttidx   = np.where((Qsim > 0.0) & (Qobs > 0.0))[0]
+            lognse  = float(errormeasures.nse(np.log(Qobs[ttidx]),np.log(Qsim[ttidx])).data)
+            sqrtnse = float(errormeasures.nse(np.sqrt(Qobs),np.sqrt(Qsim)).data)
+        else:
+            nse     = -9999.0
+            rmse    = -9999.0 
+            pbias   = -9999.0
+            ttidx   = -9999.0
+            lognse  = -9999.0
+            sqrtnse = -9999.0
+            
         dict_nse[stat_id]     = nse
         dict_rmse[stat_id]    = rmse
         dict_pbias[stat_id]   = pbias
         dict_lognse[stat_id]  = lognse
         dict_sqrtnse[stat_id] = sqrtnse
         dict_qobs[stat_id]    = Qobs.data
-        dict_qsim[stat_id]    = Qsim.data
+        if not(idx_station[istation] is None):
+            dict_qsim[stat_id]    = Qsim.data
+        else:
+            dict_qsim[stat_id]    = Qobs.data * 0.0 + -9999.0      
         # convert from numpy.datetime64 to datetime.datetime
         dict_dates[stat_id]   = np.array([ pd.Timestamp(itime).to_pydatetime() for itime in dates ])
         # station long name
@@ -371,7 +389,7 @@ nse_results = np.array([ [ dicts_nse[imodel][igauge] for igauge in gauges ] for 
 
 
 # median NSE
-median_NSE = np.array([ np.median(nse_results[imodel,:]) for imodel in np.arange(nmodels) ])
+median_NSE = np.array([ np.median(nse_results[imodel,:][nse_results[imodel,:]!=-9999.]) for imodel in np.arange(nmodels) ])
 
 # truncation of really bad results
 nse_results_truncated = copy.deepcopy(nse_results)
@@ -379,7 +397,7 @@ min_nse = 0.0
 max_nse = 0.2 * (np.int(np.max(nse_results)*5.0)+1)   # closest to [..., 0.6, 0.8, 1.0] to spread colorbar a bit
 max_nse = 1.0
 # print('max_nse = ',max_nse)
-nse_results_truncated[np.where(nse_results_truncated < min_nse)] = min_nse  # NSE will be truncated to min_nse
+nse_results_truncated[np.where((nse_results_truncated < min_nse) & (nse_results_truncated != -9999.))] = min_nse  # NSE will be truncated to min_nse # But leave NODATA
 
 
 [ax0_x, ax0_y, ax0_w, ax0_h] = [0.2,0.1,0.01,0.01]
@@ -409,6 +427,8 @@ ax1.set_yticks([]) ### Hides ticks
 
 # Cross-Validation: Sort the matrix new
 nse_results_sort = copy.deepcopy(nse_results_truncated)
+nse_results_sort[np.where((nse_results_sort == -9999.))] = np.nan    # set missing stations to NAN
+
 # Sort columns
 idx2             = Z2['leaves']     ### apply the clustering for the array-dendrograms to the actual matrix data
 nse_results_sort = nse_results_sort[:,idx2]
@@ -442,15 +462,15 @@ sub.set_yticklabels(models[idx1])
 
 
 # label text for median NSE
-sub.text(  ngauges+0.5, nmodels-0.5, 'median NSE',
-                        ha = 'left', va = 'bottom', rotation=90,
+sub.text(  ngauges*(1+0.025/0.8), nmodels-0.5, 'median NSE',
+                        ha = 'center', va = 'bottom', rotation=90,
                         fontsize=textsize )
     
 # text for median NSE values
 for imodel in np.arange(nmodels):
     # print("y: ",imodel,"   NSE: ",astr(median_NSE[imodel],prec=2))
-    sub.text(  ngauges, imodel, astr(median_NSE[imodel],prec=2),
-                        ha = 'left', va = 'center',
+    sub.text(   ngauges*(1+0.05/0.8), imodel, astr(median_NSE[imodel],prec=2),
+                        ha = 'right', va = 'center',
                         fontsize=textsize )
 
 # draw line after model groups
@@ -492,8 +512,8 @@ pbias_results = np.array([ [ dicts_pbias[imodel][igauge] for igauge in gauges ] 
 
 
 # median PBIAS
-median_PBIAS = np.array([ np.median(pbias_results[imodel,:]) for imodel in np.arange(nmodels) ])
-median_abs_PBIAS = np.array([ np.median(np.abs(pbias_results[imodel,:])) for imodel in np.arange(nmodels) ])
+median_PBIAS = np.array([ np.median(pbias_results[imodel,:][pbias_results[imodel,:]!=-9999.]) for imodel in np.arange(nmodels) ])
+median_abs_PBIAS = np.array([ np.median(np.abs(pbias_results[imodel,:][pbias_results[imodel,:]!=-9999.])) for imodel in np.arange(nmodels) ])
 
 # truncation of really bad results
 pbias_results_truncated = copy.deepcopy(pbias_results)

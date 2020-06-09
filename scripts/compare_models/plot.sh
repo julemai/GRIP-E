@@ -33,17 +33,17 @@ pid=$$
 datapath="../data/"
 
 plot_obj='1 2'                                            # can be 1, 2, and/or 3
-plot_phase='0 1'                                          # phase 0: uncalibrated, different phys. setups,
+plot_phase='1'                                          # phase 0: uncalibrated, different phys. setups,
 #                                                         # phase 1: calibrated,   different phys. setups,
 #                                                         # phase 2: calibrated,   same phys. setups
 
-domain='lake-erie'                                        # [lake-erie, great-lakes]
-periods='2011-01-01:2014-12-31'                           # time period(s) that should be used to derive NSE etc
-calval='calibration'                                      # [calibration, validation]  # choose ONE only
+# domain='lake-erie'                                        # [lake-erie, great-lakes]
+# periods='2011-01-01:2014-12-31'                           # time period(s) that should be used to derive NSE etc
+# calval='calibration'                                      # [calibration, validation]  # choose ONE only
 
-# domain='lake-erie'                                      # [lake-erie, great-lakes]
-# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
-# calval='validation'                                     # [calibration, validation]  # choose ONE only
+domain='lake-erie'                                      # [lake-erie, great-lakes]
+periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+calval='validation'                                     # [calibration, validation]  # choose ONE only
 
 # domain='great-lakes'                                    # [lake-erie, great-lakes]
 # periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'   # time period(s) that should be used to derive NSE etc
@@ -84,6 +84,16 @@ for iobj in ${plot_obj} ; do
     done
 
 done
+
+if [ -e compare_models_phase_1_objective_1_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf ] ; then
+    cp compare_models_phase_1_objective_1_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf figure_2.pdf
+    convert -density 300 -quality 95 compare_models_phase_1_objective_1_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf compare_models_phase_1_objective_1_lake-erie_2011-01-01_2014-12-31_calibration_NSE.png
+fi
+
+if [ -e compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf ] ; then
+    cp compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf figure_3.pdf
+    convert -density 300 -quality 95 compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.png
+fi
 
 echo ''
 echo 'Done.'
