@@ -9,3 +9,6 @@ parameter sets calibrated to corresponding downstream gauges
 - lower priority; might not be submitted
 - model set-up will be based on a parameter set using nearest neighbor approach
 - will be applied to stations: 04201500, 02GE003, 04167000, 04168000
+
+
+"Qobs" in files is streamflow of upstream gauges
