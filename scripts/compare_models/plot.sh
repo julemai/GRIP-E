@@ -97,7 +97,12 @@ fi
 
 python barchart.py -p barchart.pdf
 pdfcrop barchart.pdf
-mv barchart-crop.pdf barchart.pdf
+pdfsplit barchart-crop.pdf
+mv barchart-crop1.pdf barchart_obj_1-2.pdf
+mv barchart-crop2.pdf barchart_obj_1.pdf
+mv barchart-crop3.pdf barchart_obj_2.pdf
+rm barchart.pdf
+rm barchart-crop.pdf
 
 echo ''
 echo 'Done.'

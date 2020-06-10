@@ -6,8 +6,13 @@ parameter sets calibrated to corresponding downstream gauges
 - will be applied to stations: 04185000, 04195500, 04208000
 
 2. Optional gauges
-- lower priority; might not be submitted
-- model set-up will be based on a parameter set using nearest neighbor approach
+- parameter of nearest neighbor will be used
+- in specific:
+	  Optional-Basin-ID        DONOR-BASIN 
+	  04167000                 04166500  
+	  04168000                 04166500  
+	  04201500                 04200500  
+	  02GE003                  02GD004   
 - will be applied to stations: 04201500, 02GE003, 04167000, 04168000
 
 
