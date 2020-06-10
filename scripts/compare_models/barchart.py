@@ -336,6 +336,149 @@ elif (outtype == 'png'):
     fig.savefig(pngfile, transparent=transparent, bbox_inches=bbox_inches, pad_inches=pad_inches)
     plt.close(fig)
 
+
+
+# ----------------------------------
+# Figure NSE
+# ----------------------------------
+ifig = 0
+
+ifig += 1
+iplot = 0
+print('Plot - Fig ', ifig, ' ::  barchart NSE')
+fig = plt.figure(ifig)
+
+iplot += 1
+sub    = fig.add_axes(position(nrow,ncol,iplot,hspace=hspace,vspace=vspace), frame_on=False )
+
+results = np.array([ dict_results[imodel] for imodel in models ])
+
+x = np.arange(len(models))
+width = 0.35  # the width of the bars
+
+imodels = np.arange(0,2)
+rects1 = sub.bar(x[imodels], results[imodels,0], width, label='Machine Learning', color=[cols_para[1],cols_para[1]])
+imodels = np.arange(2,9)
+rects3 = sub.bar(x[imodels], results[imodels,0], width, label='Models with single-basin calibr.', color=[cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3]])
+imodels = np.arange(9,17)
+rects5 = sub.bar(x[imodels], results[imodels,0], width, label='Models with global calibration', color=[cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7]])
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+sub.set_ylabel('Median NSE [-]')
+sub.set_title('GRIP-E results (calibration; objective 1)')
+sub.set_xticks(x)
+sub.set_xticklabels([ dd.replace('-','-\n') for dd in dict_results.keys() ],fontsize='x-small')
+
+sub.set_yticks([])
+sub.set_yticklabels([""],fontsize='x-small')
+
+# set labels on top of bars
+def autolabel(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        sub.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    fontsize='x-small',
+                    rotation=90,
+                    ha='center', va='bottom')
+
+
+autolabel(rects1)
+autolabel(rects3)
+autolabel(rects5)
+
+# legend
+ll = sub.legend(frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
+                     loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
+plt.setp(ll.get_texts(), fontsize='x-small')
+
+plt.setp(sub,ylim=[0.0,1.0])
+
+
+if (outtype == 'pdf'):
+    pdf_pages.savefig(fig)
+    plt.close(fig)
+elif (outtype == 'png'):
+    pngfile = pngbase+"{0:04d}".format(ifig)+".png"
+    fig.savefig(pngfile, transparent=transparent, bbox_inches=bbox_inches, pad_inches=pad_inches)
+    plt.close(fig)
+
+
+# ----------------------------------
+# Figure NSE
+# ----------------------------------
+ifig = 0
+
+ifig += 1
+iplot = 0
+print('Plot - Fig ', ifig, ' ::  barchart NSE')
+fig = plt.figure(ifig)
+
+iplot += 1
+sub    = fig.add_axes(position(nrow,ncol,iplot,hspace=hspace,vspace=vspace), frame_on=False )
+
+results = np.array([ dict_results[imodel] for imodel in models ])
+
+x = np.arange(len(models))
+width = 0.35  # the width of the bars
+
+imodels = np.arange(0,2)
+rects2 = sub.bar(x[imodels], results[imodels,1], width, label='Machine Learning', color=[cols_para[1],cols_para[1]])
+imodels = np.arange(2,9)
+rects4 = sub.bar(x[imodels], results[imodels,1], width, label='Models with single-basin calibr.', color=[cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3]])
+imodels = np.arange(9,17)
+rects6 = sub.bar(x[imodels], results[imodels,1], width, label='Models with global calibration', color=[cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7]])
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+sub.set_ylabel('Median NSE [-]')
+sub.set_title('GRIP-E results (calibration; objective 2)')
+sub.set_xticks(x)
+sub.set_xticklabels([ dd.replace('-','-\n') for dd in dict_results.keys() ],fontsize='x-small')
+
+sub.set_yticks([])
+sub.set_yticklabels([""],fontsize='x-small')
+
+# set labels on top of bars
+def autolabel(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        sub.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    fontsize='x-small',
+                    rotation=90,
+                    ha='center', va='bottom')
+
+
+autolabel(rects2)
+autolabel(rects4)
+autolabel(rects6)
+
+# legend
+ll = sub.legend(frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
+                     loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
+plt.setp(ll.get_texts(), fontsize='x-small')
+
+plt.setp(sub,ylim=[0.0,1.0])
+
+
+if (outtype == 'pdf'):
+    pdf_pages.savefig(fig)
+    plt.close(fig)
+elif (outtype == 'png'):
+    pngfile = pngbase+"{0:04d}".format(ifig)+".png"
+    fig.savefig(pngfile, transparent=transparent, bbox_inches=bbox_inches, pad_inches=pad_inches)
+    plt.close(fig)
+
+
+
+    
+
 # -------------------------------------------------------------------------
 # Finished
 # -------------------------------------------------------------------------
