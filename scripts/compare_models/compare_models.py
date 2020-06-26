@@ -57,6 +57,7 @@ pdffile     = 'test.pdf'
 usetex      = False
 time_period = ''
 nosorty     = False
+crossout    = False
 
 parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
               description='''Convert LBRM raw streamflow model outputs into NetDF format (consistent across all models in GRIP-E).''')
@@ -76,6 +77,8 @@ parser.add_argument('-t', '--usetex', action='store_true', default=usetex, dest=
                     help="Use LaTeX to render text in pdf.")
 parser.add_argument('-y', '--nosorty', action='store_true', default=nosorty, dest="nosorty",
                     help="If given, y-axis will not be sorted.")
+parser.add_argument('-c', '--crossout', action='store_true', default=crossout, dest="crossout",
+                    help="If set, will cross out some defined stations for some models.")
 
 args        = parser.parse_args()
 input_files = (args.input_files[0]).split(' ')
@@ -84,6 +87,7 @@ pdffile     = args.pdffile
 usetex      = args.usetex
 time_period = args.time_period[0]
 nosorty     = args.nosorty
+crossout    = args.crossout
 
 del parser, args
 
@@ -476,6 +480,27 @@ for imodel in np.arange(nmodels):
 # draw line after model groups
 for iline in lines_after_model:
     sub.plot([-0.5,ngauges-0.5],[nmodels-iline-1.5,nmodels-iline-1.5],linewidth=lwidth,color='black')
+
+# cross-out some stations (validation stations already used for calibration)
+if crossout:
+
+    cross_stations = {}
+    cross_stations['lbrm']       = ['02GE003', '04167000', '04168000', '04185000', '04195500', '04201500', '04208000']
+    cross_stations['mesh-class'] = ['02GE003', '04167000', '04201500']
+
+    for icross_station in cross_stations:
+
+        if len(np.where(models[idx1] == icross_station)[0]) > 0:
+            imodel = np.where(models[idx1] == icross_station)[0][0]
+        
+            for iigauge in cross_stations[icross_station]:
+                
+                igauge = np.where(gauges[idx2] == iigauge)[0][0]
+                #sub.plot([igauge-0.5,igauge+0.5],[imodel-0.5,imodel+0.5],linewidth=lwidth,color='black')
+                #sub.plot([igauge-0.5,igauge+0.5],[imodel+0.5,imodel-0.5],linewidth=lwidth,color='black')
+
+                sub.add_patch(Polygon(np.array([[igauge-0.5, imodel-0.5], [igauge-0.5, imodel+0.5], [igauge+0.5, imodel+0.5], [igauge+0.5, imodel-0.5]]),
+                                          closed=True, linewidth=0.0, fill=False, hatch='///'))
 
 
 # Legend

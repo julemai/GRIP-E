@@ -54,10 +54,29 @@ calval='validation'                                     # [calibration, validati
 # calval='validation'                                     # [calibration, validation]  # choose ONE only
 
 
+python barchart.py -p barchart.pdf
+pdfcrop barchart_1.pdf
+mv barchart_1-crop.pdf barchart_obj_1-2.pdf
+pdfcrop barchart_2.pdf
+mv barchart_2-crop.pdf barchart_obj_1.pdf
+pdfcrop barchart_3.pdf
+mv barchart_3-crop.pdf barchart_obj_2.pdf
+rm barchart_1.pdf
+rm barchart_2.pdf
+rm barchart_3.pdf
+
+
+
 for iobj in ${plot_obj} ; do
 
     path="../../data/objective_${iobj}/${domain}/${calval}"
     ext="_${calval}"
+
+    if [[  ${calval} == 'validation' ]] ; then
+	crossout="-c"    # cross out some stations
+    else
+	crossout=""
+    fi
 
     for iphase in ${plot_phase} ; do
 
@@ -72,7 +91,7 @@ for iobj in ${plot_obj} ; do
             files=$( echo ${files} )
             
             # given -y does not sort models (y-axis)
-            python compare_models.py -i "${files}" -a ${period} -p compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf -y
+            python compare_models.py -i "${files}" -a ${period} -p compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf -y ${crossout}
             pdfcrop compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}.pdf
 	    pdfsplit compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop.pdf
             mv compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}-crop1.pdf compare_models_phase_${iphase}_objective_${iobj}_${domain}_${period_str}${ext}_NSE.pdf
@@ -94,15 +113,6 @@ if [ -e compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calib
     cp compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf figure_3.pdf
     convert -density 300 -quality 95 compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.pdf compare_models_phase_1_objective_2_lake-erie_2011-01-01_2014-12-31_calibration_NSE.png
 fi
-
-python barchart.py -p barchart.pdf
-pdfcrop barchart.pdf
-pdfsplit barchart-crop.pdf
-mv barchart-crop1.pdf barchart_obj_1-2.pdf
-mv barchart-crop2.pdf barchart_obj_1.pdf
-mv barchart-crop3.pdf barchart_obj_2.pdf
-rm barchart.pdf
-rm barchart-crop.pdf
 
 echo ''
 echo 'Done.'
