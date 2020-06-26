@@ -76,23 +76,25 @@ del parser, args
 
 
 dict_results = collections.OrderedDict()
-dict_results['ML-LSTM']      = [0.73, 0.54]
-dict_results['ML-XGBoost']   = [0.37, 0.22]
-dict_results['LBRM']         = [0.66, 0.72]
-dict_results['GR4J-lp']      = [0.63, 0.67]
-dict_results['GR4J-sd']      = [0.64, 0.67]
-dict_results['HYMOD2-DS']    = [0.74, 0.73]
-dict_results['SWAT-EPA']     = [0.19, np.nan]
-dict_results['SWAT-Guelph']  = [0.55, 0.59]
-dict_results['mHM-Waterloo'] = [0.76, 0.78]
-dict_results['mHM-UFZ']      = [0.66, 0.67]
-dict_results['HYPE']         = [0.52, 0.48]
-dict_results['VIC']          = [0.41, 0.43]
-dict_results['VIC-GRU']      = [0.28, 0.30]
-dict_results['GEM-Hydro']    = [0.51, 0.44]
-dict_results['MESH-SVS']     = [0.48, 0.46]
-dict_results['MESH-CLASS']   = [0.34, 0.40]
-dict_results['WATFLOOD']     = [0.33, 0.32]
+#                              calibration      validation
+#                              obj 1  obj 2     obj 1  obj 2
+dict_results['ML-LSTM']      = [0.79, 0.79,     0.41,  0.41 ]
+dict_results['ML-XGBoost']   = [0.36, 0.26,     0.17,  0.17 ]
+dict_results['LBRM']         = [0.66, 0.72,     0.70,  0.70 ]
+dict_results['GR4J-lp']      = [0.63, 0.67,     0.50,  0.50 ]
+dict_results['GR4J-sd']      = [0.64, 0.67,     0.44,  0.44 ]
+dict_results['HYMOD2-DS']    = [0.74, 0.73,     np.nan,np.nan ]    
+dict_results['SWAT-EPA']     = [0.19, np.nan,   np.nan,np.nan ]
+dict_results['SWAT-Guelph']  = [0.55, 0.59,     0.26,  0.23 ]
+dict_results['mHM-Waterloo'] = [0.76, 0.78,     0.68,  0.68 ]
+dict_results['mHM-UFZ']      = [0.66, 0.67,     0.64,  0.60 ]
+dict_results['HYPE']         = [0.52, 0.48,     0.41,  0.41 ]
+dict_results['VIC']          = [0.41, 0.43,     0.53,  0.51 ]
+dict_results['VIC-GRU']      = [0.40, 0.43,     np.nan,np.nan ]
+dict_results['GEM-Hydro']    = [0.51, 0.44,     0.54,  0.54 ]
+dict_results['MESH-SVS']     = [0.48, 0.46,     0.58,  0.58 ]
+dict_results['MESH-CLASS']   = [0.34, 0.40,     0.51,  0.51 ]
+dict_results['WATFLOOD']     = [0.33, 0.32,     np.nan,np.nan ]     
 
 models = dict_results.keys()
 
@@ -115,7 +117,7 @@ else:
 ncol        = 1           # # of columns of subplots per figure
 nrow        = 4           # # of rows of subplots per figure
 hspace      = 0.05        # x-space between subplots
-vspace      = 0.04        # y-space between subplots
+vspace      = 0.06        # y-space between subplots
 right       = 0.9         # right space on page
 textsize    = 10           # standard text size
 textsize_clock = 0.6*textsize        # standard text size
@@ -126,7 +128,7 @@ dyabc_clock = 0           # % of (max-min) shift up from lower x-axis for a,b,c,
 dxsig       = 1.23        # % of (max-min) shift to the right from left y-axis for a,b,c,... labels
 dysig       = -0.05       # % of (max-min) shift up from lower x-axis for a,b,c,... labels
 
-lwidth      = 1.0         # linewidth
+lwidth      = 0.5         # linewidth
 elwidth     = 1.0         # errorbar line width
 alwidth     = 0.5         # axis line width
 glwidth     = 0.5         # grid line width
@@ -212,8 +214,10 @@ mpl.rc('font', size=textsize)
 mpl.rc('lines', linewidth=lwidth, color='black')
 mpl.rc('axes', linewidth=alwidth, labelcolor='black')
 mpl.rc('path', simplify=False) # do not remove
+mpl.rcParams['hatch.linewidth'] = lwidth
 
-from matplotlib.patches import Rectangle, Circle, Polygon
+from matplotlib.patches import Rectangle, Circle, Polygon, Patch
+from matplotlib.lines import Line2D
 from mpl_toolkits.basemap import Basemap
 
 # colors
@@ -246,18 +250,13 @@ cols_para = color.get_brewer('Paired8', rgb=True)   # need to be at least 9 colo
 # -------------------------------------------------------------------------
 
 if (outtype == 'pdf'):
-    print('Plot PDF ', pdffile)
-    pdf_pages = PdfPages(pdffile)
+    print('Plot PDF ', '.'.join(pdffile.split('.')[0:-1])+'_1.pdf')
+    pdf_pages = PdfPages('.'.join(pdffile.split('.')[0:-1])+'_1.pdf')
 elif (outtype == 'png'):
     print('Plot PNG ', pngbase)
 else:
     print('Plot X')
 # figsize = mpl.rcParams['figure.figsize']
-
-import scipy
-import scipy.cluster.hierarchy as sch
-# from scipy.spatial.distance import squareform
-import scipy.spatial.distance as dist
 
 
 
@@ -272,10 +271,13 @@ iplot = 0
 print('Plot - Fig ', ifig, ' ::  barchart NSE')
 fig = plt.figure(ifig)
 
+# ---------------------------------------
+# calibration
+# ---------------------------------------
 iplot += 1
 sub    = fig.add_axes(position(nrow,ncol,iplot,hspace=hspace,vspace=vspace), frame_on=False )
 
-results = np.array([ dict_results[imodel] for imodel in models ])
+results = np.array([ dict_results[imodel][0:2] for imodel in models ])
 
 x = np.arange(len(models))
 width = 0.35  # the width of the bars
@@ -320,12 +322,103 @@ autolabel(rects4)
 autolabel(rects5)
 autolabel(rects6)
 
+# # legend
+# ll = sub.legend(frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
+#                      loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
+# plt.setp(ll.get_texts(), fontsize='x-small')
+
+plt.setp(sub,xlim=[-0.5,len(models)-0.5])
+#plt.setp(sub,ylim=[0.0,1.0])
+plt.setp(sub,ylim=[0.0,np.nanmax(results)+0.1])
+
+# ---------------------------------------
+# validation
+# ---------------------------------------
+iplot += 1
+sub    = fig.add_axes(position(nrow,ncol,iplot,hspace=hspace,vspace=vspace), frame_on=False )
+
+results = np.array([ dict_results[imodel][2:4] for imodel in models ])
+
+x = np.arange(len(models))
+width = 0.35  # the width of the bars
+
+patterns = ["////","","","","","",""]
+
+imodels = np.arange(0,2)
+rects1  = sub.bar(x[imodels] - width/2, results[imodels,0], width, label='Objective 1 (Machine Learning)', color=[cols_para[0],cols_para[0]])
+rects2  = sub.bar(x[imodels] + width/2, results[imodels,1], width, label='Objective 2 (Machine Learning)', color=[cols_para[1],cols_para[1]])
+imodels = np.arange(2,3)
+rects3  = sub.bar(x[imodels] - width/2, results[imodels,0], width, label='', color=[cols_para[2]], hatch=patterns[0])
+rects4  = sub.bar(x[imodels] + width/2, results[imodels,1], width, label='', color=[cols_para[3]], hatch=patterns[0])
+imodels = np.arange(3,9)
+rects5  = sub.bar(x[imodels] - width/2, results[imodels,0], width, label='Objective 1 (single-basin calibr.)', color=[cols_para[2],cols_para[2],cols_para[2],cols_para[2],cols_para[2],cols_para[2],cols_para[2]])
+rects6  = sub.bar(x[imodels] + width/2, results[imodels,1], width, label='Objective 2 (single-basin calibr.)', color=[cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3],cols_para[3]])
+imodels = [9,10,11,12,13,14,16] # np.arange(9,17)
+rects7  = sub.bar(x[imodels] - width/2, results[imodels,0], width, label='Objective 1 (global calibration)', color=[cols_para[6],cols_para[6],cols_para[6],cols_para[6],cols_para[6],cols_para[6],cols_para[6]])
+rects8  = sub.bar(x[imodels] + width/2, results[imodels,1], width, label='Objective 2 (global calibration)', color=[cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7],cols_para[7]])
+imodels = [15] # np.arange(9,17)
+rects9  = sub.bar(x[imodels] - width/2, results[imodels,0], width, label='', color=[cols_para[6]], hatch=patterns[0])
+rects10 = sub.bar(x[imodels] + width/2, results[imodels,1], width, label='', color=[cols_para[7]], hatch=patterns[0])
+
+
+rectsdummy = sub.bar(len(models)+3, 0.0, width, label='some stations used for calibration', color=['white'], hatch=patterns[0], linewidth=lwidth, edgecolor='black' )
+
+# Add some text for labels, title and custom x-axis tick labels, etc.
+sub.set_ylabel('Median NSE [-]')
+sub.set_title('GRIP-E results (validation)')
+sub.set_xticks(x)
+sub.set_xticklabels([ dd.replace('-','-\n') for dd in dict_results.keys() ],fontsize='x-small')
+
+sub.set_yticks([])
+sub.set_yticklabels([""],fontsize='x-small')
+
+# set labels on top of bars
+def autolabel(rects):
+    """Attach a text label above each bar in *rects*, displaying its height."""
+    for rect in rects:
+        height = rect.get_height()
+        sub.annotate('{}'.format(height),
+                    xy=(rect.get_x() + rect.get_width() / 2, height),
+                    xytext=(0, 3),  # 3 points vertical offset
+                    textcoords="offset points",
+                    fontsize='x-small',
+                    rotation=90,
+                    ha='center', va='bottom')
+
+
+autolabel(rects1)
+autolabel(rects2)
+autolabel(rects3)
+autolabel(rects4)
+autolabel(rects5)
+autolabel(rects6)
+autolabel(rects7)
+autolabel(rects8)
+autolabel(rects9)
+autolabel(rects10)
+
 # legend
-ll = sub.legend(frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
-                     loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
+legend_elements = [ Patch(facecolor=cols_para[0], edgecolor=cols_para[0], label='Objective 1 (Machine Learning)'),
+                    Patch(facecolor=cols_para[1], edgecolor=cols_para[1], label='Objective 2 (Machine Learning)'),
+                    Patch(facecolor='white', edgecolor='white', linewidth=lwidth, hatch=patterns[0], label=''),
+                    Patch(facecolor=cols_para[2], edgecolor=cols_para[2], label='Objective 1 (single-basin calibr.)'),
+                    Patch(facecolor=cols_para[3], edgecolor=cols_para[3], label='Objective 2 (single-basin calibr.)'),
+                    Patch(facecolor='white', edgecolor='black', linewidth=lwidth, hatch=patterns[0], label='Some stations used for calibration'),
+                    Patch(facecolor=cols_para[6], edgecolor=cols_para[6], label='Objective 1 (global calibration)'),
+                    Patch(facecolor=cols_para[7], edgecolor=cols_para[7], label='Objective 2 (global calibration)'),
+                        ]
+ll = sub.legend(handles=legend_elements,
+                    frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
+                    loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
 plt.setp(ll.get_texts(), fontsize='x-small')
 
-plt.setp(sub,ylim=[0.0,1.0])
+# # legend
+# ll = sub.legend(frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=llhtextpad, handlelength=llhlength,
+#                      loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
+# plt.setp(ll.get_texts(), fontsize='x-small')
+
+plt.setp(sub,xlim=[-0.5,len(models)-0.5])
+plt.setp(sub,ylim=[0.0,np.nanmax(results)+0.1])
 
 
 if (outtype == 'pdf'):
@@ -337,6 +430,26 @@ elif (outtype == 'png'):
     plt.close(fig)
 
 
+# -------------------------------------------------------------------------
+# Finished
+# -------------------------------------------------------------------------
+
+if (outtype == 'pdf'):
+    pdf_pages.close()
+elif (outtype == 'png'):
+    pass
+else:
+    plt.show()
+
+
+if (outtype == 'pdf'):
+    print('Plot PDF ', '.'.join(pdffile.split('.')[0:-1])+'_2.pdf')
+    pdf_pages = PdfPages('.'.join(pdffile.split('.')[0:-1])+'_2.pdf')
+elif (outtype == 'png'):
+    print('Plot PNG ', pngbase)
+else:
+    print('Plot X')
+# figsize = mpl.rcParams['figure.figsize']
 
 # ----------------------------------
 # Figure NSE
@@ -395,7 +508,8 @@ ll = sub.legend(frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=ll
                      loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
 plt.setp(ll.get_texts(), fontsize='x-small')
 
-plt.setp(sub,ylim=[0.0,1.0])
+plt.setp(sub,xlim=[-0.5,len(models)-0.5])
+plt.setp(sub,ylim=[0.0,np.nanmax(results)+0.1])
 
 
 if (outtype == 'pdf'):
@@ -406,6 +520,27 @@ elif (outtype == 'png'):
     fig.savefig(pngfile, transparent=transparent, bbox_inches=bbox_inches, pad_inches=pad_inches)
     plt.close(fig)
 
+
+# -------------------------------------------------------------------------
+# Finished
+# -------------------------------------------------------------------------
+
+if (outtype == 'pdf'):
+    pdf_pages.close()
+elif (outtype == 'png'):
+    pass
+else:
+    plt.show()
+    
+
+if (outtype == 'pdf'):
+    print('Plot PDF ', '.'.join(pdffile.split('.')[0:-1])+'_3.pdf')
+    pdf_pages = PdfPages('.'.join(pdffile.split('.')[0:-1])+'_3.pdf')
+elif (outtype == 'png'):
+    print('Plot PNG ', pngbase)
+else:
+    print('Plot X')
+# figsize = mpl.rcParams['figure.figsize']
 
 # ----------------------------------
 # Figure NSE
@@ -464,7 +599,8 @@ ll = sub.legend(frameon=frameon, ncol=3, labelspacing=llrspace, handletextpad=ll
                      loc='upper center', bbox_to_anchor=(0.5,-0.15), scatterpoints=1, numpoints=1)
 plt.setp(ll.get_texts(), fontsize='x-small')
 
-plt.setp(sub,ylim=[0.0,1.0])
+plt.setp(sub,xlim=[-0.5,len(models)-0.5])
+plt.setp(sub,ylim=[0.0,np.nanmax(results)+0.1])
 
 
 if (outtype == 'pdf'):
