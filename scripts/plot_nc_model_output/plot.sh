@@ -32,7 +32,7 @@ pid=$$
 
 datapath="../data/"
 
-plot_models='ML-LSTM ML-XGBoost'                      # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE HYMOD2-DS
+plot_models='VIC-GRU'                      # [    Lake Erie:   LBRM  HMETS-Raven-lp GR4J-Raven-lp GR4J-Raven-sd HYPE HYMOD2-DS
 #                                                                GEM-Hydro WRF-Hydro MESH-SVS MESH-CLASS VIC VIC-GRU
 #                                                                WATFLOOD SWAT-EPA SWAT-Guelph
 #                                                                ML-ConvLSTM ML-ConvLSTM-DEM ML-ConvLSTM-LC ML-ConvLSTM-LC-DEM ML-LinReg ML-LSTM ML-XGBoost
@@ -40,13 +40,13 @@ plot_models='ML-LSTM ML-XGBoost'                      # [    Lake Erie:   LBRM  
 #                                                                Raven-blended
 #                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd LBRM-MG LBRM-ML-LSTM ML-EA-LSTM ML-LSTM ML-XGBoost]
 
-# domain='lake-erie'                                      # [lake-erie great-lakes]
-# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
-# calvals='calibration'                                   # [calibration validation]  # choose ONE only
-
 domain='lake-erie'                                      # [lake-erie great-lakes]
 periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
-calvals='validation'                                    # [calibration validation]  # choose ONE only
+calvals='calibration'                                   # [calibration validation]  # choose ONE only
+
+# domain='lake-erie'                                      # [lake-erie great-lakes]
+# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+# calvals='validation'                                    # [calibration validation]  # choose ONE only
 
 # domain='great-lakes'                                      # [lake-erie great-lakes]
 # periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc
