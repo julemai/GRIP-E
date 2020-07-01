@@ -37,13 +37,13 @@ plot_phase='1'                                          # phase 0: uncalibrated,
 #                                                         # phase 1: calibrated,   different phys. setups,
 #                                                         # phase 2: calibrated,   same phys. setups
 
-domain='lake-erie'                                        # [lake-erie, great-lakes]
-periods='2011-01-01:2014-12-31'                           # time period(s) that should be used to derive NSE etc
-calval='calibration'                                      # [calibration, validation]  # choose ONE only
+# domain='lake-erie'                                        # [lake-erie, great-lakes]
+# periods='2011-01-01:2014-12-31'                           # time period(s) that should be used to derive NSE etc
+# calval='calibration'                                      # [calibration, validation]  # choose ONE only
 
-# domain='lake-erie'                                      # [lake-erie, great-lakes]
-# periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
-# calval='validation'                                     # [calibration, validation]  # choose ONE only
+domain='lake-erie'                                      # [lake-erie, great-lakes]
+periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+calval='validation'                                     # [calibration, validation]  # choose ONE only
 
 # domain='great-lakes'                                    # [lake-erie, great-lakes]
 # periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'   # time period(s) that should be used to derive NSE etc

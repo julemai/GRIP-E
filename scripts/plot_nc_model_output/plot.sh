@@ -40,13 +40,13 @@ plot_models='VIC-GRU'                      # [    Lake Erie:   LBRM  HMETS-Raven
 #                                                                Raven-blended
 #                                            #      Great Lakes: GR4J-Raven-lp GR4J-Raven-sd LBRM-MG LBRM-ML-LSTM ML-EA-LSTM ML-LSTM ML-XGBoost]
 
-domain='lake-erie'                                      # [lake-erie great-lakes]
-periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
-calvals='calibration'                                   # [calibration validation]  # choose ONE only
-
 # domain='lake-erie'                                      # [lake-erie great-lakes]
 # periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
-# calvals='validation'                                    # [calibration validation]  # choose ONE only
+# calvals='calibration'                                   # [calibration validation]  # choose ONE only
+
+domain='lake-erie'                                      # [lake-erie great-lakes]
+periods='2011-01-01:2014-12-31'                         # time period(s) that should be used to derive NSE etc
+calvals='validation'                                    # [calibration validation]  # choose ONE only
 
 # domain='great-lakes'                                      # [lake-erie great-lakes]
 # periods='2001-01-01:2010-12-31 2011-01-01:2016-12-31'     # time period(s) that should be used to derive NSE etc

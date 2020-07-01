@@ -45,7 +45,7 @@ convert_models='VIC-GRU'                 # [    Lake Erie:   LBRM  HMETS-Raven-l
 
 domain='lake-erie'                           # [lake-erie great-lakes]
 calvals='calibration'                        # [calibration validation]
-#calvals='validation'                         # [calibration validation] 
+calvals='validation'                         # [calibration validation] 
 
 setup_by='julie'                             # Raven setup by 'julie' (outputs in separate files) or 'hongren' (outputs in one file)
 convert_obj='1 2'                            # can be 1, 2, and/or 3
