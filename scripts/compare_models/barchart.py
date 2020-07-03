@@ -94,7 +94,7 @@ dict_results['VIC-GRU']      = [0.42, 0.43,     0.51,  0.51 ]
 dict_results['GEM-Hydro']    = [0.51, 0.44,     0.54,  0.54 ]
 dict_results['MESH-SVS']     = [0.48, 0.46,     0.58,  0.58 ]
 dict_results['MESH-CLASS']   = [0.34, 0.40,     0.51,  0.51 ]
-dict_results['WATFLOOD']     = [0.33, 0.32,     np.nan,np.nan ]     
+dict_results['WATFLOOD']     = [0.33, 0.32,     0.05,  0.05 ]     
 
 models = dict_results.keys()
 
