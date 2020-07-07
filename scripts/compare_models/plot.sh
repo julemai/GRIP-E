@@ -33,7 +33,7 @@ pid=$$
 datapath="../data/"
 
 plot_obj='1 2'                                            # can be 1, 2, and/or 3
-plot_phase='1'                                          # phase 0: uncalibrated, different phys. setups,
+plot_phase='1'                                            # phase 0: uncalibrated, different phys. setups,
 #                                                         # phase 1: calibrated,   different phys. setups,
 #                                                         # phase 2: calibrated,   same phys. setups
 

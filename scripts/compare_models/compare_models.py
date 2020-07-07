@@ -204,10 +204,13 @@ for iinput_file,input_file in enumerate(input_files):
 if (pdffile == ''):
     if (pngbase == ''):
         outtype = 'x'
+        csvfile = None
     else:
         outtype = 'png'
+        csvfile = pngbase+'.csv'
 else:
     outtype = 'pdf'
+    csvfile = '.'.join(pdffile.split('.')[:-1])+'.csv'
 
 # Main plot
 ncol        = 1           # # of columns of subplots per figure
@@ -463,6 +466,14 @@ else:
     sub.set_xticklabels(gauges[idx2],rotation=90,fontsize='xx-small')
 sub.set_yticks(np.arange(nmodels))
 sub.set_yticklabels(models[idx1])
+
+
+# write results to CSV
+ff = open(csvfile,"w")
+ff.write('NSE,' + ','.join(['"'+gg+'"' for gg in gauges]) + '\n')
+for ii in range(np.shape(nse_results_sort)[0]):
+    ff.write( models[ii] + ',' + ','.join( astr(nse_results[ii],prec=4) ) + '\n' )
+ff.close()
 
 
 # label text for median NSE
