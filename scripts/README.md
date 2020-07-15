@@ -5,11 +5,14 @@
 - autostring.py       <br> JAMS module: convert numbers to string  <br>
 - brewer.py           <br> JAMS module: provides Brewer colors <br>
 - date2dec.py         <br> JAMS module: converts date into decimal (julian)  <br>
+- dec2date.py         <br> JAMS module: converts decimal (julian) to date <br>
+- errormeasures.py    <br> JAMS module: calculate some error measures <br>
 - fread.py            <br> JAMS module: reads ASCII file into floats <br>
 - fsread.py           <br> JAMS module: reads ASCII file into floats and strings <br>
 - position.py         <br> JAMS module: positions subplots in figures  <br>
 - signature2plot.py   <br> JAMS module: adds signature to plots  <br>
 - str2tex.py          <br> JAMS module: converts string to tex-string  <br>
+- sread.py            <br> JAMS module: reads ASCII file into strings <br>
 
 - color/              <br> JAMS module: providing colors 
 - const/              <br> JAMS module: defining constants
