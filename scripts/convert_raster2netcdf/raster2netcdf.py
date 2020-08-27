@@ -42,9 +42,9 @@ import netcdf4     as     nc4      # in lib/
 from fread         import fread    # in lib/
 from fsread        import fsread   # in lib/
 
-input_file  = 'test-arcgis-raster.dat'
-output_file = 'test-arcgis-raster.nc'
-varname     = 'test,int32,1,test variable'
+input_file  = ['test-arcgis-raster.dat']
+output_file = ['test-arcgis-raster.nc']
+varname     = ['test,int32,1,test variable']
 addinfo     = None
 parser      = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter,
               description='''Convert files from ArcGIS raster format into NetDF file usable in CaSPAr.''')
@@ -71,6 +71,7 @@ addinfo       = args.addinfo
 del parser, args
 
 # read raster file
+print('Read file: {0}'.format(input_file))
 header = fread(input_file,skip=6,nc=2,header=True)
 #
 if ( header[0][0].lower() == 'ncols'):

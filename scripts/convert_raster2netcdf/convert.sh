@@ -34,10 +34,10 @@ datapath="../../data/"
 convert_dem_90m=0
 convert_flowacc_90m=0
 convert_flowdir_90m=0
-convert_dem_500m=1
-convert_flowacc_500m=1
-convert_flowdir_500m=1
-convert_soil=0
+convert_dem_500m=0
+convert_flowacc_500m=0
+convert_flowdir_500m=0
+convert_soil=1
 convert_landcover=0
 
 # -------------------
