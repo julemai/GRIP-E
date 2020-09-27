@@ -15,5 +15,5 @@ the Great Lakes, calibration conventionally uses area-ratio estimates of runoff 
 as observations, rather than using streamflow gauge data directly. This approach is used here. In
 reality, some of the project validation gauges may have been incorporated to the area-ratio estimates
 used for calibration. As a result, information from those validation gauges may be contained within
-the calibration dataset. The results for LBRM at the _*validation stations are hence not considered*_ in
+the calibration dataset. The results for LBRM at the _<b>validation stations are hence not considered</b>_ in
 the results and discussion (although they are shown for completeness).
