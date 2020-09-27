@@ -6,7 +6,7 @@ parameter sets calibrated to corresponding downstream gauges
 - will be applied to stations: 04185000, 04195500, 04208000
 
 2. Optional gauges
-- parameter of nearest neighbor will be used
+- parameter of nearest neighbor will be used (distance between catchment centroids, landcover, and soiltype)
 - in specific:<br>
   - Optional-Basin-ID --> DONOR-BASIN <br>
 	  04167000 --> 04166500 <br>
