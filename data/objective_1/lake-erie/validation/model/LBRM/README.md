@@ -9,4 +9,11 @@
 - will be applied to stations: 04201500, 02GE003, 04167000, 04168000
 
 
-Disclaimer: Area-Ratios might include some of the validation stations; hence validation results of LBRM will not be considered and are only added for completeness
+*Disclaimer:*
+Because the primary application of LBRM is simulating total runoff contribution to
+the Great Lakes, calibration conventionally uses area-ratio estimates of runoff for each subbasin
+as observations, rather than using streamflow gauge data directly. This approach is used here. In
+reality, some of the project validation gauges may have been incorporated to the area-ratio estimates
+used for calibration. As a result, information from those validation gauges may be contained within
+the calibration dataset. The results for LBRM at the _*validation stations are hence not considered*_ in
+the results and discussion (although they are shown for completeness).
