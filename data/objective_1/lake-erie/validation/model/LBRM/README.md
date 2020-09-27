@@ -9,7 +9,7 @@
 - will be applied to stations: 04201500, 02GE003, 04167000, 04168000
 
 
-*Disclaimer:*
+<b>Disclaimer:</b><br>
 Because the primary application of LBRM is simulating total runoff contribution to
 the Great Lakes, calibration conventionally uses area-ratio estimates of runoff for each subbasin
 as observations, rather than using streamflow gauge data directly. This approach is used here. In
