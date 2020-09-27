@@ -9,4 +9,4 @@
 - will be applied to stations: 04201500, 02GE003, 04167000, 04168000
 
 
-Disclaimer: Area-Ratios might include some of the validation stations
+Disclaimer: Area-Ratios might include some of the validation stations; hence validation results of LBRM will not be considered and are only added for completeness
