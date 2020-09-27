@@ -26,11 +26,11 @@ reaches. Therefore, the FLOW_OUT for both these reaches has to be added.
 
 
 
-Use SWAT reach 442 with weight 0.9583 to derive streamflow at gauge 04185000
-Use SWAT reach 471 with weight 1.0058 to derive streamflow at gauge 04195500
-Use SWAT reach 558 with weight 1.0000 to derive streamflow at gauge 04201500
-Use SWAT reach 521 with weight 1.0000 to derive streamflow at gauge 04201500
-Use SWAT reach 505 with weight 1.0059 to derive streamflow at gauge 04208000
-Use SWAT reach 235 with weight 1.0001 to derive streamflow at gauge 02GE003
-Use SWAT reach 309 with weight 1.0690 to derive streamflow at gauge 04168000
-Use SWAT reach 295 with weight 1.1043 to derive streamflow at gauge 04167000
+Use SWAT reach 442 with weight 0.9583 to derive streamflow at gauge 04185000<br>
+Use SWAT reach 471 with weight 1.0058 to derive streamflow at gauge 04195500<br>
+Use SWAT reach 558 with weight 1.0000 to derive streamflow at gauge 04201500<br>
+Use SWAT reach 521 with weight 1.0000 to derive streamflow at gauge 04201500<br>
+Use SWAT reach 505 with weight 1.0059 to derive streamflow at gauge 04208000<br>
+Use SWAT reach 235 with weight 1.0001 to derive streamflow at gauge 02GE003<br>
+Use SWAT reach 309 with weight 1.0690 to derive streamflow at gauge 04168000<br>
+Use SWAT reach 295 with weight 1.1043 to derive streamflow at gauge 04167000<br>
