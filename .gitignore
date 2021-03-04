@@ -1,12 +1,6 @@
 **.pyc
 **.DS_Store
 
-# ignore for now (validation observations GRIP-E)
-data/objective_1/lake-erie/validation/csv/*
-data/objective_1/lake-erie/validation/netcdf/*
-data/objective_2/lake-erie/validation/csv/*
-data/objective_2/lake-erie/validation/netcdf/*
-
 data/meteo_forcing_RDRS/*.nc
 data/meteo_forcing_RDRS/*.zip
 
