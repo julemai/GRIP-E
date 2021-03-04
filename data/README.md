@@ -1,64 +1,22 @@
-## Meteorological forcings
+## Datasets used for project
 
-1. Regional Deterministic Reforecast System (RDRS)
-   - download:      contact Julie (juliane.mai@uwaterloo.ca)
-   - folder:        meteo_forcing_RDRS
-   - used to setup: all models
+### Geophysical Datasets 
+The geophysical datasets (DEM, land cover, soil) shared here were used by some models in the project. At the end of the project we agreed on a common geophysical dataset indicated under "Common dataset" in the Wiki [here](https://github.com/julemai/GRIP-E/wiki/Datasets).
 
-## DEM
-1. Conditioned SRTM DEM from HydroSHEDS, 3 second (90 m)
-   - download:      https://hydrosheds.cr.usgs.gov/index.php
-   - folder:        dem_conditioned-SRTM-90m
-   - used to setup: SWAT
-   
-2. Conditioned SRTM DEM from HydroSHEDS, 15 second (500 m)
-   - download:      https://hydrosheds.cr.usgs.gov/index.php
-   - folder:        dem_conditioned-SRTM-500m
-   - used to setup: VIC, VIC-GRU, HYPE
+## Meteorologic forcings 
+The meteorologic forcings shared here are used by all models in the GRIP-E project. They can be downloaded using the external download links. The fully gridded dataset is [here](http://www.civil.uwaterloo.ca/jmai/GRIP-E/RDRS_CaPA24hr_forcings_final.zip) (1.1GB). The forcings aggregated to basin level are [here](http://www.civil.uwaterloo.ca/jmai/GRIP-E/RDRS_CaPA24hr_forcings_final_aggregated.zip) (1.4 MB).
 
-3. ASTER Global DEM from NASA, 1 second (30 m)
-   - download:      https://asterweb.jpl.nasa.gov/gdem.asp
-   - folder:        
-   - used to setup:
-     
-## Soil data
-1. Harmonized World soil data (FAO), 30 second (1 km)
-   - download:      http://www.fao.org/soils-portal/soil-survey/soil-maps-and-databases/harmonized-world-soil-database-v12/en/
-   - folder:        soilclass_HWSD
-   - used to setup: VIC
+## Observed streamflow
+The data for observed streamflow are available in raw csv/txt format (US stations are in ft<sup>3</sup>/s; CA stations in m<sup>3</sup>/s) and in harmonized NetCDF format (all stations in m<sup>3</sup>/s). The observations are split into stations ob objective 1 (low-human impact) and objective 2 (most downstream). There are stations that appear in both objcetives (low-human impact and most downstream). 
 
-2. Soil Landscapes of Canada (SLC), 1:1,000,000
-   - download:      http://sis.agr.gc.ca/cansis/nsdb/slc/v3.2/index.html
-   - folder:        
-   - used to setup:
-   
-## Land cover
-1. UMD Global Land Cover Classification, 1 km
-   - download:      http://glcf.umd.edu/data/landcover/
-   - folder:        
-   - used to setup:
-   
-2. MODIS/Terra+Aqua Land Cover Type Yearly L3 Global 500m SIN Grid V006 (MCD12Q1_006), 500 m
-   - download:      https://lpdaac.usgs.gov/dataset_discovery/modis/modis_products_table/mcd12q1_v006
-   - folder:        landcover_MODIS
-   - used to setup: VIC
-   
-3. Land Cover, 2010 (Landsat) from the The North American Land Change Monitoring System (NALCMS), 30 m
-   - download:      http://www.cec.org/tools-and-resources/map-files/land-cover-2010-landsat-30m
-   - folder:        
-   - used to setup:
-   
-4. ESA GlobCover 2009, 300 m
-   - download:      http://due.esrin.esa.int/page_globcover.php
-   - folder:        
-   - used to setup:
-   
-5. Land use & cover from the Great Lakes Aquatic Habitat Framework (GLAHF)
-   - download:      https://www.glahf.org/data/
-   - folder:        
-   - used to setup:
+* Observed streamflow of objective 1 stations in calibration: [here](https://github.com/julemai/GRIP-E/tree/master/data/objective_1/lake-erie/calibration) (list of stations [here](https://github.com/julemai/GRIP-E/blob/master/data/objective_1/lake-erie/calibration/gauge_info.csv))
+* Observed streamflow of objective 1 stations in validation: [here](https://github.com/julemai/GRIP-E/tree/master/data/objective_1/lake-erie/validation) (list of stations [here](https://github.com/julemai/GRIP-E/blob/master/data/objective_1/lake-erie/validation/gauge_info.csv))
+* Observed streamflow of objective 2 stations in calibration: [here](https://github.com/julemai/GRIP-E/tree/master/data/objective_2/lake-erie/calibration) (list of stations [here](https://github.com/julemai/GRIP-E/blob/master/data/objective_2/lake-erie/calibration/gauge_info.csv))
+* Observed streamflow of objective 2 stations in validation: [here](https://github.com/julemai/GRIP-E/tree/master/data/objective_2/lake-erie/validation) (list of stations [here](https://github.com/julemai/GRIP-E/blob/master/data/objective_2/lake-erie/validation/gauge_info.csv))
 
+## Model results
+The model results are available in native model output format and harmonized NetCDF format. The latter is the same for each file and certainly preferable for post-processing. The results are in folders `data/objective_XXX/lake-erie/YYY/model/ZZZ` where `XXX in {1,2}`, `YYY in {calibration, validation}`, and `ZZZ` is the model name. The netCDF file names follow the pattern `ZZZ_phase_WWW_objective_XXX.nc` where `ZZZ` is the model name (lowercase), `WWW in {0,1}` (phase of project; 0=pre-calibration/ default run; 1=after calibration), and `XXX in {1,2}` (objective; 1=low-human impact; 2=most-downstream gauges).
 
-
-
-
+Example:
+The results of the HYPE model for objective 1 for the calibration stations after calibration are in the file
+`data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_1_objective_1.nc` ([here](https://github.com/julemai/GRIP-E/blob/master/data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_1_objective_1.nc)).
