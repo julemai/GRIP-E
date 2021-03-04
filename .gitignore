@@ -18,6 +18,7 @@ data/landcover_NALCMS_GreatLakes/rect_landcover_NACLMS_GreatLakes_v1.*.txt.zip
 #data/soilclass_GSDE_GreatLakes/*.zip
 data/Routing_product_v1.0/*.zip
 data/meteo_forcing_RDRS/*.nc
+data/meteo_forcing_RDRS/*.zip
 data/meteo_forcing_RDRS/grids.dat
 data/meteo_forcing_RDRS-v2/*.nc
 data/meteo_forcing_RDRS-v2/aggregated/great-lakes/validation
