@@ -17,6 +17,6 @@ The data for observed streamflow are available in raw csv/txt format (US station
 ## Model results
 The model results are available in native model output format and harmonized NetCDF format. The latter is the same for each file and certainly preferable for post-processing. The results are in folders `data/objective_XXX/lake-erie/YYY/model/ZZZ` where `XXX in {1,2}`, `YYY in {calibration, validation}`, and `ZZZ` is the model name. The netCDF file names follow the pattern `ZZZ_phase_WWW_objective_XXX.nc` where `ZZZ` is the model name (lowercase), `WWW in {0,1}` (phase of project; 0=pre-calibration/ default run; 1=after calibration), and `XXX in {1,2}` (objective; 1=low-human impact; 2=most-downstream gauges).
 
-Example:
+Example:<br>
 The results of the HYPE model for objective 1 for the calibration stations after calibration are in the file
 `data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_1_objective_1.nc` ([here](https://github.com/julemai/GRIP-E/blob/master/data/objective_1/lake-erie/calibration/model/HYPE/hype_phase_1_objective_1.nc)).
