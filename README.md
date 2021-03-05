@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/131615395.svg)](https://zenodo.org/badge/latestdoi/131615395)
+
 This is the project documentation of the Great Lakes Runoff Inter-comparison Project for Lake Erie GRIP-E funded under IMPC project of Global Water Futures program.
 
 <p align="center">
@@ -45,25 +47,25 @@ https://doi.org/10.1061/(ASCE)HE.1943-5584.0002097
 Mai, J. , B. A. Tolson, H. Shen, É. Gaborit, V. Fortin, N. Gasset, H. Awoye, T. A. Stadnyk, L. M. Fry, E. A. Bradley, F. Seglenieks, A. G. Temgoua, D. G. Princz, S. Gharari, A. Haghnegahdar, M. E. Elshamy, S. Razavi, M. Gauch, J. Lin, X. Ni, Y. Yuan, M. McLeod, N. B. Basu, R. Kumar, O. Rakovec, L. Samaniego, S. Attinger, N. K. Shrestha, P. Daggupati, T. Roy, S. Wi, T. Hunter, J. R. Craig, and A. Pietroniro (2021).<br> 
 The Great Lakes Runoff Intercomparison Project Phase 3: Lake Erie (GRIP-E) <br>
 *Zenodo*.  <br>
-https://doi.org/10.5281/zenodo.4301003
+[![DOI](https://zenodo.org/badge/131615395.svg)](https://zenodo.org/badge/latestdoi/131615395)
 
 **Gridded model outputs of mHM-UFZ** are published under:
 
 Rakovec, O., Kumar, R., McLeod, M., Mai, J., and Samaniego, L. (2020).<br>
 mHM_UFZ gridded simulations for the Great Lakes Runoff Inter-comparison Project for Lake Erie <br>
 *Zenodo*.  <br>
-https://doi.org/10.5281/zenodo.3886551
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3886551.svg)](https://doi.org/10.5281/zenodo.3886551)
 
 **Gridded model outputs of GEM-Hydro** are published under:
 
 Gaborit, É., Princz, D.G., Fortin, V., Durnford, D., Mai, J. (2020).<br>
 GEM-Hydro gridded simulations for the Great Lakes Runoff Inter-comparison Project for Lake Erie (GRIP-E)<br>
 *Zenodo*.  <br>
-https://doi.org/10.5281/zenodo.3890487
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3890487.svg)](https://doi.org/10.5281/zenodo.3890487)
 
 **Basin outlines** and shapefiles are published under:
 
 Shen, H., Mai, J., Tolson, B. A., and Han, M. (2020).<br>
 Watershed shapes for the Great Lakes Runoff Inter-comparison Project for Lake Erie (GRIP-E)<br>
 *Zenodo*.  <br>
-https://doi.org/10.5281/zenodo.3888690
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3888690.svg)](https://doi.org/10.5281/zenodo.3888690)
