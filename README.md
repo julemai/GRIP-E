@@ -1,5 +1,9 @@
 This is the project documentation of the Great Lakes Runoff Inter-comparison Project for Lake Erie GRIP-E funded under IMPC project of Global Water Futures program.
 
+<p align="center">
+   <img src="https://github.com/julemai/GRIP-E/wiki/images/GRIP-E_logo.png" width="45%" />
+</p>
+
 ## Aim of the project
 
 The main scopes of the GRIP-E project are:
