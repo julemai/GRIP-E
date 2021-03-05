@@ -14,7 +14,7 @@ The main scopes of the GRIP-E project are:
 * Identify respective strengths of models, i.e., learning which models perform best under certain conditions
 * Generating multi-model ensembles to quantify uncertainty of model outputs
 
-We contacted some model users to get a better feeling of their needs and determine model end-use and thus inform participants about end-goals of model development. The results can be found [here](https://github.com/julemai/GRIP-E/wiki/User-survey).
+We contacted some model users to get a better feeling of their needs and determine model end-use and thus inform participants about end-goals of model development. 
 
 ## Models and Partners
 
