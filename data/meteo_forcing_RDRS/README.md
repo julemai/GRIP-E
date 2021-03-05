@@ -6,8 +6,11 @@
 
 1.b Downloaded from
 
-    contact Julie (juliane.mai@uwaterloo.ca)
-	file size: 1.1GB is too big for GitHub
+    CaSPAr 
+    
+    Available through external download links:
+    * gridded dataset: http://www.civil.uwaterloo.ca/jmai/GRIP-E/RDRS_CaPA24hr_forcings_final.zip (1.1GB)
+    * aggregated to basin level: http://www.civil.uwaterloo.ca/jmai/GRIP-E/RDRS_CaPA24hr_forcings_final_aggregated.zip (1.4 MB)
 
 1.c Prepared by
 
