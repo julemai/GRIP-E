@@ -1,5 +1,3 @@
-[![DOI](https://zenodo.org/badge/131615395.svg)](https://zenodo.org/badge/latestdoi/131615395)
-
 This is the project documentation of the Great Lakes Runoff Inter-comparison Project for Lake Erie GRIP-E funded under IMPC project of Global Water Futures program.
 
 <p align="center">
