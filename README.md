@@ -30,8 +30,7 @@ The modelling domain is set as specified by the Great Lakes Aquatic Habitat Fram
 
 ## Results
 
-The results are constantly updated throughout the course of the project. We are looking at results of the individual models in different phases and objectives. The objectives determine where the model performance is evaluated. Details can be found [here](https://github.com/julemai/GRIP-E/wiki/Results).
-
+The results of the individual models in different phases and objectives are presented. Details can be found [here](https://github.com/julemai/GRIP-E/wiki/Results).
 
 ## Citation
 
@@ -42,28 +41,28 @@ The Great Lakes Runoff Intercomparison Project Phase 3: Lake Erie (GRIP-E) <br>
 https://doi.org/10.1061/(ASCE)HE.1943-5584.0002097
 
 ### Code and Data Publication
-**Code and data** that can be found in this GitHub are published under:
+**Code and data** that can be found in this GitHub were published under:
 
 Mai, J. , B. A. Tolson, H. Shen, É. Gaborit, V. Fortin, N. Gasset, H. Awoye, T. A. Stadnyk, L. M. Fry, E. A. Bradley, F. Seglenieks, A. G. Temgoua, D. G. Princz, S. Gharari, A. Haghnegahdar, M. E. Elshamy, S. Razavi, M. Gauch, J. Lin, X. Ni, Y. Yuan, M. McLeod, N. B. Basu, R. Kumar, O. Rakovec, L. Samaniego, S. Attinger, N. K. Shrestha, P. Daggupati, T. Roy, S. Wi, T. Hunter, J. R. Craig, and A. Pietroniro (2021).<br> 
 The Great Lakes Runoff Intercomparison Project Phase 3: Lake Erie (GRIP-E) <br>
 *Zenodo*.  <br>
 [![DOI](https://zenodo.org/badge/131615395.svg)](https://zenodo.org/badge/latestdoi/131615395)
 
-**Gridded model outputs of mHM-UFZ** are published under:
+**Gridded model outputs of mHM-UFZ** were published under:
 
 Rakovec, O., Kumar, R., McLeod, M., Mai, J., and Samaniego, L. (2020).<br>
 mHM_UFZ gridded simulations for the Great Lakes Runoff Inter-comparison Project for Lake Erie <br>
 *Zenodo*.  <br>
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3886551.svg)](https://doi.org/10.5281/zenodo.3886551)
 
-**Gridded model outputs of GEM-Hydro** are published under:
+**Gridded model outputs of GEM-Hydro** were published under:
 
 Gaborit, É., Princz, D.G., Fortin, V., Durnford, D., Mai, J. (2020).<br>
 GEM-Hydro gridded simulations for the Great Lakes Runoff Inter-comparison Project for Lake Erie (GRIP-E)<br>
 *Zenodo*.  <br>
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3890487.svg)](https://doi.org/10.5281/zenodo.3890487)
 
-**Basin outlines** and shapefiles are published under:
+**Basin outlines** and shapefiles were published under:
 
 Shen, H., Mai, J., Tolson, B. A., and Han, M. (2020).<br>
 Watershed shapes for the Great Lakes Runoff Inter-comparison Project for Lake Erie (GRIP-E)<br>
